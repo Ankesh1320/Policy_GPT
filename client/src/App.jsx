@@ -1,7 +1,7 @@
+import LandingPage from './pages/LandingPage';
+
 function App() {
-  return (
-    <h1>Hello PolicyGPT</h1>
-  )
+  return <LandingPage />;
 }
 
-export default App
+export default App;
