@@ -80,6 +80,10 @@ const handleLogin = async (req, res, role) => {
         email: user.email,
         mobile: user.mobile,
         role: user.role,
+        fullName: user.fullName,
+        state: user.state,
+        occupation: user.occupation,
+        incomeRange: user.incomeRange,
       },
     });
   } catch (error) {
@@ -93,6 +97,216 @@ const handleLogin = async (req, res, role) => {
 
 export const loginCitizen = (req, res) => handleLogin(req, res, "citizen");
 export const loginAdmin = (req, res) => handleLogin(req, res, "admin");
+
+export const registerCitizen = async (req, res) => {
+  try {
+    const { fullName, email, mobile, state, occupation, incomeRange, password } = req.body;
+
+    // Validate inputs
+    if (!fullName || fullName.trim().length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid full name (minimum 2 characters)",
+      });
+    }
+
+    if (!mobile || !/^[6-9]\d{9}$/.test(mobile.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid 10-digit mobile number",
+      });
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid email address",
+      });
+    }
+
+    if (!state || !state.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select your state",
+      });
+    }
+
+    if (!occupation || !occupation.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select your occupation",
+      });
+    }
+
+    if (!incomeRange || !incomeRange.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select your income range",
+      });
+    }
+
+    if (!password || password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const cleanMobile = mobile.trim();
+
+    // Check if email already exists
+    const existingEmailUser = await User.findOne({ email: normalizedEmail });
+    if (existingEmailUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Email address is already registered",
+      });
+    }
+
+    // Check if mobile already exists
+    const existingMobileUser = await User.findOne({ mobile: cleanMobile });
+    if (existingMobileUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Mobile number is already registered",
+      });
+    }
+
+    // Create user
+    const user = await User.create({
+      fullName: fullName.trim(),
+      email: normalizedEmail,
+      mobile: cleanMobile,
+      state: state.trim(),
+      occupation: occupation.trim(),
+      incomeRange: incomeRange.trim(),
+      password,
+      role: "citizen",
+    });
+
+    // Generate token
+    const token = generateToken(user._id);
+
+    res.status(201).json({
+      success: true,
+      message: "Registration successful",
+      token,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        mobile: user.mobile,
+        state: user.state,
+        occupation: user.occupation,
+        incomeRange: user.incomeRange,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during registration",
+    });
+  }
+};
+
+export const registerAdmin = async (req, res) => {
+  try {
+    const { fullName, email, mobile, state, password } = req.body;
+
+    // Validate inputs
+    if (!fullName || fullName.trim().length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid full name (minimum 2 characters)",
+      });
+    }
+
+    if (!mobile || !/^[6-9]\d{9}$/.test(mobile.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid 10-digit mobile number",
+      });
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid official email address",
+      });
+    }
+
+    if (!state || !state.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select your state",
+      });
+    }
+
+    if (!password || password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const cleanMobile = mobile.trim();
+
+    // Check if email already exists
+    const existingEmailUser = await User.findOne({ email: normalizedEmail });
+    if (existingEmailUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Email address is already registered",
+      });
+    }
+
+    // Check if mobile already exists
+    const existingMobileUser = await User.findOne({ mobile: cleanMobile });
+    if (existingMobileUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Mobile number is already registered",
+      });
+    }
+
+    // Create user
+    const user = await User.create({
+      fullName: fullName.trim(),
+      email: normalizedEmail,
+      mobile: cleanMobile,
+      state: state.trim(),
+      password,
+      role: "admin",
+    });
+
+    // Generate token
+    const token = generateToken(user._id);
+
+    res.status(201).json({
+      success: true,
+      message: "Admin registration successful",
+      token,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        mobile: user.mobile,
+        state: user.state,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Admin registration error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during admin registration",
+    });
+  }
+};
 
 export const getMe = async (req, res) => {
   res.status(200).json({

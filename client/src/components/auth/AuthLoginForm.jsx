@@ -1,4 +1,5 @@
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import AuthHeader from "./AuthHeader";
 import RoleToggle from "./RoleToggle";
 import FormInput from "./FormInput";
@@ -94,12 +95,12 @@ function AuthLoginForm({
 
       <p className="mt-6 text-center text-sm font-medium text-[#797875]">
         Don&apos;t have an account?{" "}
-        <button
-          type="button"
-          className="font-bold text-[#fd7a08] transition-colors duration-200 hover:text-[#e56d00] cursor-pointer"
+        <Link
+          to={role === "admin" ? "/admin/register" : "/citizen/register"}
+          className="font-bold text-[#fd7a08] transition-colors duration-200 hover:text-[#e56d00]"
         >
           Register
-        </button>
+        </Link>
       </p>
     </form>
   );

@@ -18,3 +18,22 @@ export const loginUser = async ({ identifier, password, role }) => {
 
   return data;
 };
+
+export const registerUser = async (userData, role) => {
+  const endpoint =
+    role === "admin" ? "/auth/admin/register" : "/auth/citizen/register";
+
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Registration failed");
+  }
+
+  return data;
+};

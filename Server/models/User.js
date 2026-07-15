@@ -22,6 +22,22 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password must be at least 6 characters"],
       select: false,
     },
+    fullName: {
+      type: String,
+      trim: true,
+    },
+    state: {
+      type: String,
+      trim: true,
+    },
+    occupation: {
+      type: String,
+      trim: true,
+    },
+    incomeRange: {
+      type: String,
+      trim: true,
+    },
     role: {
       type: String,
       enum: ["citizen", "admin"],
