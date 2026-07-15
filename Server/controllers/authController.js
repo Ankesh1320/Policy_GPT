@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Otp from "../models/Otp.js";
+import sendEmail from "../utils/sendEmail.js";
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -313,4 +315,195 @@ export const getMe = async (req, res) => {
     success: true,
     user: req.user,
   });
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { identifier } = req.body;
+
+    if (!identifier) {
+      return res.status(400).json({
+        success: false,
+        message: "Email or mobile number is required",
+      });
+    }
+
+    const trimmed = identifier.trim();
+    let user = null;
+    let isEmailAddress = false;
+
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      user = await User.findOne({ email: trimmed.toLowerCase() });
+      isEmailAddress = true;
+    } else if (/^[6-9]\d{9}$/.test(trimmed)) {
+      user = await User.findOne({ mobile: trimmed });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "No registered account found with this email/mobile number",
+      });
+    }
+
+    // Generate a 6-digit OTP
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Store in database (overwrite existing OTPs for this identifier to avoid clutter)
+    const normalizedIdentifier = isEmailAddress ? trimmed.toLowerCase() : trimmed;
+    await Otp.deleteMany({ identifier: normalizedIdentifier });
+    await Otp.create({ identifier: normalizedIdentifier, otp: otpCode });
+
+    // Send via email or log if mobile
+    if (isEmailAddress) {
+      const emailHtml = `
+        <div style="font-family: 'Poppins', Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ffcd73; border-radius: 15px; background-color: #fff8de;">
+          <h2 style="color: #242322; text-align: center;">Reset Your Password</h2>
+          <p style="color: #4c3c35; font-size: 15px; line-height: 1.5;">Hello,</p>
+          <p style="color: #4c3c35; font-size: 15px; line-height: 1.5;">We received a request to reset the password for your PolicyGPT account. Use the verification code below to proceed:</p>
+          <div style="text-align: center; margin: 25px 0;">
+            <span style="display: inline-block; font-size: 28px; font-weight: bold; color: #fd7a08; letter-spacing: 4px; padding: 10px 20px; border: 2px dashed #fd7a08; border-radius: 10px; background-color: #ffffff;">${otpCode}</span>
+          </div>
+          <p style="color: #938e8c; font-size: 13px; line-height: 1.5;">This OTP code is valid for 5 minutes. If you did not request this, please ignore this email.</p>
+        </div>
+      `;
+      await sendEmail({
+        to: user.email,
+        subject: "PolicyGPT - Password Reset Verification Code",
+        html: emailHtml,
+      });
+    } else {
+      // Mobile placeholder
+      if (process.env.NODE_ENV === "development") {
+        console.log(`[SMS PLACEHOLDER] Send SMS to ${user.mobile}: Your PolicyGPT verification code is ${otpCode}`);
+      } else {
+        console.log(`[SMS PLACEHOLDER] SMS requested for mobile ending in ${user.mobile.slice(-4)}`);
+      }
+    }
+
+    // Log OTP to backend console for developer convenience only in development
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[OTP DEBUG] Generated OTP for ${normalizedIdentifier}: ${otpCode}`);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Verification code sent successfully",
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during forgot password process",
+    });
+  }
+};
+
+export const verifyOtp = async (req, res) => {
+  try {
+    const { identifier, otp } = req.body;
+
+    if (!identifier || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Identifier and OTP code are required",
+      });
+    }
+
+    const trimmedIdentifier = identifier.trim().toLowerCase();
+    const otpRecord = await Otp.findOne({ identifier: trimmedIdentifier });
+
+    if (!otpRecord) {
+      return res.status(400).json({
+        success: false,
+        message: "Verification code has expired or is invalid",
+      });
+    }
+
+    if (otpRecord.otp !== otp.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect verification code",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Verification code verified successfully",
+    });
+  } catch (error) {
+    console.error("Verify OTP error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during OTP verification",
+    });
+  }
+};
+
+export const resendOtp = async (req, res) => {
+  return forgotPassword(req, res);
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { identifier, otp, password } = req.body;
+
+    if (!identifier || !otp || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields (identifier, verification code, new password) are required",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    const trimmedIdentifier = identifier.trim().toLowerCase();
+    const otpRecord = await Otp.findOne({ identifier: trimmedIdentifier });
+
+    if (!otpRecord || otpRecord.otp !== otp.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification session",
+      });
+    }
+
+    let query = {};
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)) {
+      query = { email: trimmedIdentifier };
+    } else {
+      query = { mobile: trimmedIdentifier };
+    }
+
+    const user = await User.findOne(query);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Save the new password (pre-save middleware on User will automatically hash this using bcrypt)
+    user.password = password;
+    await user.save();
+
+    // Delete verified OTP record
+    await Otp.deleteMany({ identifier: trimmedIdentifier });
+
+    res.status(200).json({
+      success: true,
+      message: "Password has been reset successfully",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during password reset process",
+    });
+  }
 };

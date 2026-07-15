@@ -77,12 +77,12 @@ function AuthLoginForm({
       </div>
 
       <div className="mb-5 flex justify-end">
-        <button
-          type="button"
+        <Link
+          to="/forgot-password"
           className="text-xs font-medium text-[#fd7a08] transition-colors duration-200 hover:text-[#e56d00] cursor-pointer"
         >
           Forgot password ?
-        </button>
+        </Link>
       </div>
 
       <PrimaryButton type="submit" isLoading={isLoading}>

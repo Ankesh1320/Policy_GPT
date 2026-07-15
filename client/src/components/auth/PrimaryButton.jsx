@@ -1,4 +1,4 @@
-function PrimaryButton({ children, isLoading, disabled, type = "button" }) {
+function PrimaryButton({ children, isLoading, disabled, type = "button", loadingText = "Signing in..." }) {
   return (
     <button
       type={type}
@@ -8,7 +8,7 @@ function PrimaryButton({ children, isLoading, disabled, type = "button" }) {
       {isLoading ? (
         <span className="flex items-center gap-2">
           <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#242322]/30 border-t-[#242322]" />
-          Signing in...
+          {loadingText}
         </span>
       ) : (
         children
