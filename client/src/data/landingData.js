@@ -23,8 +23,8 @@ export const navLinks = [
 export const heroStats = [
   { icon: schemesIcon, value: '2,400+', label: 'Government Schemes', valueColor: 'text-brand-blue-dark' },
   { icon: policiesIcon, value: '850+', label: 'Policies Indexed', valueColor: 'text-brand-orange' },
-  { icon: peopleIcon, value: '48 Lakh+', label: 'Citizens Helped', valueColor: 'text-brand-green' },
-  { icon: mapIcon, value: '28', label: 'State & UTs Covered', valueColor: 'text-brand-blue-dark' },
+  { icon: peopleIcon, value: '48 Lakh+', label: 'Citizens Helped', valueColor: 'text-brand-blue-dark' },
+  { icon: mapIcon, value: '28', label: 'State & UTs Covered', valueColor: 'text-brand-orange' },
 ];
 
 export const popularTags = ['PM Kisan', 'Ayushman Bharat', 'Scholarships', 'MUDRA Loan', 'PM Awas'];

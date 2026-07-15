@@ -4,8 +4,8 @@ import SectionHeader from '../ui/SectionHeader';
 
 export default function CategorySection() {
   return (
-    <section id="categories" className="bg-white py-16 lg:py-20">
-      <div className="mx-auto max-w-[1440px] px-5 lg:px-20">
+    <section id="categories" className="bg-white py-10 sm:py-14 lg:py-20">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-5 lg:px-20">
         <SectionHeader
           eyebrow="BROWSE BY CATEGORY"
           title="Popular Categories"
@@ -17,7 +17,7 @@ export default function CategorySection() {
               View All &gt;
             </a>
           }
-          className="mb-10"
+          className="mb-6 sm:mb-10"
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-[27px]">

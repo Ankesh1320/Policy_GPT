@@ -24,19 +24,20 @@ function MatchBar({ name, percent, color }) {
 
 export default function FindSchemesSection() {
   return (
-    <section id="find-schemes" className="relative overflow-hidden py-16 lg:py-24">
+    <section id="find-schemes" className="relative overflow-hidden py-10 sm:py-14 lg:py-24">
       <img
         src={findSchemesImg}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover blur-[3px]"
+        className="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
       />
       <div className="find-schemes-gradient absolute inset-0" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-[1440px] px-5 lg:px-20">
-        <div className="overflow-hidden rounded-[30px] border border-white/10 bg-white/5 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.25)] backdrop-blur-sm">
-          <div className="grid gap-8 p-6 lg:grid-cols-2 lg:gap-12 lg:p-12 xl:p-16">
-            <div>
+      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-5 lg:px-20">
+        <div className="overflow-hidden rounded-[20px] border border-white/10 shadow-[0px_3px_20px_0px_rgba(0,0,0,0.25)] sm:rounded-[30px]">
+          <div className="grid lg:grid-cols-2">
+            {/* Left side - White background */}
+            <div className="bg-white/50 backdrop-blur-sm p-5 sm:p-8 lg:p-12 xl:p-16">
               <div className="mb-6 inline-flex items-center gap-2 rounded-[30px] bg-card-green px-4 py-2">
                 <img src={aiIcon} alt="" className="h-2.5 w-3.5" aria-hidden="true" />
                 <span className="font-body text-sm font-semibold text-brand-green">
@@ -53,7 +54,7 @@ export default function FindSchemesSection() {
                 and policies you are eligible for — no manual searching required.
               </p>
 
-              <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <div className="mb-6 flex flex-wrap gap-3">
                 <Button
                   variant="primary"
                   size="lg"
@@ -76,7 +77,8 @@ export default function FindSchemesSection() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            {/* Right side - Match bars with background */}
+            <div className="flex flex-col gap-3 p-5 sm:p-8 lg:p-12 xl:p-16">
               {eligibilityMatches.map((match) => (
                 <MatchBar key={match.name} {...match} />
               ))}

@@ -3,15 +3,15 @@ import SectionHeader from '../ui/SectionHeader';
 
 export default function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="bg-white py-16 lg:py-20">
-      <div className="mx-auto max-w-[1440px] px-5 lg:px-20">
+    <section id="how-it-works" className="bg-white py-10 sm:py-14 lg:py-20">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-5 lg:px-20">
         <SectionHeader
           eyebrow="SIMPLE PROCESS"
           title="How PolicyGPT Works"
           description="From discovery to application in 4 easy steps. No complexity, no jargon — just the help you need."
           align="center"
           eyebrowColor="text-brand-green"
-          className="mb-12"
+          className="mb-8 sm:mb-12"
         />
 
         <div className="relative">

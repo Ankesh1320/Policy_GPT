@@ -4,11 +4,11 @@ import Button from '../ui/Button';
 
 export default function NewsletterSection() {
   return (
-    <section className="relative overflow-hidden py-16 lg:py-20">
+    <section className="relative overflow-hidden py-10 sm:py-14 lg:py-20">
       <img
         src={footerImg}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover blur-[3px]"
+        className="absolute inset-0 h-full w-full object-cover "
         aria-hidden="true"
       />
       <div
@@ -16,7 +16,7 @@ export default function NewsletterSection() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-[1440px] px-5 text-center lg:px-20">
+      <div className="relative mx-auto max-w-[1440px] px-4 text-center sm:px-5 lg:px-20">
         <img
           src={mailboxIcon}
           alt=""
@@ -31,15 +31,15 @@ export default function NewsletterSection() {
           delivered to your inbox weekly.
         </p>
         <form
-          className="mx-auto flex w-full max-w-[491px] flex-col gap-3 sm:flex-row"
+          className="mx-auto flex w-full max-w-[491px] flex-row items-center gap-2 rounded-[16px] bg-white p-1.5 shadow-card sm:rounded-[20px] sm:gap-3 sm:p-2"
           onSubmit={(e) => e.preventDefault()}
         >
           <input
             type="email"
-            placeholder="Enter your email address"
-            className="h-[50px] flex-1 rounded-[20px] bg-white px-5 font-body text-base text-text-placeholder shadow-card outline-none placeholder:text-text-placeholder focus:ring-2 focus:ring-brand-orange/30"
+            placeholder="Enter your email"
+            className="flex-1 min-w-0 bg-transparent px-3 py-2.5 font-body text-sm text-text-placeholder outline-none placeholder:text-text-placeholder sm:px-4 sm:text-base"
           />
-          <Button variant="subscribe" size="lg" className="h-[50px] shrink-0 !px-8">
+          <Button variant="subscribe" size="sm" className="shrink-0 !px-4 sm:!px-6">
             Subscribe
           </Button>
         </form>

@@ -6,17 +6,17 @@ import arrowIcon from '../../assets/icons/line-md_arrow-right.svg';
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[calc(100svh-55px)] max-h-[900px] flex-col overflow-hidden">
+    <section className="relative flex flex-col overflow-hidden pb-8 lg:pb-10">
       <img
         src={heroImg}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover blur-[3px]"
+        className="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"
       />
       <div className="hero-gradient-overlay absolute inset-0" aria-hidden="true" />
 
-      <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 pb-6 pt-6 lg:px-20 lg:pb-8 lg:pt-8">
-        <div className="mx-auto flex w-full max-w-[990px] flex-1 flex-col items-center text-center">
+      <div className="relative mx-auto flex w-full max-w-[1440px] flex-col px-4 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6 lg:px-20 lg:pb-6 lg:pt-10">
+        <div className="mx-auto flex w-full max-w-[990px] flex-col items-center text-center">
           {/* Top content — compact so stats stay in view */}
           <div className="flex flex-col items-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-[50px] bg-white px-5 py-2.5 shadow-card sm:px-6 sm:py-3">
@@ -42,8 +42,8 @@ export default function HeroSection() {
               apply for government welfare schemes and policies — in plain language.
             </p>
 
-            <div className="mb-4 flex w-full max-w-[708px] flex-col gap-2 rounded-[20px] bg-white p-2 shadow-card sm:flex-row sm:items-center">
-              <label className="relative flex w-full items-center">
+            <div className="mb-3 flex w-full max-w-[708px] flex-row items-center rounded-[16px] bg-white p-2 shadow-card sm:mb-4 sm:rounded-[20px]">
+              <label className="relative flex min-w-0 flex-1 items-center">
                 <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">
                   <svg
                     width="18"
@@ -63,17 +63,17 @@ export default function HeroSection() {
                 </span>
                 <input
                   type="search"
-                  placeholder="Search schemes, policies, departments..."
-                  className="flex-1 bg-transparent pl-11 pr-4 py-2.5 font-body text-sm text-text-placeholder outline-none placeholder:text-text-placeholder sm:text-base"
+                  placeholder="Search schemes..."
+                  className="w-full bg-transparent pl-11 pr-2 py-2.5 font-body text-sm text-text-placeholder outline-none placeholder:text-text-placeholder sm:placeholder:content-['Search_schemes,_policies,_departments...'] sm:text-base"
                 />
               </label>
               <Button
                 variant="search"
-                size="lg"
+                size="sm"
                 icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
-                className="w-full shrink-0 !py-2.5 sm:w-auto"
+                className="shrink-0 !py-2.5 !px-3 sm:!px-6"
               >
-                Search
+                <span className="hidden sm:inline">Search</span>
               </Button>
             </div>
 
@@ -93,7 +93,7 @@ export default function HeroSection() {
           </div>
 
           {/* Stat cards pinned toward bottom of hero */}
-          <div className="mt-auto w-full pt-6 lg:pt-8">
+          <div className="mt-8 w-full lg:mt-8">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:gap-6">
               {heroStats.map((stat) => (
                 <StatCard key={stat.label} {...stat} />

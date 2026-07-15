@@ -100,17 +100,15 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
-            <li className="pt-2">
-              <a href="#" className="block font-heading text-base font-semibold text-text-primary">
+            <li className="flex flex-wrap items-center gap-3 px-3 py-2">
+              <a href="#" className="font-heading text-base font-semibold text-text-primary hover:text-brand-orange transition-colors">
                 Login
               </a>
-            </li>
-            <li>
               <Button
                 variant="nav"
                 size="sm"
                 icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
-                className="w-full"
+                className="w-auto"
               >
                 Register Free
               </Button>

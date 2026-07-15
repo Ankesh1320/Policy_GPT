@@ -69,7 +69,7 @@ function CopyrightIcon() {
 export default function Footer() {
   return (
     <footer id="footer" className="bg-cream-dark text-white">
-      <div className="mx-auto max-w-[1440px] px-5 pb-8 pt-16 lg:px-20">
+      <div className="mx-auto max-w-[1440px] px-4 pb-6 pt-10 sm:px-5 sm:pb-8 sm:pt-12 lg:px-20 lg:pt-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <img src={logoFull} alt="PolicyGPT" className="mb-4 h-9 " />
