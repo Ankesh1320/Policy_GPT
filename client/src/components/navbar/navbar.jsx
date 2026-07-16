@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Bell, ChevronDown, ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Bell, ChevronDown } from "lucide-react";
 import { navLinks, currentUser } from "../../data/dashboardData";
 import ProfileDropdown from "../Dashboard/ProfileDropdown";
+import logoFull from "../../assets/logos/logo-full.svg";
 
 const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -21,15 +23,9 @@ const Navbar = () => {
     <header className="w-full bg-white border-b border-gray-100">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between px-8 py-4">
         {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full bg-[#F2762E] flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-5 h-5 text-white" strokeWidth={2.5} />
-          </div>
-          <span className="font-heading text-[22px] font-bold tracking-tight">
-            <span className="text-gray-900">Policy</span>
-            <span className="text-[#F2762E]">GPT</span>
-          </span>
-        </div>
+        <Link to="/" className="shrink-0">
+          <img src={logoFull} alt="PolicyGPT" className="h-9 w-auto" />
+        </Link>
 
         {/* Nav links */}
         <nav className="hidden md:flex items-center gap-9">
