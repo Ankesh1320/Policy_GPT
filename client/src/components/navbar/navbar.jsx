@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Bell, ChevronDown } from "lucide-react";
-import { navLinks, currentUser } from "../../data/dashboardData";
+import { navLinks } from "../../data/dashboardData";
 import ProfileDropdown from "../Dashboard/ProfileDropdown";
 import logoIcon from "../../assets/logos/logo-icon.svg";
 
 const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
+
+  const userString = localStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
+  const fullName = user?.fullName || "Guest User";
+  const firstName = fullName.split(" ")[0];
+  const initial = fullName.charAt(0).toUpperCase();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -62,10 +68,10 @@ const Navbar = () => {
               className="flex items-center gap-2"
             >
               <span className="w-8 h-8 rounded-full bg-[#A13A3A] text-white text-sm font-semibold flex items-center justify-center">
-                {currentUser.initial}
+                {initial}
               </span>
               <span className="text-[15px] font-medium text-gray-800">
-                {currentUser.firstName}
+                {firstName}
               </span>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>

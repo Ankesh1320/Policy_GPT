@@ -1,13 +1,17 @@
 import React from "react";
-import { currentUser, welcomeStats } from "../../data/dashboardData";
+import { welcomeStats } from "../../data/dashboardData";
 
 const WelcomeCard = () => {
+  const userString = localStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
+  const fullName = user?.fullName || "Guest User";
+
   return (
     <section className="w-full rounded-2xl bg-gradient-to-r from-green-50 via-green-50/70 to-orange-50 px-10 py-8">
       <p className="text-[15px] text-gray-500">Welcome back,</p>
 
       <h1 className="font-heading mt-1 flex items-center gap-2 text-[32px] font-bold text-gray-900">
-        {currentUser.name}
+        {fullName}
         <span role="img" aria-label="waving hand">
           👋
         </span>
