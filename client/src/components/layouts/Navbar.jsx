@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import logoFull from '../../assets/logos/logo-full.svg';
 import { navLinks } from '../../data/landingData';
 import Button from '../ui/Button';
@@ -41,9 +42,9 @@ export default function Navbar() {
         className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-3 lg:px-20"
         aria-label="Main navigation"
       >
-        <a href="#" className="shrink-0">
+        <Link to="/" className="shrink-0">
           <img src={logoFull} alt="PolicyGPT" className="h-9 w-auto" />
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-3 xl:flex">
           {navLinks.map((link) => (
@@ -59,20 +60,23 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-3 xl:flex">
-          <a
-            href="#"
+          <Link
+            to="/login"
             className="font-heading text-base font-semibold text-text-primary transition-colors hover:text-brand-orange"
           >
             Login
-          </a>
-          <Button
-            variant="nav"
-            size="sm"
-            icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
-            className="!px-5 !py-2"
-          >
-            Register Free
-          </Button>
+          </Link>
+          {/* TODO: Connect to a unified register route when registration selection page or route exists. */}
+          <Link to="/citizen/register" className="inline-flex">
+            <Button
+              variant="nav"
+              size="sm"
+              icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
+              className="!px-5 !py-2"
+            >
+              Register Free
+            </Button>
+          </Link>
         </div>
 
         <button
@@ -101,17 +105,20 @@ export default function Navbar() {
               </li>
             ))}
             <li className="flex flex-wrap items-center gap-3 px-3 py-2">
-              <a href="#" className="font-heading text-base font-semibold text-text-primary hover:text-brand-orange transition-colors">
+              <Link to="/login" className="font-heading text-base font-semibold text-text-primary hover:text-brand-orange transition-colors">
                 Login
-              </a>
-              <Button
-                variant="nav"
-                size="sm"
-                icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
-                className="w-auto"
-              >
-                Register Free
-              </Button>
+              </Link>
+              {/* TODO: Connect to a unified register route when registration selection page or route exists. */}
+              <Link to="/citizen/register" className="w-auto inline-flex">
+                <Button
+                  variant="nav"
+                  size="sm"
+                  icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
+                  className="w-auto"
+                >
+                  Register Free
+                </Button>
+              </Link>
             </li>
           </ul>
         </div>

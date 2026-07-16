@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -29,21 +30,32 @@
   --shadow-btn: 0px 3px 7px 0px rgba(0, 0, 0, 0.25);
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 @layer base {
   /* Hide scrollbar for Chrome, Edge, Safari */
-::-webkit-scrollbar {
-  display: none;
-}
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-/* Hide scrollbar for Firefox */
-html {
-  scrollbar-width: none;
-}
+  /* Hide scrollbar for Firefox */
+  html {
+    scrollbar-width: none;
+  }
 
-/* Hide scrollbar for IE and old Edge */
-body {
-  -ms-overflow-style: none;
-}
+  /* Hide scrollbar for IE and old Edge */
+  body {
+    -ms-overflow-style: none;
+  }
 
   h1,
   h2,
@@ -57,21 +69,15 @@ body {
 
 @keyframes breathingDot {
   0% {
-    
     background-color: #6FE49A;
-   
   }
 
   50% {
-    
     background-color: #34C759;
-   
   }
 
   100% {
-    
     background-color: #6FE49A;
-    
   }
 }
 
