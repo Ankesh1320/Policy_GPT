@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 import { 
   Shield, 
@@ -26,15 +26,42 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 // Data for charts
-const lineData = [
-  { name: '1 May', total: 0, approved: 0, pending: 0 },
-  { name: '5 May', total: 0, approved: 0, pending: 0 },
-  { name: '10 May', total: 0, approved: 0, pending: 0 },
-  { name: '15 May', total: 0, approved: 0, pending: 0 },
-  { name: '20 May', total: 0, approved: 0, pending: 0 },
-  { name: '25 May', total: 0, approved: 0, pending: 0 },
-  { name: '30 May', total: 0, approved: 0, pending: 0 },
-];
+const chartDataOptions = {
+  'thisMonth': [
+    { name: '1 Jul', total: 0, approved: 0, pending: 0 },
+    { name: '5 Jul', total: 0, approved: 0, pending: 0 },
+    { name: '10 Jul', total: 0, approved: 0, pending: 0 },
+    { name: '15 Jul', total: 0, approved: 0, pending: 0 },
+    { name: '20 Jul', total: 0, approved: 0, pending: 0 },
+    { name: '25 Jul', total: 0, approved: 0, pending: 0 },
+    { name: '30 Jul', total: 0, approved: 0, pending: 0 },
+  ],
+  'prevMonth': [
+    { name: '1 Jun', total: 0, approved: 0, pending: 0 },
+    { name: '5 Jun', total: 0, approved: 0, pending: 0 },
+    { name: '10 Jun', total: 0, approved: 0, pending: 0 },
+    { name: '15 Jun', total: 0, approved: 0, pending: 0 },
+    { name: '20 Jun', total: 0, approved: 0, pending: 0 },
+    { name: '25 Jun', total: 0, approved: 0, pending: 0 },
+    { name: '30 Jun', total: 0, approved: 0, pending: 0 },
+  ],
+  'last6Months': [
+    { name: 'Feb', total: 0, approved: 0, pending: 0 },
+    { name: 'Mar', total: 0, approved: 0, pending: 0 },
+    { name: 'Apr', total: 0, approved: 0, pending: 0 },
+    { name: 'May', total: 0, approved: 0, pending: 0 },
+    { name: 'Jun', total: 0, approved: 0, pending: 0 },
+    { name: 'Jul', total: 0, approved: 0, pending: 0 },
+  ],
+  'last12Months': [
+    { name: 'Aug', total: 0, approved: 0, pending: 0 },
+    { name: 'Oct', total: 0, approved: 0, pending: 0 },
+    { name: 'Dec', total: 0, approved: 0, pending: 0 },
+    { name: 'Feb', total: 0, approved: 0, pending: 0 },
+    { name: 'Apr', total: 0, approved: 0, pending: 0 },
+    { name: 'Jun', total: 0, approved: 0, pending: 0 },
+  ]
+};
 
 const pieData = [
   { name: 'Agriculture', value: 0, color: '#3b82f6' },
@@ -45,6 +72,30 @@ const pieData = [
 ];
 
 export default function App() {
+  const [timeRange, setTimeRange] = useState('thisMonth');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  
+  const currentChartData = chartDataOptions[timeRange];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownRef]);
+
+  const timeRangeLabels = {
+    'thisMonth': 'This Month',
+    'prevMonth': 'Previous Month',
+    'last6Months': 'Last 6 Months',
+    'last12Months': 'Last 12 Months'
+  };
+
   return (
     <div className="app-container">
       {/* Sidebar */}
@@ -304,9 +355,31 @@ export default function App() {
           <div className="section-card">
             <div className="chart-header">
               <h2 className="section-title">Applications Overview</h2>
-              <button className="dropdown">
-                This Month <ChevronDown size={14} />
-              </button>
+              <div style={{position: 'relative'}} ref={dropdownRef}>
+                <button 
+                  className="dropdown" 
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                  {timeRangeLabels[timeRange]} <ChevronDown size={14} />
+                </button>
+                
+                {isDropdownOpen && (
+                  <div className="custom-dropdown-menu">
+                    {Object.entries(timeRangeLabels).map(([value, label]) => (
+                      <div 
+                        key={value}
+                        className={`custom-dropdown-item ${timeRange === value ? 'active' : ''}`}
+                        onClick={() => {
+                          setTimeRange(value);
+                          setIsDropdownOpen(false);
+                        }}
+                      >
+                        {label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="chart-stats">
@@ -335,7 +408,7 @@ export default function App() {
 
             <div className="chart-container">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={lineData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                <LineChart data={currentChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} dy={10} />
                   <YAxis axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} />
