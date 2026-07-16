@@ -1,12 +1,13 @@
-import { HiOutlineShieldCheck } from "react-icons/hi2";
+import { Link } from "react-router-dom";
+import logoFull from "../../assets/logos/logo-full.svg";
 
 function RegisterHeader({ role }) {
   const isAdmin = role === "admin";
   return (
     <div className="mb-5 flex flex-col items-center text-center">
-      <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#fd7a08] transition-transform duration-200 hover:scale-105">
-        <HiOutlineShieldCheck className="h-5 w-5 text-white" aria-hidden="true" />
-      </div>
+      <Link to="/" className="mb-4 shrink-0 transition-transform duration-200 hover:scale-105">
+        <img src={logoFull} alt="PolicyGPT" className="h-9 w-auto" />
+      </Link>
       <h1 className="font-['Poppins'] text-2xl font-bold text-[#242322]">
         {isAdmin ? "Create Admin Account" : "Create your account"}
       </h1>
