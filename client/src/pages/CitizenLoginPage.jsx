@@ -18,6 +18,10 @@ function CitizenLoginPage() {
     const result = await loginState.handleSubmit(event);
     if (result) {
       console.log("Citizen login successful", result.user);
+      const userRole = result.user?.role || (localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user"))?.role : "citizen");
+      if (userRole === "citizen") {
+        navigate("/citizen/dashboard");
+      }
     }
   };
 
