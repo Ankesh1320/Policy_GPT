@@ -7,6 +7,7 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import VerifyOtpPage from "../pages/VerifyOtpPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import LandingPage from "../pages/LandingPage";
+import CitizenDashboard from "../pages/CitizenDashboard";
 
 function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ function AppRoutes() {
         <Route path="/verify-otp" element={<VerifyOtpPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/login" element={<Navigate to="/citizen/login" replace />} />
+        <Route path="/citizen/dashboard" element={<CitizenDashboard />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
