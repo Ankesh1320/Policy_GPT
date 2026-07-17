@@ -8,10 +8,12 @@ const App = () => {
     <div className="app">
       <Navbar />
 
-      {/* Hero Section - heading moved up with tighter padding */}
+      {/* Hero Section - heading aligned below PolicyGPT logo */}
       <section className="hero-section" id="hero-section">
-        <h1>Contact &amp; Support</h1>
-        <p>We're here to help. Reach out anytime.</p>
+        <div className="hero-section-inner">
+          <h1>Contact &amp; Support</h1>
+          <p>We're here to help. Reach out anytime.</p>
+        </div>
       </section>
 
       {/* Main Contact Section */}
