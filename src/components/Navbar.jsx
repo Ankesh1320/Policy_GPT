@@ -1,47 +1,109 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const Logo = () => (
-  <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="20" cy="20" r="19" fill="#F97316" />
-    <path
-      d="M20 7C20 7 10 11.5 10 19.5C10 27.5 15.5 32.5 20 34.5C24.5 32.5 30 27.5 30 19.5C30 11.5 20 7 20 7Z"
-      fill="white"
-    />
-    <polyline
-      points="14.5,20 18,23.5 25.5,15.5"
+function MenuIcon({ open }) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
-      stroke="#F97316"
-      strokeWidth="2.5"
+      stroke="currentColor"
+      strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+      aria-hidden="true"
+    >
+      {open ? (
+        <>
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </>
+      ) : (
+        <>
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+const navLinks = [
+  { label: 'Explore Schemes', href: '#categories' },
+  { label: 'Policies', href: '#updates' },
+  { label: 'Eligibility Checker', href: '#find-schemes' },
+  { label: 'Compare', href: '#how-it-works' },
+  { label: 'About', href: '#testimonials' },
+  { label: 'Contact', href: '#contact', active: true },
+];
 
 const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <nav className="navbar" id="navbar">
-      <div className="navbar-logo">
-        <Logo />
-        <span className="navbar-logo-text">
-          Policy<span>GPT</span>
-        </span>
-      </div>
+    <header className="navbar-header" id="navbar-header">
+      <nav className="navbar" id="navbar" aria-label="Main navigation">
+        <a href="/" className="navbar-logo">
+          <img src="/logo-full.svg" alt="PolicyGPT" className="navbar-logo-img" />
+        </a>
 
-      <ul className="navbar-links">
-        <li><a href="#explore">Explore Schemes</a></li>
-        <li><a href="#policies">Policies</a></li>
-        <li><a href="#eligibility">Eligibility Checker</a></li>
-        <li><a href="#compare">Compare</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact" className="active">Contact</a></li>
-      </ul>
+        <ul className="navbar-links">
+          {navLinks.map((link) => (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                className={`navbar-link${link.active ? ' navbar-link--active' : ''}`}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
 
-      <div className="navbar-actions">
-        <button className="btn-login" id="btn-login">Login</button>
-        <button className="btn-register" id="btn-register">Register Free</button>
-      </div>
-    </nav>
+        <div className="navbar-actions">
+          <a href="#login" className="btn-login">Login</a>
+          <a href="#register" className="btn-register" id="btn-register">
+            Register Free
+            <img src="/arrow-right.svg" alt="" className="btn-register-icon" aria-hidden="true" />
+          </a>
+        </div>
+
+        <button
+          type="button"
+          className="navbar-mobile-toggle"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileOpen}
+        >
+          <MenuIcon open={mobileOpen} />
+        </button>
+      </nav>
+
+      {mobileOpen && (
+        <div className="navbar-mobile-menu">
+          <ul className="navbar-mobile-links">
+            {navLinks.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className={`navbar-mobile-link${link.active ? ' navbar-link--active' : ''}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+            <li className="navbar-mobile-actions">
+              <a href="#login" className="btn-login">Login</a>
+              <a href="#register" className="btn-register">
+                Register Free
+                <img src="/arrow-right.svg" alt="" className="btn-register-icon" aria-hidden="true" />
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
+    </header>
   );
 };
 
