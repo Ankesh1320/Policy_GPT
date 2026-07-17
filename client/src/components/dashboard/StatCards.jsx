@@ -1,6 +1,5 @@
 import React from "react";
 import { Bookmark, CheckCircle2, FileText, Clock } from "lucide-react";
-import { statCards } from "../../data/dashboardData";
 
 const ICONS = {
   Bookmark,
@@ -8,6 +7,41 @@ const ICONS = {
   FileText,
   Clock,
 };
+
+const STAT_CONFIG = [
+  {
+    id: "saved",
+    key: "savedSchemes",
+    icon: "Bookmark",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+    label: "Saved Schemes",
+  },
+  {
+    id: "eligible",
+    key: "eligibleSchemes",
+    icon: "CheckCircle2",
+    iconBg: "bg-green-50",
+    iconColor: "text-green-600",
+    label: "Eligible Schemes",
+  },
+  {
+    id: "applications",
+    key: "applications",
+    icon: "FileText",
+    iconBg: "bg-orange-50",
+    iconColor: "text-orange-600",
+    label: "Applications",
+  },
+  {
+    id: "deadlines",
+    key: "deadlines",
+    icon: "Clock",
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+    label: "Upcoming Deadlines",
+  },
+];
 
 const StatCard = ({ icon, iconBg, iconColor, value, label }) => {
   const Icon = ICONS[icon];
@@ -27,11 +61,12 @@ const StatCard = ({ icon, iconBg, iconColor, value, label }) => {
   );
 };
 
-const StatCards = () => {
+
+const StatCards = ({ stats }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {statCards.map((card) => (
-        <StatCard key={card.id} {...card} />
+      {STAT_CONFIG.map((card) => (
+        <StatCard key={card.id} {...card} value={stats?.[card.key] ?? 0} />
       ))}
     </div>
   );

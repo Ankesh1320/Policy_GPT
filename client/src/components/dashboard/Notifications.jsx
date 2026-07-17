@@ -1,5 +1,4 @@
 import React from "react";
-import { notifications } from "../../data/dashboardData";
 
 const NotificationRow = ({ title, time, dotColor }) => (
   <div className="bg-[#F3F0FC] rounded-2xl px-5 py-4">
@@ -15,16 +14,22 @@ const NotificationRow = ({ title, time, dotColor }) => (
   </div>
 );
 
-const Notifications = () => {
+const Notifications = ({ notifications = [] }) => {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
       <h2 className="font-heading text-lg font-bold text-gray-900 mb-5">Notifications</h2>
 
-      <div className="flex flex-col gap-3">
-        {notifications.map((item) => (
-          <NotificationRow key={item.id} {...item} />
-        ))}
-      </div>
+      {notifications.length === 0 ? (
+        <p className="text-sm text-gray-400 py-6 text-center">
+          You're all caught up.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {notifications.map((item) => (
+            <NotificationRow key={item.id} {...item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

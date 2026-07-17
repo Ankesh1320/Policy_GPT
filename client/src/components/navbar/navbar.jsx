@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Bell, ChevronDown, ShieldCheck } from "lucide-react";
-import { navLinks, currentUser } from "../../data/dashboardData";
+import { navLinks } from "../../utils/staticContent";
 import ProfileDropdown from "../Dashboard/ProfileDropdown";
 
-const Navbar = () => {
+const Navbar = ({ userName = "" }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
@@ -16,6 +16,9 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const firstName = userName.split(" ")[0] || "";
+  const initial = userName.charAt(0).toUpperCase() || "?";
 
   return (
     <header className="w-full bg-white border-b border-gray-100">
@@ -62,10 +65,10 @@ const Navbar = () => {
               className="flex items-center gap-2"
             >
               <span className="w-8 h-8 rounded-full bg-[#A13A3A] text-white text-sm font-semibold flex items-center justify-center">
-                {currentUser.initial}
+                {initial}
               </span>
               <span className="text-[15px] font-medium text-gray-800">
-                {currentUser.firstName}
+                {firstName}
               </span>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>

@@ -1,6 +1,5 @@
 import React from "react";
 import { ChevronRight, Sprout, HeartPulse, Home, Briefcase } from "lucide-react";
-import { savedSchemes } from "../../data/dashboardData";
 
 const ICONS = {
   Sprout,
@@ -10,7 +9,7 @@ const ICONS = {
 };
 
 const SchemeRow = ({ name, subtitle, icon, iconBg, status }) => {
-  const Icon = ICONS[icon];
+  const Icon = ICONS[icon] || Briefcase; // fallback if backend sends an unmapped icon name
 
   return (
     <div className="flex items-center justify-between bg-[#FBF8F3] rounded-2xl px-5 py-4">
@@ -38,7 +37,7 @@ const SchemeRow = ({ name, subtitle, icon, iconBg, status }) => {
   );
 };
 
-const SavedSchemes = () => {
+const SavedSchemes = ({ schemes = [] }) => {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
       <div className="flex items-center justify-between mb-5">
@@ -51,11 +50,17 @@ const SavedSchemes = () => {
         </a>
       </div>
 
-      <div className="flex flex-col gap-3">
-        {savedSchemes.map((scheme) => (
-          <SchemeRow key={scheme.id} {...scheme} />
-        ))}
-      </div>
+      {schemes.length === 0 ? (
+        <p className="text-sm text-gray-400 py-6 text-center">
+          No saved schemes yet.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {schemes.map((scheme) => (
+            <SchemeRow key={scheme._id || scheme.id} {...scheme} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
