@@ -16,19 +16,19 @@ const CitizenDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#FDF9F2]">
+    <div className="h-screen flex flex-col overflow-hidden bg-[#FDF9F2]">
       <Navbar
         userName={data?.user?.name}
         onMenuClick={() => setIsSidebarOpen((prev) => !prev)}
       />
 
-      <div className="flex">
+      <div className="flex flex-1 min-h-0">
         <Sidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
 
-        <main className="flex-1 min-w-0 px-8 py-8 flex flex-col gap-6">
+        <main className="flex-1 min-w-0 overflow-y-auto px-8 py-8 flex flex-col gap-6">
           {isLoading && <DashboardSkeleton />}
 
           {isError && <DashboardError message={error} onRetry={retry} />}

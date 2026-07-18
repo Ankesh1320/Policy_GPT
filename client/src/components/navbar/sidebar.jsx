@@ -50,11 +50,6 @@ const NavItem = ({ label, icon, active }) => {
   );
 };
 
-/**
- * Left sidebar navigation.
- * `isOpen` controls the mobile slide-in drawer state; on desktop
- * (lg breakpoint and up) the sidebar is always visible as a static column.
- */
 const Sidebar = ({ isOpen, onClose }) => {
   return (
     <>
@@ -67,11 +62,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       <aside
-        className={`fixed lg:sticky top-0 lg:top-16 left-0 h-screen lg:h-[calc(100vh-64px)] w-64 bg-white border-r border-gray-100 px-4 py-6 flex flex-col justify-between z-50 transition-transform duration-200 ${
+        className={`fixed lg:relative inset-y-0 lg:inset-y-auto left-0 h-full w-64 bg-white border-r border-gray-100 px-4 py-6 flex flex-col justify-between z-50 shrink-0 transition-transform duration-200 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
-        <nav className="flex flex-col gap-6 overflow-y-auto">
+        <nav className="flex flex-col gap-6 overflow-y-auto scrollbar-hide">
           {sidebarSections.map((group, index) => (
             <div key={index} className="flex flex-col gap-1">
               {group.section && (
