@@ -17,6 +17,7 @@ function AdminLoginPage() {
     const result = await loginState.handleSubmit(event);
     if (result) {
       console.log("Admin login successful", result.user);
+      navigate("/admin/dashboard");
     }
   };
 
