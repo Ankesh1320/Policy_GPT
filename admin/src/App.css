@@ -421,7 +421,8 @@
   margin-right: 16px;
 }
 
-.badge-approved, .badge-published {
+.badge-approved,
+.badge-published {
   background-color: var(--success-green-light);
   color: var(--success-green);
 }
@@ -568,9 +569,17 @@
   border-radius: 50%;
 }
 
-.dot-total { background-color: var(--primary-orange); }
-.dot-approved { background-color: #3b82f6; }
-.dot-pending { background-color: var(--success-green); }
+.dot-total {
+  background-color: var(--primary-orange);
+}
+
+.dot-approved {
+  background-color: #3b82f6;
+}
+
+.dot-pending {
+  background-color: var(--success-green);
+}
 
 .chart-stat-value {
   font-size: 18px;
@@ -661,10 +670,25 @@
   background-color: var(--bg-main);
 }
 
-.activity-icon.yellow { color: #f59e0b; background-color: #fef3c7; }
-.activity-icon.blue { color: #3b82f6; background-color: #eff6ff; }
-.activity-icon.green { color: #10b981; background-color: #d1fae5; }
-.activity-icon.purple { color: #8b5cf6; background-color: #f3e8ff; }
+.activity-icon.yellow {
+  color: #f59e0b;
+  background-color: #fef3c7;
+}
+
+.activity-icon.blue {
+  color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.activity-icon.green {
+  color: #10b981;
+  background-color: #d1fae5;
+}
+
+.activity-icon.purple {
+  color: #8b5cf6;
+  background-color: #f3e8ff;
+}
 
 .activity-content {
   display: flex;
