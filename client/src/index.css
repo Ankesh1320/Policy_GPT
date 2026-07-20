@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -10,6 +10,13 @@
   --color-brand-blue-dark: #1e40af;
   --color-brand-green: #16a34a;
   --color-cream: #f9f3da;
+  --color-page-warm: #fef6e8;
+  --color-slate-heading: #1e293b;
+  --color-slate-muted: #64748b;
+  --color-badge-green-bg: #d5ffd2;
+  --color-badge-green-text: #46ba6c;
+  --color-border-light: #e5e7eb;
+  --color-border-header: #f3f4f6;
   --color-cream-dark: #1c2b3a;
   --color-text-primary: #242322;
   --color-text-secondary: #797875;

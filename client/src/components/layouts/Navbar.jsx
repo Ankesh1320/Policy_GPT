@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logoFull from '../../assets/logos/logo-full.svg';
 import { navLinks } from '../../data/landingData';
 import Button from '../ui/Button';
@@ -33,8 +33,37 @@ function MenuIcon({ open }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ activeLabel }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+
+  const getLinkClass = (label) => {
+    const isActive =
+      activeLabel === label ||
+      (label === 'Policies' && location.pathname.startsWith('/policies'));
+
+    return isActive
+      ? 'inline-flex items-center gap-2 rounded-[30px] bg-card-orange px-4 py-1.5 font-heading text-base font-semibold text-brand-orange transition-colors'
+      : 'inline-flex items-center gap-2 rounded-[20px] bg-white/0 px-4 py-2 font-heading text-base font-medium text-text-muted transition-colors hover:bg-gray-100 hover:text-text-primary';
+  };
+
+  const renderNavLink = (link, onNavigate) => {
+    const className = getLinkClass(link.label);
+
+    if (link.label === 'Policies') {
+      return (
+        <Link to="/policies" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
+    return (
+      <a href={link.href} className={className} onClick={onNavigate}>
+        {link.label}
+      </a>
+    );
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-warm bg-white/80 backdrop-blur-[10px]">
@@ -49,12 +78,7 @@ export default function Navbar() {
         <ul className="hidden items-center gap-3 xl:flex">
           {navLinks.map((link) => (
             <li key={link.label}>
-              <a
-                href={link.href}
-                className="inline-flex items-center gap-2 rounded-[20px] bg-white/0 px-4 py-2 font-heading text-base font-medium text-text-muted transition-colors hover:bg-gray-100 hover:text-text-primary"
-              >
-                {link.label}
-              </a>
+              {renderNavLink(link)}
             </li>
           ))}
         </ul>
@@ -95,13 +119,7 @@ export default function Navbar() {
           <ul className="flex flex-col gap-3">
             {navLinks.map((link) => (
               <li key={link.label}>
-                <a
-                  href={link.href}
-                  className="block font-heading text-base font-medium text-text-muted px-3 py-2 rounded-[12px] transition-colors hover:bg-gray-50"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </a>
+                {renderNavLink(link, () => setMobileOpen(false))}
               </li>
             ))}
             <li className="flex flex-wrap items-center gap-3 px-3 py-2">
