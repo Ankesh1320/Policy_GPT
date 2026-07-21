@@ -31,7 +31,7 @@ function AppRoutes() {
         <Route path="/eligibility-checker" element={<EligibilityCheckerPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-         <Route path="/" element={<CitizenDashboard />} />
+         <Route path="/citizen/dashboard" element={<CitizenDashboard />} />
       </Routes>
     </BrowserRouter>
   );

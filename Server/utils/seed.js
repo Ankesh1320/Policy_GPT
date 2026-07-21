@@ -1,5 +1,5 @@
 import { connectDB } from "../config/db.js";
-import { User } from "../src/models/User.js";
+import  User from "../src/models/User.js";
 import { SavedScheme } from "../src/models/SavedScheme.js";
 import { Application } from "../src/models/Application.js";
 import { Notification } from "../src/models/Notification.js";
@@ -18,12 +18,20 @@ const seed = async () => {
   ]);
 
   const user = await User.create({
-    name: "Rahul Verma",
-    email: "rahul.verma@example.com",
-    eligibleSchemesCount: 18,
-    savedSchemesCount: 12,
-    applicationsCount: 3,
-    deadlinesCount: 5,
+  fullName: "Rahul Verma",
+  email: "rahul.verma@example.com",
+  mobile: "9876543210",
+  password: "Password@123",
+
+  role: "citizen",
+  state: "Uttar Pradesh",
+  occupation: "Student",
+  incomeRange: "Below ₹2 Lakh",
+
+  eligibleSchemesCount: 18,
+  savedSchemesCount: 12,
+  applicationsCount: 3,
+  deadlinesCount: 5,
   });
 
   await SavedScheme.insertMany([
