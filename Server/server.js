@@ -11,6 +11,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware to trace incoming API requests
+app.use((req, res, next) => {
+  console.log(`[HTTP LOG] ${req.method} ${req.originalUrl || req.url}`);
+  next();
+});
+
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
@@ -21,4 +27,5 @@ connectDB();
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server running on port ${process.env.PORT || 5000}`);
-});  
+});
+  

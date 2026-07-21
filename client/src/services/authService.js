@@ -38,11 +38,18 @@ export const registerUser = async (userData, role) => {
   return data;
 };
 
-export const forgotPassword = async (identifier) => {
+export const forgotPassword = async (input) => {
+  const identifierValue = typeof input === "object" && input !== null ? (input.identifier || input.email || "") : String(input || "");
+  const payload = { identifier: identifierValue.trim() };
+
+  console.log("Forgot password payload:", payload);
+
   const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifier }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   });
 
   const data = await response.json();
