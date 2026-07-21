@@ -3,8 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import { env } from "./config/env.js";
 import routes from "./src/routes/index.js";
-// import authRoutes from "./src/routes/authRoutes.js";
-// import eligibilityRoutes from "./src/routes/eligibilityRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import eligibilityRoutes from "./src/routes/eligibilityRoutes.js";
 import { notFound, errorHandler } from "./src/middleware/errorHandler.js";
 
 const app = express();
@@ -26,8 +26,8 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 app.use("/api", routes);
-// app.use("/api/auth", authRoutes);
-// app.use("/api/eligibility", eligibilityRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/eligibility", eligibilityRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
