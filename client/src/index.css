@@ -1,13 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-heading: "Poppins", sans-serif;
   --font-body: "Inter", sans-serif;
+
+  --color-brand-orange: #fd7a08;
+  --color-brand-blue: #2251ca;
+  --color-brand-blue-dark: #1e40af;
+  --color-brand-green: #16a34a;
+  --color-cream: #f9f3da;
+  --color-page-warm: #fef6e8;
+  --color-slate-heading: #1e293b;
+  --color-slate-muted: #64748b;
+  --color-badge-green-bg: #d5ffd2;
+  --color-badge-green-text: #46ba6c;
+  --color-border-light: #e5e7eb;
+  --color-border-header: #f3f4f6;
+  --color-cream-dark: #1c2b3a;
+  --color-text-primary: #242322;
+  --color-text-secondary: #797875;
+  --color-text-muted: #5d5c5a;
+  --color-text-slate: #94a3b8;
+  --color-text-body: #475569;
+  --color-text-placeholder: #b3b3b3;
+  --color-border-warm: #e5ddd5;
+  --color-card-blue: #eef2ff;
+  --color-card-green: #f0fdf4;
+  --color-card-orange: #fff7ed;
+  --color-btn-yellow: #ffcd73;
+  --color-heading-dark: #1e1e1e;
+  --color-heading-charcoal: #2c2c2c;
+
+  --shadow-card: 0px 4px 30px -5px rgba(0, 0, 0, 0.25);
+  --shadow-soft: 0px 3px 10px 0px rgba(0, 0, 0, 0.25);
+  --shadow-btn: 0px 3px 7px 0px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
+  margin: 0;
   font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .scrollbar-hide {
@@ -16,4 +54,79 @@ body {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+@layer base {
+  /* Hide scrollbar for Chrome, Edge, Safari */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for Firefox */
+  html {
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for IE and old Edge */
+  body {
+    -ms-overflow-style: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@keyframes breathingDot {
+  0% {
+    background-color: #6FE49A;
+  }
+
+  50% {
+    background-color: #34C759;
+  }
+
+  100% {
+    background-color: #6FE49A;
+  }
+}
+
+.animate-breathing-dot {
+  animation: breathingDot 2s ease-in-out infinite;
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .text-gradient-brand {
+    background: linear-gradient(90deg, #2563eb 0%, #110033 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-gradient-overlay {
+    background: linear-gradient(180deg,
+        rgba(255, 205, 115, 0.4) 0%,
+        rgba(238, 242, 255, 0.3) 50%,
+        rgba(22, 163, 74, 0.3) 100%);
+  }
+
+  .find-schemes-gradient {
+    background: linear-gradient(180deg,
+        rgba(255, 205, 115, 0.35) 0%,
+        rgba(238, 242, 255, 0.3) 50%,
+        rgba(22, 163, 74, 0.2) 100%);
+  }
 }

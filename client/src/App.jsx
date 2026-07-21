@@ -1,9 +1,7 @@
-import CitizenDashboard from "./pages/CitizenDashboard";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <CitizenDashboard />
-  )
+  return <AppRoutes />;
 }
 
-export default App
+export default App;
