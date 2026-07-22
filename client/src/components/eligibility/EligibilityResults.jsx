@@ -14,12 +14,12 @@ export default function EligibilityResults({ results, filteredSchemes, onEditCri
       </div>
 
       {/* Main Headline */}
-      <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#101828] text-center mb-3 tracking-tight">
+      <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-heading text-center mb-3 tracking-tight">
         You Are Eligible for {schemeCount} Schemes!
       </h2>
 
       {/* Subtitle */}
-      <p className="text-[#475467] text-base sm:text-lg text-center mb-12 font-normal max-w-2xl mx-auto">
+      <p className="font-body text-text-body text-base sm:text-lg text-center mb-12 font-medium max-w-2xl mx-auto">
         Based on your profile, here are the top matched government schemes for you.
       </p>
 
@@ -33,8 +33,9 @@ export default function EligibilityResults({ results, filteredSchemes, onEditCri
       {/* Retake Questionnaire Action Footer */}
       <div className="mt-12 text-center">
         <button
+          type="button"
           onClick={onEditCriteria}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors cursor-pointer"
+          className="inline-flex h-[43px] items-center justify-center gap-2 px-6 rounded-full border border-border-light bg-white text-slate-muted font-body text-sm font-normal transition-colors hover:border-brand-orange hover:text-brand-orange cursor-pointer"
         >
           <span>✏️ Retake Questionnaire</span>
         </button>

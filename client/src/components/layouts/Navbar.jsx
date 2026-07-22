@@ -66,6 +66,14 @@ export default function Navbar({ activeLabel }) {
       );
     }
 
+    if (link.label === 'Compare') {
+      return (
+        <Link to="/compare" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
     return (
       <a href={link.href} className={className} onClick={onNavigate}>
         {link.label}

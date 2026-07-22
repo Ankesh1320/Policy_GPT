@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import eligibilityRoutes from "./routes/eligibilityRoutes.js";
+import compareRoutes from "./routes/compareRoutes.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/eligibility", eligibilityRoutes);
+app.use("/api/compare", compareRoutes);
 
 connectDB();
 
