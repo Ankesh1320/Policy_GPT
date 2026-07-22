@@ -35,7 +35,7 @@ export default function EligibilityResults({ results, filteredSchemes, onEditCri
         <button
           type="button"
           onClick={onEditCriteria}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border-warm bg-white text-slate-heading font-body font-semibold text-sm hover:border-brand-orange hover:text-brand-orange transition-colors cursor-pointer"
+          className="inline-flex h-[43px] items-center justify-center gap-2 px-6 rounded-full border border-border-light bg-white text-slate-muted font-body text-sm font-normal transition-colors hover:border-brand-orange hover:text-brand-orange cursor-pointer"
         >
           <span>✏️ Retake Questionnaire</span>
         </button>

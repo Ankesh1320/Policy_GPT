@@ -20,7 +20,7 @@ export default function ProgressBar({ currentStep, totalSteps = 5 }) {
             <div
               key={s}
               className={`h-2.5 rounded-full transition-colors ${
-                s <= currentStep ? "bg-card-blue" : "bg-border-light"
+                s <= currentStep ? "bg-brand-orange/20" : "bg-border-light"
               }`}
             />
           ))}

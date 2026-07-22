@@ -51,12 +51,12 @@ export default function EligibilitySchemeCard({ scheme }) {
         </div>
 
         {/* Scheme Title */}
-        <h3 className="font-heading font-bold text-slate-heading text-xl leading-snug mb-1 line-clamp-2 group-hover:text-brand-orange transition-colors">
+        <h3 className="font-heading font-bold text-slate-heading text-lg leading-[26px] mb-1 line-clamp-2 group-hover:text-brand-orange transition-colors">
           {scheme.title}
         </h3>
 
         {/* Department Subtitle */}
-        <p className="font-body text-xs text-text-secondary font-medium mb-3">
+        <p className="font-body text-sm font-medium leading-[21px] text-text-secondary mb-3">
           {scheme.department}
         </p>
 
@@ -96,7 +96,7 @@ export default function EligibilitySchemeCard({ scheme }) {
       {/* Bottom CTA Button */}
       <Link
         to={scheme._id ? `/policies/${scheme._id}` : "/policies"}
-        className="w-full py-3 px-4 rounded-full border border-transparent bg-card-orange text-brand-orange font-body font-medium text-sm hover:bg-brand-orange hover:text-white text-center flex items-center justify-center gap-2 transition-colors cursor-pointer"
+        className="w-full h-[43px] inline-flex items-center justify-center gap-2 rounded-full border border-transparent bg-card-orange px-5 font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white cursor-pointer"
       >
         <span>View Details</span>
         <span className="text-lg font-normal">→</span>

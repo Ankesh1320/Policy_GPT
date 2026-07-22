@@ -12,9 +12,9 @@ export default function QuestionCard({
   const { badge, question, helperText, options } = questionData;
 
   return (
-    <div className="w-full max-w-[800px] mx-auto bg-white rounded-[28px] p-6 sm:p-10 md:p-12 shadow-card border border-border-warm">
+    <div className="w-full max-w-[800px] mx-auto bg-white rounded-[20px] p-6 sm:p-10 md:p-12 shadow-card border border-border-warm">
       {/* Step Badge */}
-      <div className="w-11 h-11 rounded-xl bg-card-blue text-brand-blue font-heading font-bold text-base flex items-center justify-center mb-6">
+      <div className="w-11 h-11 rounded-full bg-card-orange text-brand-orange font-heading font-bold text-base flex items-center justify-center mb-6">
         {badge}
       </div>
 
