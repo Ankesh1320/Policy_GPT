@@ -18,7 +18,7 @@ export default function CompareSchemesPage() {
   } = useCompareSchemes();
 
   return (
-    <div className="min-h-screen bg-white font-body flex flex-col justify-between">
+    <div className="min-h-screen bg-page-warm font-body flex flex-col justify-between">
       <div>
         {/* Top Navbar */}
         <Navbar activeLabel="Compare" />
@@ -26,8 +26,8 @@ export default function CompareSchemesPage() {
         {/* Hero & Breadcrumb Header */}
         <CompareHeader />
 
-        {/* Main Section with Light Warm Beige Background */}
-        <section className="bg-[#FAF5E4] py-10 px-4 sm:px-6 lg:px-8 border-t border-gray-100/60 min-h-[700px]">
+        {/* Main Section with Cream Background */}
+        <main className="bg-cream py-10 px-5 lg:px-20 min-h-[700px]">
           <div className="w-full max-w-[1440px] mx-auto">
             {/* Top Selection Card (Switchable between edit mode and summary mode) */}
             <CompareSelectionCard
@@ -43,7 +43,7 @@ export default function CompareSchemesPage() {
             {/* Comparison Matrix Table */}
             <CompareTableMatrix selectedSchemes={selectedSchemes} />
           </div>
-        </section>
+        </main>
       </div>
 
       {/* Footer */}

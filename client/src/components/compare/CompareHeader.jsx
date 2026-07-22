@@ -1,27 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import breadcrumbChevron from "../../assets/icons/policies/breadcrumb-chevron.svg";
 
 export default function CompareHeader() {
   return (
-    <div className="bg-white border-b border-gray-100 py-6 px-5 sm:px-8 lg:px-20">
-      <div className="max-w-[1280px] mx-auto">
-        {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 font-medium mb-3">
-          <Link to="/" className="hover:text-[#FD7A08] transition-colors">
+    <section className="border-b border-border-header bg-white">
+      <div className="mx-auto max-w-[1440px] px-5 py-10 lg:px-20 lg:py-12">
+        {/* Breadcrumb */}
+        <nav className="mb-4 flex items-center gap-3" aria-label="Breadcrumb">
+          <Link
+            to="/"
+            className="font-body text-sm leading-5 text-text-body transition-colors hover:text-brand-orange"
+          >
             Home
           </Link>
-          <span className="text-gray-400 font-normal">&gt;</span>
-          <span className="text-gray-900 font-semibold">Compare Schemes</span>
+          <img src={breadcrumbChevron} alt="" className="h-3 w-2" aria-hidden="true" />
+          <span className="font-body text-sm font-semibold leading-5 text-slate-heading">
+            Compare Schemes
+          </span>
         </nav>
 
         {/* Title & Subtitle */}
-        <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-[#101828] tracking-tight">
+        <h1 className="font-heading text-[30px] font-bold leading-9 tracking-[-0.0367em] text-[#0F172A]">
           Compare Schemes
         </h1>
-        <p className="mt-1 font-body text-sm sm:text-base text-gray-500 font-normal">
+        <p className="mt-2 max-w-xl font-body text-base font-medium leading-6 text-text-body">
           Side-by-side comparison to help you make the right choice.
         </p>
       </div>
-    </div>
+    </section>
   );
 }
+

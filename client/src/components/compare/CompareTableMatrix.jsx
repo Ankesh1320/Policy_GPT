@@ -79,38 +79,38 @@ export default function CompareTableMatrix({ selectedSchemes }) {
   return (
     <div className="w-full max-w-[1280px] mx-auto">
       {/* Featured Comparision Section Title */}
-      <h2 className="font-heading font-extrabold text-[#101828] text-xl sm:text-2xl mb-4 tracking-tight">
+      <h2 className="font-heading font-extrabold text-slate-heading text-xl sm:text-2xl mb-4 tracking-tight">
         Featured Scheme Comparision
       </h2>
 
       {/* Main Rounded Matrix Container */}
-      <div className="bg-white rounded-[28px] border border-gray-200/80 overflow-hidden shadow-sm">
+      <div className="bg-white rounded-[28px] border border-border-warm overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             {/* Header Row */}
             <thead>
-              <tr className="border-b border-gray-100">
+              <tr className="border-b border-border-warm/60">
                 {/* Features Column Header */}
-                <th className="w-1/3 min-w-[200px] p-6 font-heading text-xs font-bold text-[#475467] tracking-wider uppercase bg-white">
+                <th className="w-1/3 min-w-[200px] p-6 font-heading text-xs font-bold text-text-body tracking-wider uppercase bg-white">
                   FEATURES
                 </th>
 
                 {/* Scheme 1 Header */}
-                <th className="w-1/3 min-w-[240px] p-6 bg-[#ECFDF5] border-r border-gray-100">
-                  <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-[#FFF3EA] text-[#E04F16] mb-2">
+                <th className="w-1/3 min-w-[240px] p-6 bg-[#ECFDF5] border-r border-border-warm/60">
+                  <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-card-orange text-brand-orange mb-2">
                     {scheme1.badgeTag || "POPULAR"}
                   </span>
-                  <h3 className="font-heading font-bold text-lg text-[#16A34A] leading-snug">
+                  <h3 className="font-heading font-bold text-lg text-brand-green leading-snug">
                     {scheme1.title}
                   </h3>
                 </th>
 
                 {/* Scheme 2 Header */}
-                <th className="w-1/3 min-w-[240px] p-6 bg-[#EEF2FF]">
-                  <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-[#FFF3EA] text-[#E04F16] mb-2">
+                <th className="w-1/3 min-w-[240px] p-6 bg-card-blue">
+                  <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-card-orange text-brand-orange mb-2">
                     {scheme2.badgeTag || "FEATURED"}
                   </span>
-                  <h3 className="font-heading font-bold text-lg text-[#1E40AF] leading-snug">
+                  <h3 className="font-heading font-bold text-lg text-brand-blue-dark leading-snug">
                     {scheme2.title}
                   </h3>
                 </th>
@@ -125,22 +125,22 @@ export default function CompareTableMatrix({ selectedSchemes }) {
                 return (
                   <tr
                     key={row.label}
-                    className={`border-b border-gray-100 transition-colors ${
-                      isWarmRow ? "bg-[#FAF5E4]/60" : "bg-white"
+                    className={`border-b border-border-warm/40 transition-colors ${
+                      isWarmRow ? "bg-cream/60" : "bg-white"
                     }`}
                   >
                     {/* Feature Name */}
-                    <td className="p-5 font-heading text-sm font-semibold text-gray-700">
+                    <td className="p-5 font-heading text-sm font-semibold text-slate-heading">
                       {row.label}
                     </td>
 
                     {/* Scheme 1 Value */}
-                    <td className="p-5 font-body text-sm font-medium text-gray-800 border-r border-gray-100/50">
+                    <td className="p-5 font-body text-sm font-medium text-text-body border-r border-border-warm/40">
                       {row.val1}
                     </td>
 
                     {/* Scheme 2 Value */}
-                    <td className="p-5 font-body text-sm font-medium text-gray-800">
+                    <td className="p-5 font-body text-sm font-medium text-text-body">
                       {row.val2}
                     </td>
                   </tr>
@@ -151,7 +151,7 @@ export default function CompareTableMatrix({ selectedSchemes }) {
         </div>
 
         {/* Bottom View Details Action Buttons Row */}
-        <div className="bg-[#FAF5E4]/80 p-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+        <div className="bg-cream/80 p-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-center border-t border-border-warm/60">
           <div className="hidden md:block"></div>
 
           {/* Scheme 1 View Details Button */}

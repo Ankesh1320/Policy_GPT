@@ -1,29 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import breadcrumbChevron from "../../assets/icons/policies/breadcrumb-chevron.svg";
 
 export default function EligibilityHeader() {
   return (
-    <div className="bg-white border-b border-border-warm/60 py-6 px-5 sm:px-8 lg:px-20">
-      <div className="max-w-[1440px] mx-auto">
+    <section className="border-b border-border-header bg-white">
+      <div className="mx-auto max-w-[1440px] px-5 py-10 lg:px-20 lg:py-12">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 font-body text-sm text-text-secondary font-medium mb-3">
-          <Link to="/" className="hover:text-brand-orange transition-colors">
+        <nav className="mb-4 flex items-center gap-3" aria-label="Breadcrumb">
+          <Link
+            to="/"
+            className="font-body text-sm leading-5 text-text-body transition-colors hover:text-brand-orange"
+          >
             Home
           </Link>
-          <span className="text-text-slate font-normal">&gt;</span>
-          <span className="text-text-primary font-semibold">Eligibility Checker</span>
+          <img src={breadcrumbChevron} alt="" className="h-3 w-2" aria-hidden="true" />
+          <span className="font-body text-sm font-semibold leading-5 text-slate-heading">
+            Eligibility Checker
+          </span>
         </nav>
 
         {/* Page Title */}
-        <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-heading tracking-tight">
+        <h1 className="font-heading text-[30px] font-bold leading-9 tracking-[-0.0367em] text-[#0F172A]">
           Eligibility Checker
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-2 font-body text-base sm:text-lg text-text-secondary font-normal max-w-3xl">
+        <p className="mt-2 max-w-xl font-body text-base font-medium leading-6 text-text-body">
           Answer a few simple questions to instantly discover government schemes you're eligible for.
         </p>
       </div>
-    </div>
+    </section>
   );
 }
+
