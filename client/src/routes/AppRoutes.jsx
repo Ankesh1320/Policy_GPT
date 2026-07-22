@@ -12,6 +12,7 @@ import PolicyDetailsPage from "../pages/PolicyDetailsPage";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
 import CompareSchemesPage from "../pages/CompareSchemesPage";
+import AboutUsPage from "../pages/AboutUsPage";
 
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
         <Route path="/policies/:id" element={<PolicyDetailsPage />} />
         <Route path="/eligibility-checker" element={<EligibilityCheckerPage />} />
         <Route path="/compare" element={<CompareSchemesPage />} />
+        <Route path="/about" element={<AboutUsPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

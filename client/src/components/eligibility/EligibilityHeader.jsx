@@ -26,7 +26,7 @@ export default function EligibilityHeader() {
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-2 max-w-xl font-body text-base font-medium leading-6 text-text-body">
+        <p className="mt-2 font-body text-base font-medium leading-6 text-text-body">
           Answer a few simple questions to instantly discover government schemes you're eligible for.
         </p>
       </div>
