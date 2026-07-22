@@ -84,7 +84,7 @@ export default function CompareTableMatrix({ selectedSchemes }) {
       </h2>
 
       {/* Main Rounded Matrix Container */}
-      <div className="bg-white rounded-[20px] border border-border-warm overflow-hidden shadow-sm">
+      <div className="bg-white rounded-[24px] border border-border-warm overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             {/* Header Row */}
@@ -96,21 +96,21 @@ export default function CompareTableMatrix({ selectedSchemes }) {
                 </th>
 
                 {/* Scheme 1 Header */}
-                <th className="w-1/3 min-w-[240px] p-6 bg-page-warm/30 border-r border-border-warm/60">
+                <th className="w-1/3 min-w-[240px] p-6 bg-[#ECFDF5] border-r border-border-warm/60">
                   <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-card-orange text-brand-orange mb-2">
                     {scheme1.badgeTag || "POPULAR"}
                   </span>
-                  <h3 className="font-heading font-bold text-lg text-slate-heading leading-snug">
+                  <h3 className="font-heading font-bold text-lg text-brand-green leading-snug">
                     {scheme1.title}
                   </h3>
                 </th>
 
                 {/* Scheme 2 Header */}
-                <th className="w-1/3 min-w-[240px] p-6 bg-page-warm/30">
+                <th className="w-1/3 min-w-[240px] p-6 bg-card-blue">
                   <span className="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold tracking-wider uppercase bg-card-orange text-brand-orange mb-2">
                     {scheme2.badgeTag || "FEATURED"}
                   </span>
-                  <h3 className="font-heading font-bold text-lg text-slate-heading leading-snug">
+                  <h3 className="font-heading font-bold text-lg text-brand-blue-dark leading-snug">
                     {scheme2.title}
                   </h3>
                 </th>
@@ -157,22 +157,22 @@ export default function CompareTableMatrix({ selectedSchemes }) {
           {/* Scheme 1 View Details Button */}
           <div>
             <Link
-              to={scheme1.id ? `/policies/${scheme1.id}` : "/policies"}
-              className="w-full h-[43px] inline-flex items-center justify-center gap-2 rounded-full border border-transparent bg-card-orange px-5 font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white cursor-pointer"
+              to={scheme1._id || scheme1.id ? `/policies/${scheme1._id || scheme1.id}` : "/policies"}
+              className="w-full bg-[#ECFDF5] text-[#16A34A] font-semibold text-sm py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#D1FAE5] transition-colors cursor-pointer shadow-xs"
             >
               <span>View Details</span>
-              <span className="text-base">→</span>
+              <span className="text-base">›</span>
             </Link>
           </div>
 
           {/* Scheme 2 View Details Button */}
           <div>
             <Link
-              to={scheme2.id ? `/policies/${scheme2.id}` : "/policies"}
-              className="w-full h-[43px] inline-flex items-center justify-center gap-2 rounded-full border border-transparent bg-card-orange px-5 font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white cursor-pointer"
+              to={scheme2._id || scheme2.id ? `/policies/${scheme2._id || scheme2.id}` : "/policies"}
+              className="w-full bg-[#EEF2FF] text-[#1E40AF] font-semibold text-sm py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#E0E7FF] transition-colors cursor-pointer shadow-xs"
             >
               <span>View Details</span>
-              <span className="text-base">→</span>
+              <span className="text-base">›</span>
             </Link>
           </div>
         </div>
