@@ -9,6 +9,7 @@ import ResetPasswordPage from "../pages/ResetPasswordPage";
 import LandingPage from "../pages/LandingPage";
 import PoliciesPage from "../pages/PoliciesPage";
 import PolicyDetailsPage from "../pages/PolicyDetailsPage";
+import SchemesPage from "../pages/SchemesPage";
 
 function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ function AppRoutes() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/login" element={<Navigate to="/citizen/login" replace />} />
         <Route path="/" element={<LandingPage />} />
+        <Route path="/schemes" element={<SchemesPage />} />
         <Route path="/policies" element={<PoliciesPage />} />
         <Route path="/policies/:id" element={<PolicyDetailsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
