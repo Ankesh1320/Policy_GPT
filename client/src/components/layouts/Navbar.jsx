@@ -41,6 +41,7 @@ export default function Navbar({ activeLabel }) {
     const isActive =
       activeLabel === label ||
       (label === 'Policies' && location.pathname.startsWith('/policies')) ||
+      (label === 'Explore Schemes' && location.pathname.startsWith('/schemes'));
       (label === 'About' && location.pathname.startsWith('/about'));
 
     return isActive
@@ -59,6 +60,9 @@ export default function Navbar({ activeLabel }) {
       );
     }
 
+    if (link.label === 'Explore Schemes') {
+      return (
+        <Link to="/schemes" className={className} onClick={onNavigate}>
     if (link.label === 'Eligibility Checker') {
       return (
         <Link to="/eligibility-checker" className={className} onClick={onNavigate}>
