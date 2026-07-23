@@ -1,9 +1,16 @@
-import { filterCategories, filterEligibility, stateOptions } from "../../data/policiesData";
+import {
+  filterCategories as defaultCategories,
+  filterEligibility as defaultEligibility,
+  stateOptions as defaultStates,
+} from "../../data/policiesData";
 import checkboxChecked from "../../assets/icons/policies/checkbox-checked.svg";
 import checkboxUnchecked from "../../assets/icons/policies/checkbox-unchecked.svg";
 import dropdownArrow from "../../assets/icons/policies/dropdown-arrow.svg";
 
 export default function PolicyFilter({
+  categories = defaultCategories,
+  eligibilityOptions = defaultEligibility,
+  states = defaultStates,
   selectedCategory,
   onCategoryChange,
   selectedEligibility,
@@ -27,7 +34,7 @@ export default function PolicyFilter({
         <button
           type="button"
           onClick={onReset}
-          className="font-body text-sm font-semibold text-brand-orange transition-opacity hover:opacity-80"
+          className="cursor-pointer font-body text-sm font-semibold text-brand-orange transition-opacity hover:opacity-80"
         >
           Reset all
         </button>
@@ -38,12 +45,12 @@ export default function PolicyFilter({
           Category
         </p>
         <div className="flex flex-col">
-          {filterCategories.map((category) => (
+          {categories.map((category) => (
             <button
               key={category}
               type="button"
               onClick={() => onCategoryChange(category)}
-              className={`rounded-full px-2 py-2 text-left font-body text-[13px] font-medium leading-5 text-text-body transition-colors ${
+              className={`cursor-pointer rounded-full px-2 py-2 text-left font-body text-[13px] font-medium leading-5 text-text-body transition-colors ${
                 selectedCategory === category ? "bg-card-orange/60 text-brand-orange" : "hover:bg-gray-50"
               }`}
             >
@@ -58,29 +65,24 @@ export default function PolicyFilter({
           Eligibility
         </p>
         <div className="flex flex-col gap-3">
-          {filterEligibility.map((option) => {
+          {eligibilityOptions.map((option) => {
             const isChecked = selectedEligibility.includes(option);
             return (
-              <label
+              <button
                 key={option}
-                className="flex cursor-pointer items-center gap-3 font-body text-sm font-medium text-text-body"
+                type="button"
+                onClick={() => toggleEligibility(option)}
+                aria-pressed={isChecked}
+                className="flex w-full cursor-pointer items-center gap-3 text-left font-body text-sm font-medium text-text-body"
               >
-                <button
-                  type="button"
-                  onClick={() => toggleEligibility(option)}
-                  className="shrink-0"
-                  aria-pressed={isChecked}
-                  aria-label={option}
-                >
-                  <img
-                    src={isChecked ? checkboxChecked : checkboxUnchecked}
-                    alt=""
-                    className="h-4 w-4"
-                    aria-hidden="true"
-                  />
-                </button>
+                <img
+                  src={isChecked ? checkboxChecked : checkboxUnchecked}
+                  alt=""
+                  className="h-4 w-4 shrink-0"
+                  aria-hidden="true"
+                />
                 {option}
-              </label>
+              </button>
             );
           })}
         </div>
@@ -96,7 +98,7 @@ export default function PolicyFilter({
             onChange={(event) => onStateChange(event.target.value)}
             className="h-[34px] w-full appearance-none rounded-full border border-border-warm bg-page-warm py-1 pl-3 pr-10 font-body text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-orange/30"
           >
-            {stateOptions.map((state) => (
+            {states.map((state) => (
               <option key={state} value={state}>
                 {state}
               </option>

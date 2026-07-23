@@ -27,7 +27,7 @@ export default function EligibilityCheckerPage() {
     : "";
 
   return (
-    <div className="min-h-screen bg-white font-body flex flex-col justify-between">
+    <div className="min-h-screen bg-page-warm font-body flex flex-col justify-between">
       <div>
         {/* Top Navigation Bar */}
         <Navbar activeLabel="Eligibility Checker" />
@@ -35,8 +35,8 @@ export default function EligibilityCheckerPage() {
         {/* Header Section */}
         <EligibilityHeader />
 
-        {/* Questionnaire Section with Light Warm Beige Background */}
-        <section className="bg-page-warm py-12 px-4 sm:px-6 lg:px-8 min-h-[600px] flex items-center justify-center border-t border-border-warm/40">
+        {/* Questionnaire Section with Cream Background */}
+        <main className="bg-cream py-10 px-5 lg:px-20 min-h-[600px] flex items-center justify-center">
           <div className="w-full max-w-[1440px] mx-auto">
             {!isSubmitted ? (
               isLoading ? (
@@ -86,7 +86,7 @@ export default function EligibilityCheckerPage() {
               </div>
             )}
           </div>
-        </section>
+        </main>
       </div>
 
       <Footer />
