@@ -11,6 +11,7 @@ import PoliciesPage from "../pages/PoliciesPage";
 import PolicyDetailsPage from "../pages/PolicyDetailsPage";
 import SchemesPage from "../pages/SchemesPage";
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import ContactUsPage from "../pages/ContactUsPage";
 import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
 import CompareSchemesPage from "../pages/CompareSchemesPage";
 import AboutUsPage from "../pages/AboutUsPage";
@@ -35,6 +36,7 @@ function AppRoutes() {
         <Route path="/compare" element={<CompareSchemesPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/contact" element={<ContactUsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
