@@ -63,6 +63,11 @@ export default function Navbar({ activeLabel }) {
     if (link.label === 'Explore Schemes') {
       return (
         <Link to="/schemes" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
     if (link.label === 'Eligibility Checker') {
       return (
         <Link to="/eligibility-checker" className={className} onClick={onNavigate}>
@@ -82,6 +87,14 @@ export default function Navbar({ activeLabel }) {
     if (link.label === 'About') {
       return (
         <Link to="/about" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
+    if (link.label === 'Contact') {
+      return (
+        <Link to="/contact" className={className} onClick={onNavigate}>
           {link.label}
         </Link>
       );
