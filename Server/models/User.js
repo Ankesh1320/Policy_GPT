@@ -16,6 +16,18 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    mobileNumber: {
+      type: String,
+      sparse: true,
+      unique: true,
+      trim: true,
+    },
+    otp: {
+      type: String,
+    },
+    otpExpires: {
+      type: Date,
+    },
     password: {
       type: String,
       required: [true, "Password is required"],

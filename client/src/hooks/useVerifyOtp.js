@@ -5,7 +5,7 @@ import { verifyOtp, resendOtp } from "../services/authService";
 export const useVerifyOtp = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const identifier = location.state?.identifier || "";
+  const identifier = location.state?.identifier || sessionStorage.getItem("reset_identifier") || "";
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
@@ -105,10 +105,16 @@ export const useVerifyOtp = () => {
       return;
     }
 
+    if (!identifier) {
+      setError("Session expired. Please request OTP again.");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
     try {
       await verifyOtp(identifier, code);
+      sessionStorage.setItem("reset_otp", code);
       navigate("/reset-password", { state: { identifier, otp: code } });
     } catch (err) {
       setError(err.message || "Invalid OTP. Please try again.");

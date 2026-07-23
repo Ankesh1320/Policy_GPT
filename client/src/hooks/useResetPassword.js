@@ -11,8 +11,8 @@ export const useResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const identifier = location.state?.identifier || "";
-  const otp = location.state?.otp || "";
+  const identifier = location.state?.identifier || sessionStorage.getItem("reset_identifier") || "";
+  const otp = location.state?.otp || sessionStorage.getItem("reset_otp") || "";
 
   // Password requirement regex checks
   const checks = {
@@ -28,6 +28,10 @@ export const useResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!identifier || !otp) {
+      setError("Session expired or missing verification code. Please request OTP again.");
+      return;
+    }
     if (!isPasswordValid) {
       setError("Please ensure your password meets all requirements.");
       return;
@@ -41,6 +45,8 @@ export const useResetPassword = () => {
     setError("");
     try {
       await resetPassword(identifier, otp, password);
+      sessionStorage.removeItem("reset_identifier");
+      sessionStorage.removeItem("reset_otp");
       // Navigate to login with success alert state
       navigate("/citizen/login", { state: { passwordResetSuccess: true } });
     } catch (err) {

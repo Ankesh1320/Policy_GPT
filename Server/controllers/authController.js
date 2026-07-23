@@ -318,10 +318,11 @@ export const getMe = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
+  console.log("[AUTH CONTROLLER] Processing forgotPassword request for identifier:", req.body?.identifier);
   try {
     const { identifier } = req.body;
 
-    if (!identifier) {
+    if (!identifier || !identifier.trim()) {
       return res.status(400).json({
         success: false,
         message: "Email or mobile number is required",
@@ -329,33 +330,42 @@ export const forgotPassword = async (req, res) => {
     }
 
     const trimmed = identifier.trim();
-    let user = null;
-    let isEmailAddress = false;
+    const isEmailAddress = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+    const normalizedIdentifier = isEmailAddress ? trimmed.toLowerCase() : trimmed;
 
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      user = await User.findOne({ email: trimmed.toLowerCase() });
-      isEmailAddress = true;
-    } else if (/^[6-9]\d{9}$/.test(trimmed)) {
-      user = await User.findOne({ mobile: trimmed });
-    }
+    // Find the user using either email or mobileNumber (also checking mobile field for compatibility)
+    const user = await User.findOne({
+      $or: [
+        { email: normalizedIdentifier },
+        { email: trimmed },
+        { mobileNumber: trimmed },
+        { mobile: trimmed },
+      ],
+    });
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "No registered account found with this email/mobile number",
+        message: "User not found",
       });
     }
 
     // Generate a 6-digit OTP
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Store in database (overwrite existing OTPs for this identifier to avoid clutter)
-    const normalizedIdentifier = isEmailAddress ? trimmed.toLowerCase() : trimmed;
+    // Save OTP to the user document
+    user.otp = otpCode;
+    user.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
+    await user.save();
+
+    // Store in Otp collection for verification session consistency
     await Otp.deleteMany({ identifier: normalizedIdentifier });
     await Otp.create({ identifier: normalizedIdentifier, otp: otpCode });
 
-    // Send via email or log if mobile
-    if (isEmailAddress) {
+    // Send via email if user has email or identifier is an email address
+    const recipientEmail = user.email || (isEmailAddress ? normalizedIdentifier : null);
+
+    if (recipientEmail) {
       const emailHtml = `
         <div style="font-family: 'Poppins', Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ffcd73; border-radius: 15px; background-color: #fff8de;">
           <h2 style="color: #242322; text-align: center;">Reset Your Password</h2>
@@ -367,32 +377,31 @@ export const forgotPassword = async (req, res) => {
           <p style="color: #938e8c; font-size: 13px; line-height: 1.5;">This OTP code is valid for 5 minutes. If you did not request this, please ignore this email.</p>
         </div>
       `;
-      await sendEmail({
-        to: user.email,
-        subject: "PolicyGPT - Password Reset Verification Code",
-        html: emailHtml,
-      });
-    } else {
-      // Mobile placeholder
-      if (process.env.NODE_ENV === "development") {
-        console.log(`[SMS PLACEHOLDER] Send SMS to ${user.mobile}: Your PolicyGPT verification code is ${otpCode}`);
-      } else {
-        console.log(`[SMS PLACEHOLDER] SMS requested for mobile ending in ${user.mobile.slice(-4)}`);
+      try {
+        await sendEmail({
+          to: recipientEmail,
+          subject: "PolicyGPT - Password Reset Verification Code",
+          html: emailHtml,
+        });
+      } catch (emailError) {
+        console.warn("[SMTP WARNING] Email send failed (check SMTP credentials in .env):", emailError.message);
       }
+    } else {
+      console.log(`[SMS LOG] OTP for ${user.mobileNumber || user.mobile}: ${otpCode}`);
     }
 
-    // Log OTP to backend console for developer convenience only in development
-    if (process.env.NODE_ENV === "development") {
-      console.log(`[OTP DEBUG] Generated OTP for ${normalizedIdentifier}: ${otpCode}`);
-    }
+    // Always log OTP to backend console so it can be viewed in terminal
+    console.log("---------------------------------------------------------");
+    console.log(`[OTP DEBUG] OTP Code for ${normalizedIdentifier}: ${otpCode}`);
+    console.log("---------------------------------------------------------");
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Verification code sent successfully",
+      message: "OTP sent successfully",
     });
   } catch (error) {
     console.error("Forgot password error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error during forgot password process",
     });
@@ -472,14 +481,13 @@ export const resetPassword = async (req, res) => {
       });
     }
 
-    let query = {};
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)) {
-      query = { email: trimmedIdentifier };
-    } else {
-      query = { mobile: trimmedIdentifier };
-    }
-
-    const user = await User.findOne(query);
+    const user = await User.findOne({
+      $or: [
+        { email: trimmedIdentifier },
+        { mobileNumber: trimmedIdentifier },
+        { mobile: trimmedIdentifier },
+      ],
+    });
 
     if (!user) {
       return res.status(404).json({

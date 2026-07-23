@@ -39,8 +39,11 @@ export const useForgotPassword = () => {
 
     setIsLoading(true);
     try {
-      await forgotPassword(identifier);
-      navigate("/verify-otp", { state: { identifier: identifier.trim() } });
+      const trimmed = identifier.trim();
+      console.log("Submitting forgot password for:", trimmed);
+      await forgotPassword(trimmed);
+      sessionStorage.setItem("reset_identifier", trimmed);
+      navigate("/verify-otp", { state: { identifier: trimmed } });
     } catch (err) {
       setError(err.message || "Failed to send OTP. Please try again.");
     } finally {

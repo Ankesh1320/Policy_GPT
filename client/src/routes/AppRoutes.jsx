@@ -10,6 +10,10 @@ import LandingPage from "../pages/LandingPage";
 import PoliciesPage from "../pages/PoliciesPage";
 import PolicyDetailsPage from "../pages/PolicyDetailsPage";
 import SchemesPage from "../pages/SchemesPage";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
+import CompareSchemesPage from "../pages/CompareSchemesPage";
+import AboutUsPage from "../pages/AboutUsPage";
 
 function AppRoutes() {
   return (
@@ -27,6 +31,10 @@ function AppRoutes() {
         <Route path="/schemes" element={<SchemesPage />} />
         <Route path="/policies" element={<PoliciesPage />} />
         <Route path="/policies/:id" element={<PolicyDetailsPage />} />
+        <Route path="/eligibility-checker" element={<EligibilityCheckerPage />} />
+        <Route path="/compare" element={<CompareSchemesPage />} />
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
