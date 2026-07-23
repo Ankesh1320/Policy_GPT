@@ -40,7 +40,9 @@ export default function Navbar({ activeLabel }) {
   const getLinkClass = (label) => {
     const isActive =
       activeLabel === label ||
-      (label === 'Policies' && location.pathname.startsWith('/policies'));
+      (label === 'Policies' && location.pathname.startsWith('/policies')) ||
+      (label === 'Explore Schemes' && location.pathname.startsWith('/schemes'));
+      (label === 'About' && location.pathname.startsWith('/about'));
 
     return isActive
       ? 'inline-flex items-center gap-2 rounded-[30px] bg-card-orange px-4 py-1.5 font-heading text-base font-semibold text-brand-orange transition-colors'
@@ -53,6 +55,33 @@ export default function Navbar({ activeLabel }) {
     if (link.label === 'Policies') {
       return (
         <Link to="/policies" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
+    if (link.label === 'Explore Schemes') {
+      return (
+        <Link to="/schemes" className={className} onClick={onNavigate}>
+    if (link.label === 'Eligibility Checker') {
+      return (
+        <Link to="/eligibility-checker" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
+    if (link.label === 'Compare') {
+      return (
+        <Link to="/compare" className={className} onClick={onNavigate}>
+          {link.label}
+        </Link>
+      );
+    }
+
+    if (link.label === 'About') {
+      return (
+        <Link to="/about" className={className} onClick={onNavigate}>
           {link.label}
         </Link>
       );

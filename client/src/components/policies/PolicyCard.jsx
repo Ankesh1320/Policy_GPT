@@ -67,9 +67,14 @@ export default function PolicyCard({ policy }) {
       <div className="mt-auto flex items-center gap-3 pt-6">
         <Link
           to={`/policies/${policy.id}`}
-          className="inline-flex h-[43px] min-w-[128px] items-center justify-center gap-2 rounded-full border border-transparent bg-card-orange px-5 font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white"
+          className="group inline-flex h-[43px] min-w-[128px] items-center justify-center gap-2 rounded-full border border-transparent bg-card-orange px-5 font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white"
         >
-          <img src={readIcon} alt="" className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <img
+            src={readIcon}
+            alt=""
+            className="h-4 w-4 shrink-0 transition-colors group-hover:brightness-0 group-hover:invert"
+            aria-hidden="true"
+          />
           Read
         </Link>
 

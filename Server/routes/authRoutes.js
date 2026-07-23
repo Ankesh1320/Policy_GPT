@@ -8,7 +8,10 @@ router.post("/citizen/register", registerCitizen);
 router.post("/citizen/login", loginCitizen);
 router.post("/admin/register", registerAdmin);
 router.post("/admin/login", loginAdmin);
-router.post("/forgot-password", forgotPassword);
+router.post("/forgot-password", (req, res, next) => {
+  console.log("[AUTH ROUTE] Request received at POST /api/auth/forgot-password with body:", req.body);
+  forgotPassword(req, res, next);
+});
 router.post("/verify-otp", verifyOtp);
 router.post("/resend-otp", resendOtp);
 router.post("/reset-password", resetPassword);
