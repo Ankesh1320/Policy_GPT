@@ -10,6 +10,7 @@ import LandingPage from "../pages/LandingPage";
 import PoliciesPage from "../pages/PoliciesPage";
 import PolicyDetailsPage from "../pages/PolicyDetailsPage";
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import ContactUsPage from "../pages/ContactUsPage";
 
 function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ function AppRoutes() {
         <Route path="/policies" element={<PoliciesPage />} />
         <Route path="/policies/:id" element={<PolicyDetailsPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/contact" element={<ContactUsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
