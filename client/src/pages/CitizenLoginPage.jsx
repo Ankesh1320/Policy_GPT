@@ -15,10 +15,13 @@ function CitizenLoginPage() {
   };
 
   const handleSubmit = async (event) => {
-    const result = await loginState.handleSubmit(event);
-    if (result) {
-      console.log("Citizen login successful", result.user);
-    }
+  const result = await loginState.handleSubmit(event);
+
+  if (result) {
+    console.log("Citizen login successful", result.user);
+
+    navigate("/citizen/dashboard");
+  }
   };
 
   return (

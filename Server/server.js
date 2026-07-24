@@ -1,35 +1,18 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import eligibilityRoutes from "./routes/eligibilityRoutes.js";
-import compareRoutes from "./routes/compareRoutes.js";
+import app from "./app.js";
+import { env } from "./config/env.js";
+import { connectDB } from "./config/db.js";
 
-dotenv.config();
+const start = async () => {
+  try {
+    await connectDB();
 
-const app = express();
+    app.listen(env.port, () => {
+      console.log(`Server running on http://localhost:${env.port}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
 
-app.use(cors());
-app.use(express.json());
-
-// Request logging middleware to trace incoming API requests
-app.use((req, res, next) => {
-  console.log(`[HTTP LOG] ${req.method} ${req.originalUrl || req.url}`);
-  next();
-});
-
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
-app.use("/api/auth", authRoutes);
-app.use("/api/eligibility", eligibilityRoutes);
-app.use("/api/compare", compareRoutes);
-
-connectDB();
-
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server running on port ${process.env.PORT || 5000}`);
-});
-  
+start();
