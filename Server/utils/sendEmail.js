@@ -1,12 +1,15 @@
 import nodemailer from "nodemailer";
 
-const sendEmail = async ({ to, subject, html }) => {
+const sendEmail = async ({ to, subject, html, replyTo }) => {
   // Safe fallback if SMTP environment variables are not configured yet
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     console.log("----------------------- SMTP LOG -----------------------");
     console.log("WARNING: SMTP_USER or SMTP_PASS env variables are missing.");
     console.log(`To: ${to}`);
     console.log(`Subject: ${subject}`);
+    if (replyTo) {
+      console.log(`Reply-To: ${replyTo}`);
+    }
     if (process.env.NODE_ENV === "development") {
       console.log(`HTML Content:\n${html}`);
     } else {
@@ -31,6 +34,7 @@ const sendEmail = async ({ to, subject, html }) => {
     to,
     subject,
     html,
+    ...(replyTo && { replyTo }),
   };
 
   try {
