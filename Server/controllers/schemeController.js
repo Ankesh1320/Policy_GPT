@@ -1,6 +1,6 @@
 import { getCurrentUser } from "../services/userService.js";
 import { getSavedSchemes } from "../services/schemeService.js";
-import { successResponse } from "../../utils/apiResponse.js";
+import { successResponse } from "../utils/apiResponse.js";
 
 export const getSchemes = async (req, res) => {
   const user = await getCurrentUser();

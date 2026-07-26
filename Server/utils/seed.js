@@ -1,9 +1,9 @@
 import { connectDB } from "../config/db.js";
-import  User from "../src/models/User.js";
-import { SavedScheme } from "../src/models/SavedScheme.js";
-import { Application } from "../src/models/Application.js";
-import { Notification } from "../src/models/Notification.js";
-import { SearchHistory } from "../src/models/SearchHistory.js";
+import  User from "../models/User.js";
+import { SavedScheme } from "../models/SavedScheme.js";
+import { Application } from "../models/Application.js";
+import { Notification } from "../models/Notification.js";
+import { SearchHistory } from "../models/SearchHistory.js";
 import mongoose from "mongoose";
 
 const seed = async () => {

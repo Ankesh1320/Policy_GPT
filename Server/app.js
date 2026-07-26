@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { env } from "./config/env.js";
-import routes from "./src/routes/index.js";
-import authRoutes from "./src/routes/authRoutes.js";
-import eligibilityRoutes from "./src/routes/eligibilityRoutes.js";
-import { notFound, errorHandler } from "./src/middleware/errorHandler.js";
+import routes from "./routes/index.js";
+import authRoutes from "./routes/authRoutes.js";
+import eligibilityRoutes from "./routes/eligibilityRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 

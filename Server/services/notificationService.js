@@ -1,5 +1,5 @@
 import { Notification } from "../models/Notification.js";
-import { timeAgo } from "../../utils/timeAgo.js";
+import { timeAgo } from "../utils/timeAgo.js";
 
 export const getNotifications = async (userId) => {
   const notifications = await Notification.find({ user: userId })

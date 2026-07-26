@@ -1,5 +1,5 @@
 import { getCurrentUser } from "../services/userService.js";
-import { successResponse } from "../../utils/apiResponse.js";
+import { successResponse } from "../utils/apiResponse.js";
 
 export const getUser = async (req, res) => {
   const user = await getCurrentUser();
