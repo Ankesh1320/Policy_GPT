@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../ui/Button';
+import { sendContactMessage } from '../../services/contactService';
 
 const isValidEmail = (email) => {
   if (!email || email.trim().length === 0) return false;
@@ -16,12 +17,14 @@ const ContactForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setSubmitError('');
 
     if (errors[name]) {
       setErrors((prev) => {
@@ -60,6 +63,7 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
     const validationErrors = validate();
 
     if (Object.keys(validationErrors).length > 0) {
@@ -68,14 +72,24 @@ const ContactForm = () => {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    try {
+      await sendContactMessage(formData);
+      setSubmitted(true);
+    } catch (error) {
+      if (error.errors) {
+        setErrors(error.errors);
+      } else {
+        setSubmitError(error.message || 'Something went wrong. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
     setFormData({ fullName: '', email: '', subject: '', message: '' });
     setErrors({});
+    setSubmitError('');
     setSubmitted(false);
   };
 
@@ -106,6 +120,11 @@ const ContactForm = () => {
     <div className="rounded-2xl bg-white p-8 shadow-lg border border-gray-100 md:w-2/3">
       <h2 className="mb-6 text-2xl font-bold text-gray-800">Send us a Message</h2>
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        {submitError && (
+          <div className="rounded-xl bg-red-50 p-4 text-sm font-medium text-red-600 border border-red-100">
+            {submitError}
+          </div>
+        )}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <div className="flex flex-col gap-2">
             <label htmlFor="fullName" className="text-sm font-semibold text-gray-700">Full Name</label>

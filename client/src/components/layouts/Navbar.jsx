@@ -41,7 +41,7 @@ export default function Navbar({ activeLabel }) {
     const isActive =
       activeLabel === label ||
       (label === 'Policies' && location.pathname.startsWith('/policies')) ||
-      (label === 'Explore Schemes' && location.pathname.startsWith('/schemes'));
+      (label === 'Explore Schemes' && location.pathname.startsWith('/schemes')) ||
       (label === 'About' && location.pathname.startsWith('/about'));
 
     return isActive
