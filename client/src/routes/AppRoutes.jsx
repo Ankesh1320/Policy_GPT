@@ -10,6 +10,7 @@ import LandingPage from "../pages/LandingPage";
 import PoliciesPage from "../pages/PoliciesPage";
 import PolicyDetailsPage from "../pages/PolicyDetailsPage";
 import SchemesPage from "../pages/SchemesPage";
+import CitizenDashboard from "../pages/CitizenDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import ContactUsPage from "../pages/ContactUsPage";
 import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
@@ -35,6 +36,7 @@ function AppRoutes() {
         <Route path="/eligibility-checker" element={<EligibilityCheckerPage />} />
         <Route path="/compare" element={<CompareSchemesPage />} />
         <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/citizen/dashboard" element={<CitizenDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
