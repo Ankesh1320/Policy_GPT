@@ -18,6 +18,7 @@ function CitizenLoginPage() {
     const result = await loginState.handleSubmit(event);
     if (result) {
       console.log("Citizen login successful", result.user);
+      navigate("/citizen/dashboard");
     }
   };
 

@@ -13,10 +13,12 @@ const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const isMobile = (value) => /^[6-9]\d{9}$/.test(value);
 
 const handleLogin = async (req, res, role) => {
+  console.log(`[LOGIN DEBUG] Attempting login: identifier="${req.body?.identifier}", role="${role}"`);
   try {
     const { identifier, password } = req.body;
 
     if (!identifier?.trim() || !password) {
+      console.log(`[LOGIN DEBUG] Missing identifier or password`);
       return res.status(400).json({
         success: false,
         message:
@@ -31,6 +33,7 @@ const handleLogin = async (req, res, role) => {
 
     if (role === "admin") {
       if (!isEmail(trimmedIdentifier)) {
+        console.log(`[LOGIN DEBUG] Admin email validation failed for: ${trimmedIdentifier}`);
         return res.status(400).json({
           success: false,
           message: "Enter a valid official email address",
@@ -44,6 +47,7 @@ const handleLogin = async (req, res, role) => {
     }
 
     if (!query) {
+      console.log(`[LOGIN DEBUG] Query generation failed for: ${trimmedIdentifier}`);
       return res.status(400).json({
         success: false,
         message:
@@ -53,16 +57,20 @@ const handleLogin = async (req, res, role) => {
       });
     }
 
+    console.log(`[LOGIN DEBUG] Querying user with:`, { ...query, role });
     const user = await User.findOne({ ...query, role }).select("+password");
 
     if (!user) {
+      console.log(`[LOGIN DEBUG] No user found matching:`, { ...query, role });
       return res.status(401).json({
         success: false,
         message: "Invalid credentials or role",
       });
     }
 
+    console.log(`[LOGIN DEBUG] User found. Comparing passwords...`);
     const isMatch = await user.matchPassword(password);
+    console.log(`[LOGIN DEBUG] Password match result:`, isMatch);
 
     if (!isMatch) {
       return res.status(401).json({
