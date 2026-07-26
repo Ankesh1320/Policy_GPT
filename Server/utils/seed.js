@@ -1,5 +1,8 @@
-import { connectDB } from "../config/db.js";
+import dotenv from "dotenv";
+import connectDB from "../config/db.js";
 import  User from "../models/User.js";
+
+dotenv.config();
 import { SavedScheme } from "../models/SavedScheme.js";
 import { Application } from "../models/Application.js";
 import { Notification } from "../models/Notification.js";

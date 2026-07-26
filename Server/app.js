@@ -5,6 +5,8 @@ import { env } from "./config/env.js";
 import routes from "./routes/index.js";
 import authRoutes from "./routes/authRoutes.js";
 import eligibilityRoutes from "./routes/eligibilityRoutes.js";
+import compareRoutes from "./routes/compareRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -28,6 +30,8 @@ app.get("/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api", routes);
 app.use("/api/auth", authRoutes);
 app.use("/api/eligibility", eligibilityRoutes);
+app.use("/api/compare", compareRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
