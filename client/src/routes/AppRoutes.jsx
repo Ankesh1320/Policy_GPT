@@ -1,4 +1,5 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import CitizenLoginPage from "../pages/CitizenLoginPage";
 import AdminLoginPage from "../pages/AdminLoginPage";
 import CitizenRegisterPage from "../pages/CitizenRegisterPage";
@@ -17,9 +18,20 @@ import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
 import CompareSchemesPage from "../pages/CompareSchemesPage";
 import AboutUsPage from "../pages/AboutUsPage";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function AppRoutes() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/citizen/login" element={<CitizenLoginPage />} />
         <Route path="/citizen/register" element={<CitizenRegisterPage />} />
