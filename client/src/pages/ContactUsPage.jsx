@@ -3,6 +3,7 @@ import Navbar from '../components/layouts/Navbar';
 import Footer from '../components/layouts/Footer';
 import ContactInfo from '../components/contact/ContactInfo';
 import ContactForm from '../components/contact/ContactForm';
+import breadcrumbChevron from "../assets/icons/policies/breadcrumb-chevron.svg";
 
 export default function ContactUsPage() {
   return (
@@ -11,23 +12,31 @@ export default function ContactUsPage() {
 
       <main>
         {/* Hero Section */}
-        <section className="bg-white pt-8 pb-4 lg:pt-12 lg:pb-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-left">
-            <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-3">
-              <Link to="/" className="hover:text-brand-orange transition-colors">
-                Home
-              </Link>
-              <span>&gt;</span>
-              <span className="text-gray-900">Contact Us</span>
-            </div>
-            <h1 className="mb-3 font-heading text-3xl font-bold text-gray-900 md:text-4xl">
-              Contact &amp; Support
-            </h1>
-            <p className="max-w-2xl text-lg text-gray-600 mb-4">
-              We're here to help. Reach out anytime.
-            </p>
-          </div>
-        </section>
+        <section className="border-b border-border-header bg-white">
+      <div className="mx-auto max-w-[1440px] px-5 py-10 lg:px-20 lg:py-12">
+        {/* Breadcrumb */}
+        <nav className="mb-4 flex items-center gap-3" aria-label="Breadcrumb">
+          <Link
+            to="/"
+            className="font-body text-sm leading-5 text-text-body transition-colors hover:text-brand-orange"
+          >
+            Home
+          </Link>
+          <img src={breadcrumbChevron} alt="" className="h-3 w-2" aria-hidden="true" />
+          <span className="font-body text-sm font-semibold leading-5 text-slate-heading">
+            Contact
+          </span>
+        </nav>
+
+        {/* Title & Subtitle */}
+        <h1 className="font-heading text-[30px] font-bold leading-9 tracking-[-0.0367em] text-[#0F172A]">
+          Contact &amp; Support
+        </h1>
+        <p className="mt-2 max-w-xl font-body text-base font-medium leading-6 text-text-body">
+          We're here to help. Reach out anytime.
+        </p>
+      </div>
+    </section>
 
         {/* Main Contact Section */}
         <section className="bg-[#f9f3da] py-16 lg:py-24">
