@@ -9,6 +9,7 @@ import ResetPasswordPage from "../pages/ResetPasswordPage";
 import LandingPage from "../pages/LandingPage";
 import PoliciesPage from "../pages/PoliciesPage";
 import PolicyDetailsPage from "../pages/PolicyDetailsPage";
+import SchemeDetailsPage from "../pages/SchemeDetailsPage";
 import SchemesPage from "../pages/SchemesPage";
 import CitizenDashboard from "../pages/CitizenDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
@@ -31,6 +32,7 @@ function AppRoutes() {
         <Route path="/login" element={<Navigate to="/citizen/login" replace />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/schemes" element={<SchemesPage />} />
+        <Route path="/schemes/:id" element={<SchemeDetailsPage />} />
         <Route path="/policies" element={<PoliciesPage />} />
         <Route path="/policies/:id" element={<PolicyDetailsPage />} />
         <Route path="/eligibility-checker" element={<EligibilityCheckerPage />} />

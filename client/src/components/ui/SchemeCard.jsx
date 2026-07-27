@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import greenTick from '../../assets/icons/green-tick.svg';
 
 function BookmarkIcon() {
@@ -52,6 +53,7 @@ function StatPill({ label, value }) {
 }
 
 export default function SchemeCard({ scheme }) {
+  const navigate = useNavigate();
   const { ministry, title, description, badges, benefit, applicants, deadline } = scheme;
 
   return (
@@ -79,7 +81,7 @@ export default function SchemeCard({ scheme }) {
         {description}
       </p>
 
-      <div className="mb-4 grid grid-cols-3 gap-2">
+      <div className="mb-4 grid grid-cols-3 gap-2 line ">
         <StatPill label="Benefit" value={benefit} />
         <StatPill label="Applicants" value={applicants} />
         <StatPill label="Deadline" value={deadline} />
@@ -87,7 +89,8 @@ export default function SchemeCard({ scheme }) {
 
       <button
         type="button"
-        className="mt-auto w-full rounded-[30px] bg-card-orange py-2.5 text-center font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white sm:text-base"
+        onClick={() => navigate(`/schemes/${scheme.id}`)}
+        className="mt-auto inline-flex w-full items-center justify-center rounded-[30px] bg-card-orange py-2.5 text-center font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white sm:text-base"
       >
         View Details &gt;
       </button>
