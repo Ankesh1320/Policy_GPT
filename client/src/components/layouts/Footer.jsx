@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import logoFull from '../../assets/logos/logo-footer.svg';
 import heartIcon from '../../assets/icons/fluent-emoji-flat_red-heart.svg';
 import {
@@ -13,12 +14,26 @@ function FooterLinkColumn({ title, links }) {
       <ul className="flex flex-col gap-3">
         {links.map((link) => (
           <li key={link}>
-            <a
-              href="#"
-              className="font-body text-sm font-semibold text-text-slate transition-colors hover:text-white"
-            >
-              {link}
-            </a>
+            {link === 'Contact' ? (
+              <Link
+                to="/contact"
+                onClick={() => window.scrollTo(0, 0)}
+                className="font-body text-sm font-semibold text-text-slate transition-colors hover:text-white"
+              >
+                {link}
+              </Link>
+            ) : (
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo(0, 0);
+                }}
+                className="font-body text-sm font-semibold text-text-slate transition-colors hover:text-white"
+              >
+                {link}
+              </a>
+            )}
           </li>
         ))}
       </ul>
