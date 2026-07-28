@@ -1,4 +1,5 @@
-import React from "react";
+import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { Home, User, Bookmark, Settings, LogOut } from "lucide-react";
 import { profileMenuItems } from "../../utils/staticContent";
 
@@ -11,13 +12,25 @@ const ICONS = {
 };
 
 const ProfileDropdown = ({ onClose }) => {
+  const navigate = useNavigate();
+
   const handleItemClick = (item) => {
     if (item.danger || item.label.toLowerCase() === "logout") {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "/citizen/login";
+      onClose();
+      navigate("/");
     } else {
       onClose();
+      if (item.label.toLowerCase() === "dashboard") {
+        navigate("/citizen/dashboard");
+      } else if (item.label.toLowerCase() === "profile") {
+        navigate("/citizen/dashboard");
+      } else if (item.label.toLowerCase() === "saved schemes") {
+        navigate("/citizen/dashboard");
+      } else if (item.label.toLowerCase() === "settings") {
+        navigate("/citizen/dashboard");
+      }
     }
   };
 
@@ -26,20 +39,21 @@ const ProfileDropdown = ({ onClose }) => {
       {profileMenuItems.map((item) => {
         const Icon = ICONS[item.icon];
         return (
-          <React.Fragment key={item.label}>
+          <Fragment key={item.label}>
             {item.danger && <div className="my-1 border-t border-gray-100" />}
             <button
               type="button"
               onClick={() => handleItemClick(item)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-left transition-colors ${item.danger
-                ? "text-red-500 hover:bg-red-50"
-                : "text-gray-700 hover:bg-gray-50"
-                }`}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-left transition-colors ${
+                item.danger
+                  ? "text-red-500 hover:bg-red-50"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
             >
               <Icon className="w-4 h-4" strokeWidth={2} />
               {item.label}
             </button>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </div>

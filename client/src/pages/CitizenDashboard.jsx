@@ -13,7 +13,9 @@ import { useDashboard } from "../hooks/useDashboard";
 
 const CitizenDashboard = () => {
   const { data, isLoading, isError, error, retry } = useDashboard();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(
+    typeof window !== "undefined" ? window.innerWidth >= 1024 : false
+  );
 
   return (
     <div className="h-screen flex overflow-hidden bg-[#FDF9F2]">
