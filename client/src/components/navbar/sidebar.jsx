@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Home,
   Search,
@@ -38,11 +39,10 @@ const NavItem = ({ label, icon, active }) => {
   return (
     <a
       href="#"
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
-        active
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${active
           ? "bg-orange-50 text-orange-600"
           : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-      }`}
+        }`}
     >
       <Icon className="w-[18px] h-[18px]" strokeWidth={2} />
       {label}
@@ -62,11 +62,19 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       <aside
-        className={`fixed lg:relative inset-y-0 lg:inset-y-auto left-0 h-full w-64 bg-white border-r border-gray-100 px-4 py-6 flex flex-col justify-between z-50 shrink-0 transition-transform duration-200 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`fixed lg:relative inset-y-0 left-0 h-screen w-64 bg-white border-r border-gray-100 px-4 py-6 flex flex-col justify-between z-50 shrink-0 transition-transform duration-200 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
       >
         <nav className="flex flex-col gap-6 overflow-y-auto scrollbar-hide">
+          {/* Logo container */}
+          <div className="flex items-center gap-2.5 px-3 mb-2 shrink-0">
+            <img src="/logo-icon.svg" alt="PolicyGPT logo" className="w-9 h-9 shrink-0" />
+            <span className="font-heading text-[20px] font-bold tracking-tight">
+              <span className="text-gray-900">Policy</span>
+              <span className="text-[#F2762E]">GPT</span>
+            </span>
+          </div>
+
           {sidebarSections.map((group, index) => (
             <div key={index} className="flex flex-col gap-1">
               {group.section && (
@@ -81,13 +89,13 @@ const Sidebar = ({ isOpen, onClose }) => {
           ))}
         </nav>
 
-        <button
-          type="button"
+        <Link
+          to="/"
           className="flex items-center justify-center gap-2 text-[15px] font-medium text-gray-700 border border-gray-200 rounded-lg px-3 py-2.5 hover:bg-gray-50 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" strokeWidth={2} />
           Back to Main Site
-        </button>
+        </Link>
       </aside>
     </>
   );

@@ -16,12 +16,12 @@ const WelcomeCard = ({ name, eligibleSchemes, deadlines, onUpdateProfile }) => {
 
         <p className="mt-3 text-[15px] text-gray-600">
           You have{" "}
-          <span className="font-semibold text-green-600">
-            {eligibleSchemes} eligible schemes
+          <span className="font-bold text-[#10B981]">
+            {eligibleSchemes ?? 0} eligible schemes
           </span>{" "}
           and{" "}
-          <span className="font-semibold text-orange-600">
-            {deadlines} deadlines
+          <span className="font-bold text-[#F97316]">
+            {deadlines ?? 0} deadlines
           </span>{" "}
           approaching this month.
         </p>
@@ -30,10 +30,10 @@ const WelcomeCard = ({ name, eligibleSchemes, deadlines, onUpdateProfile }) => {
       <button
         type="button"
         onClick={onUpdateProfile}
-        className="hidden sm:inline-flex shrink-0 items-center gap-2 bg-[#F5C568] hover:bg-[#f0b94f] text-gray-900 font-medium text-[15px] rounded-full px-5 py-2.5 transition-colors"
+        className="hidden sm:inline-flex shrink-0 items-center gap-2 bg-[#F5C568] hover:bg-[#e0b257] text-gray-900 font-semibold text-[15px] rounded-xl px-5 py-2.5 transition-colors"
       >
         Update Profile
-        <ArrowRight className="w-4 h-4" strokeWidth={2} />
+        <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
       </button>
     </section>
   );

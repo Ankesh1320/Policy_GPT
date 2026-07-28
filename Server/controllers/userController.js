@@ -1,10 +1,9 @@
-import { getCurrentUser } from "../services/userService.js";
 import { successResponse } from "../utils/apiResponse.js";
 
 export const getUser = async (req, res) => {
-  const user = await getCurrentUser();
+  const user = req.user;
   return successResponse(res, {
-    name: user.name,
+    name: user.fullName || user.name,
     email: user.email,
     eligibleSchemes: user.eligibleSchemesCount,
     savedSchemes: user.savedSchemesCount,

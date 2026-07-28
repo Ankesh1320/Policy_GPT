@@ -1,13 +1,15 @@
 import dotenv from "dotenv";
 import connectDB from "../config/db.js";
-import  User from "../models/User.js";
-
-dotenv.config();
+import User from "../models/User.js";
+import Scheme from "../models/Scheme.js";
+import { sampleSchemes } from "../services/eligibilityService.js";
 import { SavedScheme } from "../models/SavedScheme.js";
 import { Application } from "../models/Application.js";
 import { Notification } from "../models/Notification.js";
 import { SearchHistory } from "../models/SearchHistory.js";
 import mongoose from "mongoose";
+
+dotenv.config();
 
 const seed = async () => {
   await connectDB();
@@ -18,23 +20,21 @@ const seed = async () => {
     Application.deleteMany({}),
     Notification.deleteMany({}),
     SearchHistory.deleteMany({}),
+    Scheme.deleteMany({}),
   ]);
 
+  // Seed Scheme collection
+  await Scheme.insertMany(sampleSchemes);
+
   const user = await User.create({
-  fullName: "Rahul Verma",
-  email: "rahul.verma@example.com",
-  mobile: "9876543210",
-  password: "Password@123",
-
-  role: "citizen",
-  state: "Uttar Pradesh",
-  occupation: "Student",
-  incomeRange: "Below ₹2 Lakh",
-
-  eligibleSchemesCount: 18,
-  savedSchemesCount: 12,
-  applicationsCount: 3,
-  deadlinesCount: 5,
+    fullName: "Rahul Verma",
+    email: "rahul.verma@example.com",
+    mobile: "9876543210",
+    password: "Password@123",
+    role: "citizen",
+    state: "Uttar Pradesh",
+    occupation: "Student",
+    incomeRange: "Below ₹2 Lakh",
   });
 
   await SavedScheme.insertMany([

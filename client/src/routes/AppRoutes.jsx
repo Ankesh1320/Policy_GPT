@@ -18,6 +18,7 @@ import ContactUsPage from "../pages/ContactUsPage";
 import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
 import CompareSchemesPage from "../pages/CompareSchemesPage";
 import AboutUsPage from "../pages/AboutUsPage";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -50,8 +51,22 @@ function AppRoutes() {
         <Route path="/eligibility-checker" element={<EligibilityCheckerPage />} />
         <Route path="/compare" element={<CompareSchemesPage />} />
         <Route path="/about" element={<AboutUsPage />} />
-        <Route path="/citizen/dashboard" element={<CitizenDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/citizen/dashboard"
+          element={
+            <ProtectedRoute redirectTo="/citizen/login">
+              <CitizenDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute redirectTo="/admin/login">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

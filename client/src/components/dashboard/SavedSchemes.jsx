@@ -9,10 +9,10 @@ const ICONS = {
 };
 
 const SchemeRow = ({ name, subtitle, icon, iconBg, status }) => {
-  const Icon = ICONS[icon] || Briefcase; // fallback if backend sends an unmapped icon name
+  const Icon = ICONS[icon] || Briefcase;
 
   return (
-    <div className="flex items-center justify-between bg-[#FBF8F3] rounded-2xl px-5 py-4">
+    <div className="flex items-center justify-between bg-[#F7F2E8] rounded-2xl px-5 py-4 transition-all hover:bg-[#F2EAD9]">
       <div className="flex items-center gap-4">
         <div
           className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}
@@ -21,17 +21,17 @@ const SchemeRow = ({ name, subtitle, icon, iconBg, status }) => {
         </div>
         <div>
           <p className="text-[15px] font-semibold text-gray-900">{name}</p>
-          <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
         {status && (
-          <>
-            <span className="text-sm font-medium text-green-600">{status}</span>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-          </>
+          <span className="text-xs font-semibold bg-[#E6F4EA] text-[#137333] px-3 py-1 rounded-full">
+            {status}
+          </span>
         )}
+        <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
       </div>
     </div>
   );

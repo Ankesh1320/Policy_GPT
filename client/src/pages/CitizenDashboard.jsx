@@ -16,16 +16,16 @@ const CitizenDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-[#FDF9F2]">
-      <Navbar
-        userName={data?.user?.name}
-        onMenuClick={() => setIsSidebarOpen((prev) => !prev)}
+    <div className="h-screen flex overflow-hidden bg-[#FDF9F2]">
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex flex-1 min-h-0">
-        <Sidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <Navbar
+          userName={data?.user?.fullName}
+          onMenuClick={() => setIsSidebarOpen((prev) => !prev)}
         />
 
         <main className="flex-1 min-w-0 overflow-y-auto px-8 py-8 flex flex-col gap-6">
@@ -36,11 +36,11 @@ const CitizenDashboard = () => {
           {!isLoading && !isError && data && (
             <>
               <WelcomeCard
-                name={data.user.name}
-                eligibleSchemes={data.user.eligibleSchemes}
-                deadlines={data.user.deadlines}
+                name={data.user.fullName}
+                eligibleSchemes={data.stats.eligibleSchemes}
+                deadlines={data.stats.deadlines}
               />
-              <StatCards stats={data.user} />
+              <StatCards stats={data.stats} />
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">

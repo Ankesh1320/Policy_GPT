@@ -16,28 +16,19 @@ const Navbar = ({ userName = "", onMenuClick }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const firstName = userName.split(" ")[0] || "";
-  const initial = userName.charAt(0).toUpperCase() || "?";
+  const localUser = JSON.parse(localStorage.getItem("user") || "null");
+  const displayName = userName || localUser?.fullName || localUser?.name || "";
+  const initial = displayName ? displayName.charAt(0).toUpperCase() : "?";
 
   return (
     <header className="shrink-0 w-full bg-white border-b border-gray-100 z-30">
       <div className="flex items-center justify-between px-6 h-16">
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="PolicyGPT logo" className="w-9 h-9 rounded-full shrink-0" />
-            <span className="font-heading text-[20px] font-bold tracking-tight">
-              <span className="text-gray-900">Policy</span>
-              <span className="text-[#F2762E]">GPT</span>
-            </span>
-          </div>
-
-          <div className="w-px h-6 bg-gray-200" />
-
           <button
             type="button"
             onClick={onMenuClick}
             aria-label="Toggle sidebar"
-            className="text-gray-500 hover:text-gray-900 transition-colors"
+            className="text-gray-500 hover:text-gray-900 transition-colors p-1"
           >
             <Menu className="w-5 h-5" strokeWidth={2} />
           </button>
@@ -57,13 +48,10 @@ const Navbar = ({ userName = "", onMenuClick }) => {
             <button
               type="button"
               onClick={() => setIsProfileOpen((prev) => !prev)}
-              className="flex items-center gap-2 border border-gray-200 rounded-full pl-1 pr-3 py-1"
+              className="flex items-center gap-1.5 border border-gray-200 rounded-full p-1 pr-2.5"
             >
               <span className="w-8 h-8 rounded-full bg-[#F2762E] text-white text-sm font-semibold flex items-center justify-center">
                 {initial}
-              </span>
-              <span className="text-[15px] font-medium text-gray-800">
-                {userName || firstName}
               </span>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
