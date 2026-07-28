@@ -1,18 +1,23 @@
 import React from "react";
 
-const NotificationRow = ({ title, time, dotColor }) => (
-  <div className="bg-[#F3F0FC] rounded-2xl px-5 py-4">
-    <div className="flex items-start gap-2.5">
-      {dotColor && (
-        <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${dotColor}`} />
-      )}
-      <div className={!dotColor ? "pl-4" : ""}>
-        <p className="text-[15px] font-medium text-gray-900">{title}</p>
-        <p className="text-sm text-gray-500 mt-0.5">{time}</p>
+const NotificationRow = ({ title, time, dotColor }) => {
+  const bgClass = dotColor ? "bg-[#EFF6FF]" : "bg-[#F9FAFB]";
+  return (
+    <div className={`rounded-2xl px-5 py-4 ${bgClass}`}>
+      <div className="flex items-start gap-2.5">
+        {dotColor && (
+          <span className="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 bg-[#FD7A08]" />
+        )}
+        <div className={!dotColor ? "pl-4" : ""}>
+          <p className="text-[14px] font-semibold text-gray-900 leading-snug">
+            {title}
+          </p>
+          <p className="text-xs text-gray-400 mt-1">{time}</p>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Notifications = ({ notifications = [] }) => {
   return (

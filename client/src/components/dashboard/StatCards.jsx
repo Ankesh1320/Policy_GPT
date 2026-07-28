@@ -13,32 +13,32 @@ const STAT_CONFIG = [
     id: "saved",
     key: "savedSchemes",
     icon: "Bookmark",
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
+    iconBg: "bg-[#EFF6FF]",
+    iconColor: "text-[#3B82F6]",
     label: "Saved Schemes",
   },
   {
     id: "eligible",
     key: "eligibleSchemes",
     icon: "CheckCircle2",
-    iconBg: "bg-green-50",
-    iconColor: "text-green-600",
+    iconBg: "bg-[#ECFDF5]",
+    iconColor: "text-[#10B981]",
     label: "Eligible Schemes",
   },
   {
     id: "applications",
     key: "applications",
     icon: "FileText",
-    iconBg: "bg-orange-50",
-    iconColor: "text-orange-600",
+    iconBg: "bg-[#FFF7ED]",
+    iconColor: "text-[#F97316]",
     label: "Applications",
   },
   {
     id: "deadlines",
     key: "deadlines",
     icon: "Clock",
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
+    iconBg: "bg-[#F3E8FF]",
+    iconColor: "text-[#A855F7]",
     label: "Upcoming Deadlines",
   },
 ];
@@ -47,16 +47,20 @@ const StatCard = ({ icon, iconBg, iconColor, value, label }) => {
   const Icon = ICONS[icon];
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4">
       <div
-        className={`w-11 h-11 rounded-full flex items-center justify-center ${iconBg}`}
+        className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}
       >
-        <Icon className={`w-5 h-5 ${iconColor}`} strokeWidth={2} />
+        <Icon className={`w-6 h-6 ${iconColor}`} strokeWidth={2} />
       </div>
-      <p className="font-heading mt-5 text-[28px] font-bold text-gray-900 leading-none">
-        {value}
-      </p>
-      <p className="mt-1.5 text-[15px] text-gray-500">{label}</p>
+      <div>
+        <p className="font-heading text-[26px] font-bold text-gray-900 leading-none">
+          {value}
+        </p>
+        <p className="mt-1 text-[13px] font-medium text-gray-500 leading-tight">
+          {label}
+        </p>
+      </div>
     </div>
   );
 };

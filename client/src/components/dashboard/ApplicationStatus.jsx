@@ -1,16 +1,17 @@
 import React from "react";
 
 const BADGE_STYLES = {
-  success: "bg-green-50 text-green-600",
-  warning: "bg-orange-50 text-orange-600",
-  danger: "bg-red-50 text-red-600",
+  Approved: "bg-[#E6F4EA] text-[#137333] font-semibold",
+  "Under Review": "bg-[#FCE8E6] text-[#C5221F] font-semibold",
+  Submitted: "bg-[#FEF7E0] text-[#B06000] font-semibold",
+  Rejected: "bg-[#FCE8E6] text-[#C5221F] font-semibold",
 };
 
-const StatusRow = ({ name, status, variant }) => (
+const StatusRow = ({ name, status }) => (
   <div className="flex items-center justify-between">
-    <p className="text-[15px] font-medium text-gray-900">{name}</p>
+    <p className="text-[14px] font-semibold text-gray-900">{name}</p>
     <span
-      className={`text-xs font-medium px-3 py-1 rounded-full ${BADGE_STYLES[variant] || BADGE_STYLES.warning}`}
+      className={`text-[11px] px-2.5 py-1 rounded-full ${BADGE_STYLES[status] || "bg-gray-100 text-gray-700 font-semibold"}`}
     >
       {status}
     </span>

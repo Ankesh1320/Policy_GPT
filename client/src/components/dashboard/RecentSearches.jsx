@@ -14,7 +14,7 @@ const RecentSearches = ({ searches = [] }) => {
           {searches.map((term) => (
             <span
               key={term}
-              className="text-sm text-gray-700 bg-gray-100 rounded-full px-4 py-1.5"
+              className="text-xs font-semibold text-[#4B5563] bg-[#F3F4F6] rounded-full px-3.5 py-1.5 transition-colors hover:bg-gray-200 cursor-pointer"
             >
               {term}
             </span>
