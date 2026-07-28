@@ -15,11 +15,10 @@ export default function EligibilitySchemeCard({ scheme }) {
           <div className="flex items-center gap-2">
             {/* Tag Badge (Popular / New) */}
             <span
-              className={`px-3 py-1 rounded-full font-body text-xs font-semibold ${
-                isPopular
+              className={`px-3 py-1 rounded-full font-body text-xs font-semibold ${isPopular
                   ? "bg-card-orange text-brand-orange"
                   : "bg-badge-green-bg text-badge-green-text"
-              }`}
+                }`}
             >
               {badgeTag}
             </span>

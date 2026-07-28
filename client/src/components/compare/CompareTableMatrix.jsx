@@ -125,9 +125,8 @@ export default function CompareTableMatrix({ selectedSchemes }) {
                 return (
                   <tr
                     key={row.label}
-                    className={`border-b border-border-warm/40 transition-colors ${
-                      isWarmRow ? "bg-cream/60" : "bg-white"
-                    }`}
+                    className={`border-b border-border-warm/40 transition-colors ${isWarmRow ? "bg-cream/60" : "bg-white"
+                      }`}
                   >
                     {/* Feature Name */}
                     <td className="p-5 font-heading text-sm font-semibold text-slate-heading">
