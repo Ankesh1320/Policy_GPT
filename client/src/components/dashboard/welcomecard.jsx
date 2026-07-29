@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 const WelcomeCard = ({ name, eligibleSchemes, deadlines, onUpdateProfile }) => {
   return (
-    <section className="w-full rounded-2xl bg-[#EAEEF9] px-10 py-8 flex items-center justify-between gap-6">
+    <section className="w-full rounded-2xl bg-gradient-to-r from-[#FFF2E6] via-white to-[#E6F5EA] border border-[#E2E8F0] px-10 py-8 flex items-center justify-between gap-6">
       <div>
         <p className="text-[15px] text-gray-500">Welcome back,</p>
 
