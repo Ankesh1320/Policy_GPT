@@ -35,7 +35,7 @@ export const sidebarSections = [
     section: "Support",
     items: [
       { label: "Help & FAQs", icon: "HelpCircle", to: "#" },
-      { label: "Contact Support", icon: "Headphones", to: "#" },
+      { label: "Contact Support", icon: "Headphones", to: "/contact" },
       { label: "Feedback", icon: "MessageSquare", to: "#" },
     ],
   },

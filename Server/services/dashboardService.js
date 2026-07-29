@@ -4,6 +4,7 @@ import { getNotifications } from "./notificationService.js";
 import { getRecentSearches } from "./searchHistoryService.js";
 import Scheme from "../models/Scheme.js";
 import { sampleSchemes } from "./eligibilityService.js";
+import { evaluateSchemeEligibility } from "./eligibilityEngine.js";
 
 export const getDashboardData = async (user) => {
   const [savedSchemes, applicationStatus, notifications, recentSearches] =
@@ -27,32 +28,8 @@ export const getDashboardData = async (user) => {
   let deadlinesCount = 0;
 
   for (const scheme of allSchemes) {
-    let score = 0;
-    const maxScore = 4;
-
-    // 1. Category (always matches or general)
-    score += 1;
-
-    // 2. State match
-    const states = scheme.eligibilityCriteria?.states || ["All India"];
-    if (!user.state || states.includes("All India") || states.includes(user.state)) {
-      score += 1;
-    }
-
-    // 3. Occupation match
-    const occupations = scheme.eligibilityCriteria?.occupations || ["Any"];
-    if (!user.occupation || occupations.includes("Any") || occupations.includes(user.occupation)) {
-      score += 1;
-    }
-
-    // 4. Income match
-    const incomeRanges = scheme.eligibilityCriteria?.incomeRanges || ["All"];
-    if (!user.incomeRange || incomeRanges.includes("All") || incomeRanges.includes(user.incomeRange)) {
-      score += 1;
-    }
-
-    const matchPercentage = Math.round((score / maxScore) * 100);
-    if (matchPercentage >= 85) {
+    const evaluation = evaluateSchemeEligibility(scheme, user);
+    if (evaluation.eligibilityStatus === "Eligible" || evaluation.eligibilityStatus === "Nearly Eligible") {
       eligibleSchemesCount += 1;
       if (scheme.deadline && scheme.deadline.toLowerCase() !== "ongoing") {
         deadlinesCount += 1;

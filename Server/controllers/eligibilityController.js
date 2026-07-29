@@ -43,9 +43,7 @@ export const getAllSchemes = async (req, res) => {
 export const seedSchemes = async (req, res) => {
   try {
     await Scheme.deleteMany({});
-    const created = await Scheme.insertMany(
-      sampleSchemes.map(({ _id, ...s }) => s)
-    );
+    const created = await Scheme.insertMany(sampleSchemes);
     return res.status(201).json({
       success: true,
       message: "Schemes seeded successfully",

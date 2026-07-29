@@ -80,6 +80,23 @@ const schemeSchema = new mongoose.Schema(
       occupations: { type: [String], default: ["Any"] },
       incomeRanges: { type: [String], default: ["All"] },
     },
+    eligibility: {
+      minAge: { type: Number, default: 0 },
+      maxAge: { type: Number, default: 100 },
+      genders: { type: [String], default: ["Any"] },
+      occupations: { type: [String], default: ["Any"] },
+      educationLevels: { type: [String], default: ["Any"] },
+      annualIncomeMax: { type: Number, default: 0 },
+      states: { type: [String], default: ["All India"] },
+      districts: { type: [String], default: ["All"] },
+      socialCategories: { type: [String], default: ["All"] },
+      disabilityRequired: { type: Boolean, default: false },
+      minorityRequired: { type: Boolean, default: false },
+      farmerRequired: { type: Boolean, default: false },
+      studentRequired: { type: Boolean, default: false },
+      womenOnly: { type: Boolean, default: false },
+      requiredDocuments: { type: [String], default: [] }
+    },
     financial: {
       maxBenefit: { type: String },
       benefitType: { type: String },
