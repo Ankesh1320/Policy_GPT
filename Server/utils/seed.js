@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import connectDB from "../config/db.js";
 import User from "../models/User.js";
+import Scheme from "../models/Scheme.js";
+import { sampleSchemes } from "../services/eligibilityService.js";
 
 dotenv.config();
 import { SavedScheme } from "../models/SavedScheme.js";
@@ -18,7 +20,10 @@ const seed = async () => {
     Application.deleteMany({}),
     Notification.deleteMany({}),
     SearchHistory.deleteMany({}),
+    Scheme.deleteMany({}),
   ]);
+
+  await Scheme.insertMany(sampleSchemes);
 
   const user = await User.create({
     fullName: "Rahul Verma",

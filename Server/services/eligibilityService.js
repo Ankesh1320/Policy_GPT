@@ -1,4 +1,5 @@
 import Scheme from "../models/Scheme.js";
+import { evaluateSchemeEligibility } from "./eligibilityEngine.js";
 
 export const sampleSchemes = [
   {
@@ -15,6 +16,23 @@ export const sampleSchemes = [
       states: ["Maharashtra", "Uttar Pradesh", "Tamil Nadu", "Karnataka", "Gujarat", "Rajasthan", "All India"],
       occupations: ["Farmer/Agricultural Worker"],
       incomeRanges: ["Below ₹1 Lakh", "₹1-2.5 Lakh"],
+    },
+    eligibility: {
+      minAge: 18,
+      maxAge: 75,
+      genders: ["Any"],
+      occupations: ["Farmer/Agricultural Worker"],
+      educationLevels: ["Any"],
+      annualIncomeMax: 0, // No income restriction
+      states: ["All India"],
+      districts: ["All"],
+      socialCategories: ["All"],
+      disabilityRequired: false,
+      minorityRequired: false,
+      farmerRequired: true,
+      studentRequired: false,
+      womenOnly: false,
+      requiredDocuments: ["Land Record", "Aadhaar Card", "Active Savings Bank Account"],
     },
     benefits: [
       "Direct benefit transfer of ₹6,000 annually in 3 equal installments",
@@ -40,6 +58,23 @@ export const sampleSchemes = [
       occupations: ["Any", "Farmer/Agricultural Worker", "Unemployed", "Daily Wage Worker"],
       incomeRanges: ["Below ₹1 Lakh", "₹1-2.5 Lakh"],
     },
+    eligibility: {
+      minAge: 0,
+      maxAge: 100,
+      genders: ["Any"],
+      occupations: ["Any"],
+      educationLevels: ["Any"],
+      annualIncomeMax: 250000,
+      states: ["All India"],
+      districts: ["All"],
+      socialCategories: ["All"],
+      disabilityRequired: false,
+      minorityRequired: false,
+      farmerRequired: false,
+      studentRequired: false,
+      womenOnly: false,
+      requiredDocuments: ["Aadhaar Card / Ration Card", "Income Certificate"],
+    },
     benefits: [
       "Cashless and paperless access to healthcare services at empanelled hospitals",
       "Cover of up to ₹5,000,000 per family per annum",
@@ -63,6 +98,23 @@ export const sampleSchemes = [
       states: ["Maharashtra", "Uttar Pradesh", "Tamil Nadu", "Karnataka", "Gujarat", "Rajasthan", "All India"],
       occupations: ["Student"],
       incomeRanges: ["Below ₹1 Lakh", "₹1-2.5 Lakh", "₹2.5-5 Lakh"],
+    },
+    eligibility: {
+      minAge: 15,
+      maxAge: 30,
+      genders: ["Any"],
+      occupations: ["Student"],
+      educationLevels: ["10th Pass", "12th Pass", "Graduate"],
+      annualIncomeMax: 250000,
+      states: ["All India"],
+      districts: ["All"],
+      socialCategories: ["All"],
+      disabilityRequired: false,
+      minorityRequired: false,
+      farmerRequired: false,
+      studentRequired: true,
+      womenOnly: false,
+      requiredDocuments: ["Income Certificate", "Bonafide Certificate", "Student ID Card", "Mark Sheets"],
     },
     benefits: [
       "100% tuition fee reimbursement for qualified academic institutions",
@@ -88,6 +140,23 @@ export const sampleSchemes = [
       occupations: ["Any"],
       incomeRanges: ["Below ₹1 Lakh", "₹1-2.5 Lakh", "₹2.5-5 Lakh", "₹5-8 Lakh"],
     },
+    eligibility: {
+      minAge: 18,
+      maxAge: 70,
+      genders: ["Any"],
+      occupations: ["Any"],
+      educationLevels: ["Any"],
+      annualIncomeMax: 600000,
+      states: ["All India"],
+      districts: ["All"],
+      socialCategories: ["All"],
+      disabilityRequired: false,
+      minorityRequired: false,
+      farmerRequired: false,
+      studentRequired: false,
+      womenOnly: false,
+      requiredDocuments: ["Aadhaar Card", "Income Certificate", "No-Pucca-House Affidavit"],
+    },
     benefits: [
       "Up to ₹2.67 Lakhs home loan interest subsidy under Credit Linked Subsidy Scheme",
       "Direct financial grant of ₹1.2 Lakh to ₹1.5 Lakh for construction in rural areas",
@@ -111,6 +180,23 @@ export const sampleSchemes = [
       states: ["Maharashtra", "Uttar Pradesh", "Tamil Nadu", "Karnataka", "Gujarat", "Rajasthan", "All India"],
       occupations: ["Self-Employed / Business", "Unemployed", "Farmer/Agricultural Worker"],
       incomeRanges: ["Below ₹1 Lakh", "₹1-2.5 Lakh", "₹2.5-5 Lakh", "₹5-8 Lakh", "₹8-12 Lakh", "Above ₹12 Lakh"],
+    },
+    eligibility: {
+      minAge: 18,
+      maxAge: 65,
+      genders: ["Any"],
+      occupations: ["Self-Employed / Business", "Unemployed", "Farmer/Agricultural Worker"],
+      educationLevels: ["Any"],
+      annualIncomeMax: 1200000,
+      states: ["All India"],
+      districts: ["All"],
+      socialCategories: ["All"],
+      disabilityRequired: false,
+      minorityRequired: false,
+      farmerRequired: false,
+      studentRequired: false,
+      womenOnly: false,
+      requiredDocuments: ["Identity Proof", "Business Plan", "Bank Statement"],
     },
     benefits: [
       "No collateral required for loans under Shishu (₹50k), Kishor (₹5L), and Tarun (₹10L)",
@@ -136,6 +222,23 @@ export const sampleSchemes = [
       occupations: ["Any"],
       incomeRanges: ["Below ₹1 Lakh", "₹1-2.5 Lakh", "₹2.5-5 Lakh"],
     },
+    eligibility: {
+      minAge: 19,
+      maxAge: 45,
+      genders: ["Female"],
+      occupations: ["Any"],
+      educationLevels: ["Any"],
+      annualIncomeMax: 500000,
+      states: ["All India"],
+      districts: ["All"],
+      socialCategories: ["All"],
+      disabilityRequired: false,
+      minorityRequired: false,
+      farmerRequired: false,
+      studentRequired: false,
+      womenOnly: true,
+      requiredDocuments: ["MCP Card", "Aadhaar Card", "Bank Account Details"],
+    },
     benefits: [
       "Direct cash transfer of ₹5,000 in installments upon health milestone compliance",
       "Promotes institutional delivery and health-seeking behavior",
@@ -157,54 +260,30 @@ export const processEligibilityCheck = async (userAnswers) => {
 
   const allSchemes = dbSchemes && dbSchemes.length > 0 ? dbSchemes : sampleSchemes;
 
-  const { category, occupation, state, income } = userAnswers;
+  // Filter schemes by category if requested
+  const { category } = userAnswers;
+  let targetSchemes = allSchemes;
+  if (category && category !== "All") {
+    targetSchemes = allSchemes.filter(
+      (scheme) => scheme.category.toLowerCase().trim() === category.toLowerCase().trim()
+    );
+  }
 
-  const evaluated = allSchemes.map((scheme) => {
-    let score = 0;
-    let maxScore = 4;
-    const matchReasons = [];
-
-    // Category match
-    if (!category || scheme.category === category) {
-      score += 1;
-      matchReasons.push(`Category match: ${category || "General"}`);
-    }
-
-    // State match
-    const sCriteria = scheme.eligibilityCriteria?.states || ["All India"];
-    if (!state || sCriteria.includes("All India") || sCriteria.includes(state)) {
-      score += 1;
-      matchReasons.push(`State match: ${state || "All India"}`);
-    }
-
-    // Occupation match
-    const oCriteria = scheme.eligibilityCriteria?.occupations || ["Any"];
-    if (!occupation || oCriteria.includes("Any") || oCriteria.includes(occupation)) {
-      score += 1;
-      matchReasons.push(`Occupation match: ${occupation || "Any"}`);
-    }
-
-    // Income match
-    const iCriteria = scheme.eligibilityCriteria?.incomeRanges || ["All"];
-    if (!income || iCriteria.includes("All") || iCriteria.includes(income)) {
-      score += 1;
-      matchReasons.push(`Income match: ${income || "Eligible"}`);
-    }
-
-    const matchPercentage = Math.round((score / maxScore) * 100);
-
+  // Evaluate matching schemes using the robust eligibility engine
+  const evaluated = targetSchemes.map((scheme) => {
+    const evaluation = evaluateSchemeEligibility(scheme, userAnswers);
     return {
-      ...scheme,
-      matchPercentage,
-      isFullyEligible: matchPercentage >= 85,
-      matchReasons,
+      scheme,
+      matchScore: evaluation.matchScore,
+      eligibilityStatus: evaluation.eligibilityStatus,
+      matchedRules: evaluation.matchedRules,
+      missingRequirements: evaluation.missingRequirements,
+      failedRules: evaluation.failedRules,
     };
-  }).sort((a, b) => b.matchPercentage - a.matchPercentage);
+  });
 
-  return {
-    totalEvaluated: allSchemes.length,
-    eligibleCount: evaluated.length,
-    criteria: userAnswers,
-    schemes: evaluated,
-  };
+  // Sort by matchScore descending
+  evaluated.sort((a, b) => b.matchScore - a.matchScore);
+
+  return evaluated;
 };
