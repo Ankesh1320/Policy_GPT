@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
-import Sidebar from "../components/Navbar/Sidebar";
-import WelcomeCard from "../components/Dashboard/WelcomeCard";
-import StatCards from "../components/Dashboard/StatCards";
-import SavedSchemes from "../components/Dashboard/SavedSchemes";
-import ApplicationStatus from "../components/Dashboard/ApplicationStatus";
-import RecentSearches from "../components/Dashboard/RecentSearches";
-import Notifications from "../components/Dashboard/Notifications";
-import DashboardSkeleton from "../components/Dashboard/DashboardSkeleton";
-import DashboardError from "../components/Dashboard/DashboardError";
+import Navbar from "../components/navbar/navbar";
+import Sidebar from "../components/navbar/sidebar";
+import WelcomeCard from "../components/dashboard/welcomecard";
+import StatCards from "../components/dashboard/StatCards";
+import SavedSchemes from "../components/dashboard/SavedSchemes";
+import ApplicationStatus from "../components/dashboard/ApplicationStatus";
+import RecentSearches from "../components/dashboard/RecentSearches";
+import Notifications from "../components/dashboard/Notifications";
+import DashboardSkeleton from "../components/dashboard/DashboardSkeleton";
+import DashboardError from "../components/dashboard/DashboardError";
 import { useDashboard } from "../hooks/useDashboard";
 
 const CitizenDashboard = () => {
@@ -18,7 +18,7 @@ const CitizenDashboard = () => {
   );
 
   return (
-    <div className="h-screen flex overflow-hidden bg-[#FDF9F2]">
+    <div className="h-screen flex overflow-hidden bg-cream">
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}

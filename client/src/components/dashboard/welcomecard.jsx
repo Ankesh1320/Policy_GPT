@@ -3,18 +3,13 @@ import { ArrowRight } from "lucide-react";
 
 const WelcomeCard = ({ name, eligibleSchemes, deadlines, onUpdateProfile }) => {
   return (
-    <section className="w-full rounded-2xl bg-gradient-to-r from-[#FFF2E6] via-white to-[#E6F5EA] border border-[#E2E8F0] px-10 py-8 flex items-center justify-between gap-6">
+    <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-gradient-to-r from-[#F7D2A8] via-white to-[#D8F3E3] border border-[#E2E8F0] p-6 shadow-sm gap-4">
       <div>
-        <p className="text-[15px] text-gray-500">Welcome back,</p>
-
-        <h1 className="font-heading mt-1 flex items-center gap-2 text-[32px] font-bold text-gray-900">
-          {name}
-          <span role="img" aria-label="waving hand">
-            👋
-          </span>
+        <p className="mb-1 text-[13px] text-gray-500 font-medium">Welcome back,</p>
+        <h1 className="flex items-center gap-2 font-heading text-[28px] font-bold text-gray-900 leading-tight">
+          {name} 👋
         </h1>
-
-        <p className="mt-3 text-[15px] text-gray-600">
+        <p className="mt-2 text-sm text-gray-500 font-normal">
           You have{" "}
           <span className="font-bold text-[#10B981]">
             {eligibleSchemes ?? 0} eligible schemes
@@ -30,13 +25,13 @@ const WelcomeCard = ({ name, eligibleSchemes, deadlines, onUpdateProfile }) => {
       <button
         type="button"
         onClick={onUpdateProfile}
-        className="hidden sm:inline-flex shrink-0 items-center gap-2 bg-[#F5C568] hover:bg-[#e0b257] text-gray-900 font-semibold text-[15px] rounded-xl px-5 py-2.5 transition-colors"
+        className="flex items-center gap-2 rounded-full bg-[#F2762E] hover:bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors cursor-pointer shrink-0"
       >
         Update Profile
-        <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+        <ArrowRight size={16} />
       </button>
     </section>
   );
 };
 
-export default WelcomeCard;
+export default WelcomeCard;
