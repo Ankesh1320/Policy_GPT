@@ -21,8 +21,8 @@ import { sidebarSections } from "../../utils/staticContent";
 const ICONS = {
   Home,
   Search,
-  Bookmark,
   FileText,
+  Bookmark,
   CheckCircle2,
   Scale,
   User,
@@ -97,16 +97,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <span className="text-[#F2762E]">GPT</span>
               </span>
             </div>
-            {isOpen && (
-              <button
-                type="button"
-                onClick={onClose}
-                className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer"
-                aria-label="Collapse sidebar"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-            )}
+            
           </div>
 
           {sidebarSections.map((group, index) => (

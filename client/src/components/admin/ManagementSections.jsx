@@ -14,6 +14,7 @@ import {
   MoreVertical 
 } from 'lucide-react';
 import Button from '../ui/Button';
+import { useNavigate } from 'react-router-dom';
 
 const SCHEMES = [
   {
@@ -112,6 +113,7 @@ const POLICIES = [
 ];
 
 export default function ManagementSections() {
+  const navigate = useNavigate();
   const [activeSchemeTab, setActiveSchemeTab] = useState('All Schemes');
   const [activePolicyTab, setActivePolicyTab] = useState('All Policies');
 
@@ -132,7 +134,7 @@ export default function ManagementSections() {
       <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-900">Scheme Management</h2>
-          <button className="text-sm font-semibold text-brand-orange hover:text-orange-600 cursor-pointer">View all</button>
+          
         </div>
         
         <div className="mb-5 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
@@ -156,7 +158,7 @@ export default function ManagementSections() {
             filteredSchemes.map((scheme, idx) => {
               const Icon = scheme.icon;
               return (
-                <div key={idx} className="flex items-center justify-between border border-gray-100 rounded-xl p-3 bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                <div key={idx} className="flex items-center justify-between border border-gray-100 rounded-xl p-3 bg-cream hover:bg-orange-100 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${scheme.iconBg}`}>
                       <Icon className="w-5 h-5" />
@@ -186,7 +188,11 @@ export default function ManagementSections() {
         </div>
         
         <div className="mt-auto flex justify-center">
-          <Button variant="primary" icon={<ArrowRight size={16} />}>
+          <Button
+            variant="primary"
+            icon={<ArrowRight size={16} />}
+            onClick={() => navigate('/admin/scheme-management')}
+          >
             Manage All Schemes
           </Button>
         </div>
@@ -196,7 +202,7 @@ export default function ManagementSections() {
       <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
         <div className="mb-5 flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-900">Policy Management</h2>
-          <button className="text-sm font-semibold text-brand-orange hover:text-orange-600 cursor-pointer">View all</button>
+          
         </div>
         
         <div className="mb-5 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
@@ -220,7 +226,7 @@ export default function ManagementSections() {
             filteredPolicies.map((policy, idx) => {
               const Icon = policy.icon;
               return (
-                <div key={idx} className="flex items-center justify-between border border-gray-100 rounded-xl p-3 bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                <div key={idx} className="flex items-center justify-between border border-gray-100 rounded-xl p-3 bg-cream hover:bg-orange-100 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${policy.iconBg}`}>
                       <Icon className="w-5 h-5" />
@@ -250,7 +256,11 @@ export default function ManagementSections() {
         </div>
         
         <div className="mt-auto flex justify-center">
-          <Button variant="primary" icon={<ArrowRight size={16} />}>
+          <Button
+            variant="primary"
+            icon={<ArrowRight size={16} />}
+            onClick={() => navigate('/admin/policy-management')}
+          >
             Manage All Policies
           </Button>
         </div>

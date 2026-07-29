@@ -21,6 +21,8 @@ export default function AdminSidebar({ isOpen, onClose }) {
   const location = useLocation();
 
   const isDashboardActive = location.pathname === '/admin/dashboard';
+  const isSchemeActive = location.pathname === '/admin/scheme-management';
+  const isPolicyActive = location.pathname === '/admin/policy-management';
 
   return (
     <>
@@ -80,8 +82,32 @@ export default function AdminSidebar({ isOpen, onClose }) {
             <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">
               Management
             </p>
-            <SidebarItem icon={<Layers className="w-[18px] h-[18px]" strokeWidth={2} />} text="Schedule Management" hasDropdown />
-            <SidebarItem icon={<FileText className="w-[18px] h-[18px]" strokeWidth={2} />} text="Policy Management" hasDropdown />
+            <Link
+              to="/admin/scheme-management"
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                isSchemeActive
+                  ? 'bg-[#FFF7ED] text-[#EA580C] font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <Layers className={`w-[18px] h-[18px] ${isSchemeActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
+                <span className="whitespace-nowrap">Scheme Management</span>
+              </div>
+            </Link>
+            <Link
+              to="/admin/policy-management"
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                isPolicyActive
+                  ? 'bg-[#FFF7ED] text-[#EA580C] font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <FileText className={`w-[18px] h-[18px] ${isPolicyActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
+                <span className="whitespace-nowrap">Policy Management</span>
+              </div>
+            </Link>
             <SidebarItem icon={<FileBox className="w-[18px] h-[18px]" strokeWidth={2} />} text="Applications" />
             <SidebarItem icon={<Users className="w-[18px] h-[18px]" strokeWidth={2} />} text="Users" />
             <SidebarItem icon={<Settings className="w-[18px] h-[18px]" strokeWidth={2} />} text="Roles & Permissions" />

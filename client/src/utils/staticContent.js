@@ -16,8 +16,8 @@ export const sidebarSections = [
     section: "Schemes",
     items: [
       { label: "Explore Schemes", icon: "Search", to: "/schemes" },
-      { label: "Saved Schemes", icon: "Bookmark", to: "/citizen/dashboard?tab=saved-schemes" },
-      { label: "Applied Schemes", icon: "FileText", to: "/citizen/dashboard?tab=applied-schemes" },
+      { label: "Explore Policies", icon: "FileText", to: "/policies" },
+      { label: "Saved Resources", icon: "Bookmark", to: "/citizen/dashboard?tab=saved-schemes" },
       { label: "Eligibility Checker", icon: "CheckCircle2", to: "/eligibility-checker" },
       { label: "Compare Schemes", icon: "Scale", to: "/compare" },
     ],
