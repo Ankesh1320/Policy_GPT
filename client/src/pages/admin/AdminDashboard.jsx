@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 import AdminHeader from '../../components/admin/AdminHeader';
@@ -6,40 +7,49 @@ import ManagementSections from '../../components/admin/ManagementSections';
 import BottomGrid from '../../components/admin/BottomGrid';
 
 export default function AdminDashboard() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(
+    typeof window !== "undefined" ? window.innerWidth >= 1024 : false
+  );
+
   return (
-    <div className="flex min-h-screen bg-gray-50 font-body">
+    <div className="h-screen flex overflow-hidden bg-[#FDF9F2] font-body">
       {/* Sidebar */}
-      <AdminSidebar />
+      <AdminSidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+      />
 
-      {/* Main Content */}
-      <main className="ml-[260px] flex flex-1 flex-col gap-6 p-8">
-        {/* Header */}
-        <AdminHeader />
+      {/* Main Content wrapper */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Header (Navbar) */}
+        <AdminHeader onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
 
-        {/* Welcome Banner */}
-        <section className="flex items-center justify-between rounded-2xl bg-gradient-to-br from-blue-100 to-blue-200 p-6 shadow-sm">
-          <div>
-            <p className="mb-1 text-sm text-text-secondary">Welcome back,</p>
-            <h1 className="flex items-center gap-2 font-heading text-2xl font-bold text-heading-charcoal">
-              Admin 👋
-            </h1>
-            <p className="mt-2 text-sm text-text-secondary">Here's what's happening with your platform today.</p>
-          </div>
-          <button className="flex items-center gap-2 rounded-lg bg-btn-yellow px-5 py-2.5 text-sm font-semibold text-heading-charcoal shadow-btn transition-colors hover:bg-brand-orange hover:text-white">
-            View Reports
-            <ArrowRight size={16} />
-          </button>
-        </section>
+        <main className="flex-1 min-w-0 overflow-y-auto px-8 py-8 flex flex-col gap-6">
+          {/* Welcome Banner */}
+          <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-[#FAF3E6] border border-[#EBE3D5] p-6 shadow-sm gap-4">
+            <div>
+              <p className="mb-1 text-[13px] text-gray-500 font-medium">Welcome back,</p>
+              <h1 className="flex items-center gap-2 font-heading text-[28px] font-bold text-gray-900 leading-tight">
+                Admin 👋
+              </h1>
+              <p className="mt-2 text-sm text-gray-500 font-normal">Here's what's happening with your platform today.</p>
+            </div>
+            <button className="flex items-center gap-2 rounded-full bg-[#F2762E] hover:bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors cursor-pointer shrink-0">
+              View Reports
+              <ArrowRight size={16} />
+            </button>
+          </section>
 
-        {/* Stats Grid */}
-        <StatsGrid />
+          {/* Stats Grid */}
+          <StatsGrid />
 
-        {/* Management Sections */}
-        <ManagementSections />
+          {/* Management Sections */}
+          <ManagementSections />
 
-        {/* Bottom Grid */}
-        <BottomGrid />
-      </main>
+          {/* Bottom Grid */}
+          <BottomGrid />
+        </main>
+      </div>
     </div>
   );
 }

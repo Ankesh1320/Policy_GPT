@@ -6,68 +6,76 @@ export default function StatsGrid() {
       <AdminStatCard 
         icon={<FileBox size={20} className="text-indigo-600" />} 
         iconBg="bg-indigo-50"
-        value="0" 
+        value="128" 
         label="Total Schemes" 
-        trend="0" 
+        trend="12" 
         trendLabel="this month" 
+        trendUp={true}
       />
       <AdminStatCard 
         icon={<Shield size={20} className="text-emerald-500" />} 
-        iconBg="bg-emerald-100"
-        value="0" 
+        iconBg="bg-emerald-50"
+        value="45" 
         label="Total Policies" 
-        trend="0" 
+        trend="8" 
         trendLabel="this month" 
+        trendUp={true}
       />
       <AdminStatCard 
         icon={<Users size={20} className="text-orange-500" />} 
         iconBg="bg-orange-50"
-        value="0" 
+        value="12,540" 
         label="Total Users" 
-        trend="0%" 
+        trend="18%" 
         trendLabel="this month" 
+        trendUp={true}
       />
       <AdminStatCard 
         icon={<FileText size={20} className="text-purple-500" />} 
-        iconBg="bg-purple-100"
-        value="0" 
+        iconBg="bg-purple-50"
+        value="3,256" 
         label="Applications" 
-        trend="0%" 
+        trend="15%" 
         trendLabel="this month" 
+        trendUp={true}
       />
       <AdminStatCard 
         icon={<Bell size={20} className="text-blue-500" />} 
         iconBg="bg-blue-50"
-        value="0" 
+        value="78" 
         label="Pending Approvals" 
-        trend="0" 
+        trend="5" 
         trendLabel="since yesterday" 
+        trendUp={false}
       />
       <AdminStatCard 
         icon={<FileCheck size={20} className="text-green-500" />} 
-        iconBg="bg-green-100"
-        value="0" 
-        label="Approved" 
-        trend="0%" 
+        iconBg="bg-green-50"
+        value="2,845" 
+        label="Approved Applications" 
+        trend="20%" 
         trendLabel="this month" 
+        trendUp={true}
       />
     </section>
   );
 }
 
-function AdminStatCard({ icon, iconBg, value, label, trend, trendLabel }) {
+function AdminStatCard({ icon, iconBg, value, label, trend, trendLabel, trendUp }) {
   return (
-    <article className="flex flex-col items-center justify-center rounded-2xl bg-white p-5 shadow-sm border border-border-light transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
-      <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-lg ${iconBg}`}>
+    <article className="flex flex-col items-center justify-center rounded-2xl bg-white p-5 shadow-sm border border-gray-100 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+      <div className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl ${iconBg}`}>
         {icon}
       </div>
-      <div className="mb-1 text-2xl font-bold text-text-primary">{value}</div>
-      <div className="mb-3 w-full truncate text-center text-xs font-medium text-text-secondary">
+      <div className="mb-1 font-heading text-[26px] font-bold text-gray-900 leading-none">{value}</div>
+      <div className="mb-3 w-full truncate text-center text-[13px] font-semibold text-gray-500 leading-tight">
         {label}
       </div>
-      <div className="flex items-center gap-1 text-xs font-medium">
-        <span className="text-text-primary">{trend}</span>
-        <span className="text-text-muted">{trendLabel}</span>
+      <div className="flex items-center gap-1 text-[11px] font-semibold">
+        <span className={`flex items-center font-bold ${trendUp ? "text-emerald-600" : "text-rose-600"}`}>
+          {trendUp ? "↑" : "↓"} {trend}
+        </span>
+        <span className="text-gray-400 font-normal">{trendLabel}</span>
       </div>
     </article>
   );
