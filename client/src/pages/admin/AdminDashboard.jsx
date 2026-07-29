@@ -26,7 +26,7 @@ export default function AdminDashboard() {
 
         <main className="flex-1 min-w-0 overflow-y-auto px-8 py-8 flex flex-col gap-6">
           {/* Welcome Banner */}
-          <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-[#FAF3E6] border border-[#EBE3D5] p-6 shadow-sm gap-4">
+          <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-gradient-to-r from-[#FFF2E6] via-white to-[#E6F5EA] border border-[#E2E8F0] p-6 shadow-sm gap-4">
             <div>
               <p className="mb-1 text-[13px] text-gray-500 font-medium">Welcome back,</p>
               <h1 className="flex items-center gap-2 font-heading text-[28px] font-bold text-gray-900 leading-tight">
