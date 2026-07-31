@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -17,85 +17,11 @@ import {
   CloudSun,
   Shield,
   Briefcase,
+  Trash2
 } from 'lucide-react';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 import AdminHeader from '../../components/admin/AdminHeader';
-
-/* ─────────────── Data ─────────────── */
-const ALL_POLICIES = [
-  {
-    id: 1,
-    name: 'National Education Policy 2020',
-    description: "Transforming India's education system for 21st century needs.",
-    department: 'Ministry of Education',
-    date: '29 Jul 2020',
-    status: 'Published',
-    lastUpdated: '2 days ago',
-    icon: GraduationCap,
-    iconBg: '#faf5ff',
-    iconColor: '#a855f7',
-  },
-  {
-    id: 2,
-    name: 'National Health Policy 2017',
-    description: 'Universal, accessible and affordable healthcare for all.',
-    department: 'Ministry of Health & Family Welfare',
-    date: '16 Mar 2017',
-    status: 'Under Review',
-    lastUpdated: '1 day ago',
-    icon: Activity,
-    iconBg: '#fff1f2',
-    iconColor: '#e11d48',
-  },
-  {
-    id: 3,
-    name: 'Digital India Policy',
-    description: 'Power to empower – Digital infrastructure for a new India.',
-    department: 'Ministry of Electronics & IT',
-    date: '01 Jul 2015',
-    status: 'Published',
-    lastUpdated: '3 days ago',
-    icon: Globe,
-    iconBg: '#eff6ff',
-    iconColor: '#2563eb',
-  },
-  {
-    id: 4,
-    name: 'Climate Change Action Plan',
-    description: 'Building a sustainable and climate-resilient India.',
-    department: 'Ministry of Environment',
-    date: '12 Aug 2019',
-    status: 'Approved',
-    lastUpdated: '4 hours ago',
-    icon: CloudSun,
-    iconBg: '#f0fdf4',
-    iconColor: '#16a34a',
-  },
-  {
-    id: 5,
-    name: 'Data Protection Policy',
-    description: 'Ensuring privacy, security and responsible data governance.',
-    department: 'Ministry of Electronics & IT',
-    date: '24 Nov 2022',
-    status: 'Under Review',
-    lastUpdated: '6 days ago',
-    icon: Shield,
-    iconBg: '#faf5ff',
-    iconColor: '#a855f7',
-  },
-  {
-    id: 6,
-    name: 'Make in India Policy',
-    description: 'Strengthening manufacturing and boosting economic growth.',
-    department: 'Ministry of Commerce & Industry',
-    date: '25 Sep 2014',
-    status: 'Archived',
-    lastUpdated: '1 week ago',
-    icon: Briefcase,
-    iconBg: '#fff7ed',
-    iconColor: '#ea580c',
-  },
-];
+import { policyService } from '../../services/policyService';
 
 const DEPARTMENTS = [
   'All Departments',
@@ -110,6 +36,36 @@ const STATUS_OPTIONS = ['All Status', 'Published', 'Under Review', 'Draft', 'Arc
 const SORT_OPTIONS = ['Newest', 'Oldest', 'A–Z', 'Z–A'];
 
 const PAGE_SIZE = 7;
+
+/* ─────────────── Icon Mapping Utilities ─────────────── */
+const categoryIcons = {
+  'Education': GraduationCap,
+  'Healthcare': Activity,
+  'Technology': Globe,
+  'Environment': CloudSun,
+  'Security': Shield,
+  'Finance': Shield,
+  'Employment': Briefcase,
+  'Commerce & Industry': Briefcase,
+};
+
+const getCategoryIcon = (category) => {
+  return categoryIcons[category] || FileText;
+};
+
+const getCategoryStyles = (category) => {
+  const map = {
+    'Education': { bg: '#faf5ff', color: '#a855f7' },
+    'Healthcare': { bg: '#fff1f2', color: '#e11d48' },
+    'Technology': { bg: '#eff6ff', color: '#2563eb' },
+    'Environment': { bg: '#f0fdf4', color: '#16a34a' },
+    'Security': { bg: '#faf5ff', color: '#a855f7' },
+    'Finance': { bg: '#fff7ed', color: '#ea580c' },
+    'Employment': { bg: '#fff7ed', color: '#ea580c' },
+    'Commerce & Industry': { bg: '#fff7ed', color: '#ea580c' },
+  };
+  return map[category] || { bg: '#faf5ff', color: '#a855f7' };
+};
 
 /* ─────────────── Status Badge ─────────────── */
 function StatusBadge({ status }) {
@@ -130,7 +86,7 @@ function StatusBadge({ status }) {
 }
 
 /* ─────────────── Action Button ─────────────── */
-function ActionBtn({ icon, label, color }) {
+function ActionBtn({ icon, label, color, onClick }) {
   const colorMap = {
     orange: { bg: '#fff7ed', border: '#fed7aa', text: '#ea580c' },
     blue:   { bg: '#eff6ff', border: '#bfdbfe', text: '#2563eb' },
@@ -140,6 +96,7 @@ function ActionBtn({ icon, label, color }) {
   const c = colorMap[color] || colorMap.orange;
   return (
     <button
+      onClick={onClick}
       style={{ backgroundColor: c.bg, borderColor: c.border, color: c.text }}
       className="flex items-center gap-1.5 border rounded-lg px-3 py-1.5 text-[12px] font-semibold transition-all cursor-pointer hover:brightness-95 active:scale-95"
     >
@@ -163,7 +120,7 @@ function Dropdown({ value, options, onChange, prefix }) {
         <ChevronDown className="w-4 h-4 text-gray-400 ml-1" />
       </button>
       {open && (
-        <div className="absolute top-full mt-1 left-0 z-20 bg-white border border-gray-200 rounded-xl shadow-lg py-1 min-w-[200px]">
+        <div className="absolute top-full mt-1 left-0 z-20 bg-white border border-gray-200 rounded-xl shadow-lg py-1 min-w-[200px] max-h-[300px] overflow-y-auto">
           {options.map(opt => (
             <button
               key={opt}
@@ -187,25 +144,172 @@ export default function PolicyManagement() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(
     typeof window !== 'undefined' ? window.innerWidth >= 1024 : false
   );
+
+  // State for live backend data
+  const [policiesList, setPoliciesList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Search, Filters & Pagination
   const [search, setSearch] = useState('');
   const [department, setDepartment] = useState('All Departments');
   const [statusFilter, setStatusFilter] = useState('All Status');
   const [sort, setSort] = useState('Newest');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Modals & Action States
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  // Form Fields State
+  const [formData, setFormData] = useState({
+    id: '',
+    name: '',
+    department: '',
+    category: '',
+    effectiveDate: '',
+    status: 'Draft',
+    description: ''
+  });
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const fetchAllPolicies = async () => {
+    try {
+      setLoading(true);
+      const data = await policyService.getAll();
+      setPoliciesList(data);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to load policies from server.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPolicies();
+  }, []);
+
+  const handleView = async (policy) => {
+    try {
+      const details = await policyService.getById(policy._id || policy.id);
+      setSelectedPolicy(details);
+      setIsViewOpen(true);
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to fetch policy details.', 'error');
+    }
+  };
+
+  const openAddForm = () => {
+    setFormData({
+      id: '',
+      name: '',
+      department: '',
+      category: 'Technology', // Default category for policies
+      effectiveDate: '',
+      status: 'Draft',
+      description: ''
+    });
+    setFormError(null);
+    setIsFormOpen(true);
+  };
+
+  const openEditForm = (policy) => {
+    setFormData({
+      id: policy._id || policy.id,
+      name: policy.name || '',
+      department: policy.department || '',
+      category: policy.category || 'Technology',
+      effectiveDate: policy.effectiveDate || policy.date || '',
+      status: policy.status || 'Draft',
+      description: policy.description || ''
+    });
+    setFormError(null);
+    setIsFormOpen(true);
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.department) {
+      setFormError('Please fill out all required fields (*)');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const payload = {
+        name: formData.name,
+        department: formData.department,
+        category: formData.category,
+        effectiveDate: formData.effectiveDate,
+        status: formData.status,
+        description: formData.description
+      };
+
+      if (formData.id) {
+        await policyService.update(formData.id, payload);
+        showToast('Policy updated successfully!');
+      } else {
+        await policyService.create(payload);
+        showToast('New policy added successfully!');
+      }
+      setIsFormOpen(false);
+      fetchAllPolicies();
+    } catch (err) {
+      console.error(err);
+      setFormError(err.response?.data?.message || 'Error occurred while saving.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleStatusChange = async (id, status) => {
+    try {
+      await policyService.update(id, { status });
+      showToast(`Policy status updated to ${status}!`);
+      fetchAllPolicies();
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to update status.', 'error');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this policy?')) return;
+    try {
+      await policyService.remove(id);
+      showToast('Policy deleted successfully.');
+      fetchAllPolicies();
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to delete policy.', 'error');
+    }
+  };
+
   /* Filter */
-  let policies = ALL_POLICIES.filter(p => {
+  let policies = policiesList.filter(p => {
     const q = search.toLowerCase();
-    const matchSearch =
-      !q || p.name.toLowerCase().includes(q) || p.department.toLowerCase().includes(q);
+    const nameStr = (p.name || '').toLowerCase();
+    const deptStr = (p.department || '').toLowerCase();
+    const matchSearch = !q || nameStr.includes(q) || deptStr.includes(q);
     const matchDept = department === 'All Departments' || p.department === department;
     const matchStatus = statusFilter === 'All Status' || p.status === statusFilter;
     return matchSearch && matchDept && matchStatus;
   });
 
   /* Sort */
-  if (sort === 'A–Z') policies = [...policies].sort((a, b) => a.name.localeCompare(b.name));
-  if (sort === 'Z–A') policies = [...policies].sort((a, b) => b.name.localeCompare(a.name));
+  if (sort === 'A–Z') policies = [...policies].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  if (sort === 'Z–A') policies = [...policies].sort((a, b) => (b.name || '').localeCompare(a.name || ''));
   if (sort === 'Oldest') policies = [...policies].reverse();
 
   const totalPolicies = policies.length;
@@ -237,7 +341,10 @@ export default function PolicyManagement() {
                 </p>
               </div>
             </div>
-            <button className="flex items-center gap-2 bg-[#F2762E] hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer shrink-0 shadow-sm">
+            <button
+              onClick={openAddForm}
+              className="flex items-center gap-2 bg-[#F2762E] hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer shrink-0 shadow-sm"
+            >
               <Plus className="w-4 h-4" strokeWidth={2.5} />
               Add New Policy
             </button>
@@ -269,13 +376,13 @@ export default function PolicyManagement() {
               />
               <Dropdown
                 value={`Sort by: ${sort}`}
-                options={SORT_OPTIONS.map(o => o)}
+                options={SORT_OPTIONS}
                 onChange={v => setSort(v)}
                 prefix={<SlidersHorizontal className="w-3.5 h-3.5 text-gray-400" />}
               />
             </div>
 
-            {/* Table wrapper */}
+            {/* Table */}
             <div className="mx-5 mb-4 border border-gray-100 rounded-xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
@@ -288,13 +395,10 @@ export default function PolicyManagement() {
                         Department
                       </th>
                       <th className="text-left text-xs font-semibold text-gray-500 tracking-wide px-4 py-3 whitespace-nowrap">
-                        Date
+                        Effective Date
                       </th>
                       <th className="text-left text-xs font-semibold text-gray-500 tracking-wide px-4 py-3 whitespace-nowrap">
                         Status
-                      </th>
-                      <th className="text-left text-xs font-semibold text-gray-500 tracking-wide px-4 py-3 whitespace-nowrap">
-                        Last Updated
                       </th>
                       <th className="text-center text-xs font-semibold text-gray-500 tracking-wide px-4 py-3 whitespace-nowrap">
                         Actions
@@ -302,20 +406,33 @@ export default function PolicyManagement() {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginated.length === 0 ? (
+                    {loading ? (
                       <tr>
-                        <td colSpan={6} className="py-16 text-center text-gray-400 text-sm font-medium">
+                        <td colSpan={5} className="py-16 text-center text-gray-400 text-sm font-medium">
+                          Loading policies...
+                        </td>
+                      </tr>
+                    ) : error ? (
+                      <tr>
+                        <td colSpan={5} className="py-16 text-center text-red-500 text-sm font-medium">
+                          {error}
+                        </td>
+                      </tr>
+                    ) : paginated.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-16 text-center text-gray-400 text-sm font-medium">
                           No policies found matching your filters.
                         </td>
                       </tr>
                     ) : (
                       paginated.map((policy, idx) => {
-                        const Icon = policy.icon;
+                        const Icon = getCategoryIcon(policy.category || 'Technology');
+                        const styles = getCategoryStyles(policy.category || 'Technology');
                         const isApproved = policy.status === 'Approved';
                         const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-cream';
                         return (
                           <tr
-                            key={policy.id}
+                            key={policy._id || policy.id}
                             className={`border-b border-gray-100 ${rowBg} ${
                               idx === paginated.length - 1 ? 'border-b-0' : ''
                             }`}
@@ -324,10 +441,10 @@ export default function PolicyManagement() {
                             <td className="px-5 py-4 min-w-[240px]">
                               <div className="flex items-start gap-3">
                                 <div
-                                  style={{ background: policy.iconBg }}
+                                  style={{ background: styles.bg }}
                                   className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                                 >
-                                  <Icon style={{ color: policy.iconColor, width: 18, height: 18 }} strokeWidth={2} />
+                                  <Icon style={{ color: styles.color, width: 18, height: 18 }} strokeWidth={2} />
                                 </div>
                                 <div className="self-center">
                                   <p className="text-sm font-semibold text-gray-900 leading-snug">
@@ -344,7 +461,7 @@ export default function PolicyManagement() {
 
                             {/* Date */}
                             <td className="px-4 py-4 whitespace-nowrap">
-                              <p className="text-sm text-gray-600">{policy.date}</p>
+                              <p className="text-sm text-gray-600">{policy.effectiveDate || policy.date || 'N/A'}</p>
                             </td>
 
                             {/* Status */}
@@ -352,23 +469,18 @@ export default function PolicyManagement() {
                               <StatusBadge status={policy.status} />
                             </td>
 
-                            {/* Last Updated */}
-                            <td className="px-4 py-4 whitespace-nowrap">
-                              <p className="text-xs text-gray-400 font-medium">{policy.lastUpdated}</p>
-                            </td>
-
                             {/* Actions */}
-                            <td className="px-4 py-4 min-w-[280px]">
-                              <div className="flex items-center gap-1.5 justify-center flex-nowrap">
-                                <ActionBtn icon={<Eye style={{ width: 13, height: 13 }} />} label="View" color="orange" />
-                                <ActionBtn icon={<Pencil style={{ width: 13, height: 13 }} />} label="Edit" color="blue" />
+                            <td className="px-4 py-4">
+                              <div className="flex items-center gap-1.5 justify-center flex-wrap">
+                                <ActionBtn icon={<Eye style={{ width: 13, height: 13 }} />} label="View" color="orange" onClick={() => handleView(policy)} />
+                                <ActionBtn icon={<Pencil style={{ width: 13, height: 13 }} />} label="Edit" color="blue" onClick={() => openEditForm(policy)} />
                                 {isApproved && (
-                                  <ActionBtn icon={<Upload style={{ width: 13, height: 13 }} />} label="Publish" color="green" />
+                                  <ActionBtn icon={<Upload style={{ width: 13, height: 13 }} />} label="Publish" color="green" onClick={() => handleStatusChange(policy._id || policy.id, 'Published')} />
                                 )}
-                                <ActionBtn icon={<Archive style={{ width: 13, height: 13 }} />} label="Archive" color="red" />
-                                <button className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer transition-colors ml-0.5">
-                                  <MoreVertical className="w-4 h-4" />
-                                </button>
+                                {policy.status === 'Published' && (
+                                  <ActionBtn icon={<Archive style={{ width: 13, height: 13 }} />} label="Archive" color="red" onClick={() => handleStatusChange(policy._id || policy.id, 'Archived')} />
+                                )}
+                                <ActionBtn icon={<Trash2 style={{ width: 13, height: 13 }} />} label="Delete" color="red" onClick={() => handleDelete(policy._id || policy.id)} />
                               </div>
                             </td>
                           </tr>
@@ -434,6 +546,187 @@ export default function PolicyManagement() {
           </div>
         </main>
       </div>
+
+      {/* ─────────────── View Details Modal ─────────────── */}
+      {isViewOpen && selectedPolicy && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setIsViewOpen(false)}
+              className="absolute right-4 top-4 rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition"
+            >
+              ✕
+            </button>
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                style={{ background: getCategoryStyles(selectedPolicy.category || 'Technology').bg }}
+                className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+              >
+                {React.createElement(getCategoryIcon(selectedPolicy.category || 'Technology'), {
+                  style: { color: getCategoryStyles(selectedPolicy.category || 'Technology').color, width: 24, height: 24 }
+                })}
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 font-heading">{selectedPolicy.name}</h3>
+                <p className="text-xs text-gray-500 font-medium">{selectedPolicy.category || 'Government Policy'} • {selectedPolicy.department}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <span className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide">Status</span>
+                <StatusBadge status={selectedPolicy.status} />
+              </div>
+              <div>
+                <span className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide">Effective Date</span>
+                <span className="text-sm font-semibold text-gray-700">{selectedPolicy.effectiveDate || selectedPolicy.date || 'N/A'}</span>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <span className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">Description</span>
+              <p className="text-sm text-gray-600 leading-relaxed bg-cream p-4 rounded-xl border border-gray-100">
+                {selectedPolicy.description || 'No description provided.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─────────────── Add / Edit Modal ─────────────── */}
+      {isFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setIsFormOpen(false)}
+              className="absolute right-4 top-4 rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-bold text-gray-900 font-heading mb-6">
+              {formData.id ? 'Edit Policy' : 'Add New Policy'}
+            </h3>
+
+            {formError && (
+              <div className="mb-4 text-xs font-semibold text-red-600 bg-red-50 border border-red-100 p-3 rounded-lg">
+                ⚠️ {formError}
+              </div>
+            )}
+
+            <form onSubmit={handleFormSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Policy Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="e.g. National Education Policy 2020"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Department *</label>
+                  <select
+                    value={formData.department}
+                    onChange={e => setFormData({ ...formData, department: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                  >
+                    <option value="">Select Department</option>
+                    {DEPARTMENTS.filter(d => d !== 'All Departments').map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Category / Sector</label>
+                  <select
+                    value={formData.category}
+                    onChange={e => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                  >
+                    <option value="Education">Education</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Environment">Environment</option>
+                    <option value="Security">Security</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Employment">Employment</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Effective Date</label>
+                  <input
+                    type="text"
+                    value={formData.effectiveDate}
+                    onChange={e => setFormData({ ...formData, effectiveDate: e.target.value })}
+                    placeholder="e.g. 29 Jul 2020"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Status</label>
+                  <select
+                    value={formData.status}
+                    onChange={e => setFormData({ ...formData, status: e.target.value })}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                  >
+                    <option value="Draft">Draft</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Published">Published</option>
+                    <option value="Archived">Archived</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Description</label>
+                <textarea
+                  value={formData.description}
+                  onChange={e => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Describe the policy objectives..."
+                  rows={4}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t">
+                <button
+                  type="button"
+                  onClick={() => setIsFormOpen(false)}
+                  className="px-4 py-2 border rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-5 py-2 bg-[#F2762E] hover:bg-orange-600 text-white rounded-lg text-sm font-semibold flex items-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Saving...' : 'Save Policy'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─────────────── Alert Toast ─────────────── */}
+      {toast && (
+        <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg border text-sm font-semibold transition-all duration-300 animate-slide-in ${
+          toast.type === 'success' 
+            ? 'bg-green-50 border-green-200 text-green-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
+          {toast.type === 'success' ? '✓' : '⚠️'} {toast.message}
+        </div>
+      )}
     </div>
   );
 }

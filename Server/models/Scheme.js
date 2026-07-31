@@ -4,7 +4,20 @@ const schemeSchema = new mongoose.Schema(
   {
     _id: {
       type: String,
-      required: true,
+      default: () => new mongoose.Types.ObjectId().toString(),
+    },
+    name: {
+      type: String,
+      trim: true,
+    },
+    launchDate: {
+      type: String,
+      trim: true,
+    },
+    status: {
+      type: String,
+      enum: ["Published", "Under Review", "Draft", "Archived", "Approved"],
+      default: "Draft",
     },
     title: {
       type: String,
@@ -121,6 +134,20 @@ const schemeSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+schemeSchema.pre("validate", function() {
+  if (this.name && (!this.title || !this.isModified("title"))) {
+    this.title = this.name;
+  } else if (this.title && (!this.name || !this.isModified("name"))) {
+    this.name = this.title;
+  }
+
+  if (this.launchDate && (!this.publishedDate || this.publishedDate === "2024" || !this.isModified("publishedDate"))) {
+    this.publishedDate = this.launchDate;
+  } else if (this.publishedDate && (!this.launchDate || !this.isModified("launchDate"))) {
+    this.launchDate = this.publishedDate;
+  }
+});
 
 const Scheme = mongoose.model("Scheme", schemeSchema);
 
