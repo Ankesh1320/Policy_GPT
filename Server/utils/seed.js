@@ -42,6 +42,16 @@ const seed = async () => {
     deadlinesCount: 5,
   });
 
+  const adminUser = await User.create({
+    fullName: "System Admin",
+    email: "admin@admin.com",
+    password: "password123",
+    role: "admin",
+    state: "All India",
+    occupation: "Salaried Employee",
+    incomeRange: "Above ₹12 Lakh",
+  });
+
   await SavedScheme.insertMany([
     { user: user._id, name: "PM Kisan Samman Nidhi", subtitle: "₹6,000 / year", icon: "Sprout", iconBg: "bg-blue-50", status: "Eligible" },
     { user: user._id, name: "Ayushman Bharat PM-JAY", subtitle: "₹5 Lakh health cover", icon: "HeartPulse", iconBg: "bg-purple-50", status: null },
