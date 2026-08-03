@@ -14,6 +14,7 @@ import {
     LuChevronRight,
 } from "react-icons/lu";
 import schemesData from "../data/schemesData";
+import { schemeService } from "../services/schemeService";
 import OverviewSection from "../components/scheme-details/OverviewSection";
 import EligibilitySection from "../components/scheme-details/EligibilitySection";
 import BenefitsSection from "../components/scheme-details/BenefitsSection";
@@ -27,22 +28,122 @@ export default function SchemeDetailsPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("Overview");
+    const [apiScheme, setApiScheme] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const token = localStorage.getItem("token");
 
-    const scheme = useMemo(() => {
-        const numericId = Number(id);
-        return schemesData.find((item) => item.id === numericId);
-    }, [id]);
+    useEffect(() => {
+        if (!id) return;
+        if (id.length === 24) {
+            const loadDetail = async () => {
+                setIsLoading(true);
+                setError(null);
+                try {
+                    const response = await fetch(`/api/schemes/${id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const res = await response.json();
+                    if (res.success) {
+                        const s = res.data;
+                        const mapped = {
+                            id: s._id || s.id,
+                            category: s.category || "General",
+                            title: s.title || s.name,
+                            description: s.description || "",
+                            objective: s.objective || "",
+                            ministry: s.department || s.ministry || "Central Ministry",
+                            ministryStat: s.department || s.ministry || "Central Ministry",
+                            applicants: s.beneficiaries || "N/A",
+                            state: (s.eligibility && s.eligibility.states && s.eligibility.states[0]) || "All India",
+                            badges: s.badgeTag ? [{ label: s.badgeTag, type: "popular" }] : [
+                                { label: s.category || "General", type: "new" },
+                                { label: (s.eligibility && s.eligibility.states && s.eligibility.states[0]) || "Central", type: "popular" }
+                            ],
+                            benefit: s.annualBenefit || s.benefit || "Ongoing",
+                            deadline: s.deadline || "Ongoing",
+                            eligibility: s.eligibility || ["Open for All"],
+                            eligibilityDetails: s.eligibilitySummary || "",
+                            benefits: s.benefits || "No benefit details provided.",
+                            documentsRequired: s.documentsRequired || s.requiredDocuments || [],
+                            apply: s.applicationModeSummary || "Register online using official details.",
+                            applicationProcess: s.applicationModeSummary || "Register online using official details.",
+                            applicationUrl: s.applicationUrl || s.pdfLink || "#",
+                            helpline: s.helpline || "Contact nodal bank / department"
+                        };
+                        setApiScheme(mapped);
+                        
+                        // Check if scheme is bookmarked
+                        try {
+                            const saved = await schemeService.isSaved(id);
+                            setIsBookmarked(saved);
+                        } catch (err) {
+                            console.warn("Failed to check saved status on load:", err.message);
+                        }
+                    } else {
+                        setError(res.message || "Failed to load scheme details.");
+                    }
+                } catch (err) {
+                    console.error("Error loading scheme details:", err);
+                    setError("Network error occurred while fetching details.");
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            loadDetail();
+        } else {
+            const numericId = Number(id);
+            const found = schemesData.find((item) => item.id === numericId);
+            setApiScheme(found || null);
+        }
+    }, [id, token]);
+
+    const handleToggleBookmark = async () => {
+        const nextState = !isBookmarked;
+        setIsBookmarked(nextState);
+
+        if (id && id.toString().length === 24) {
+            try {
+                if (nextState) {
+                    await schemeService.save(id);
+                } else {
+                    await schemeService.unsave(id);
+                }
+            } catch (err) {
+                console.error("Failed to toggle bookmark:", err.message);
+                setIsBookmarked(!nextState); // Revert state
+            }
+        }
+    };
+
+    const scheme = apiScheme;
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [activeTab]);
 
-    if (!scheme) {
+    if (isLoading) {
         return (
-            <div className="min-h-screen bg-cream">
+            <div className="min-h-screen bg-cream flex flex-col justify-between">
+                <Navbar activeLabel="Explore Schemes" />
+                <main className="mx-auto max-w-[1440px] px-5 lg:px-20 py-20 text-center animate-pulse">
+                    <p className="font-heading text-2xl font-bold text-slate-heading">Loading scheme details...</p>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
+
+    if (error || !scheme) {
+        return (
+            <div className="min-h-screen bg-cream flex flex-col justify-between">
                 <Navbar activeLabel="Explore Schemes" />
                 <main className="mx-auto max-w-[1440px] px-5 lg:px-20 py-20 text-center">
-                    <p className="font-heading text-2xl font-bold text-slate-heading">Scheme not found</p>
+                    <p className="font-heading text-2xl font-bold text-red-600">Scheme not found</p>
+                    <p className="mt-2 text-sm text-text-secondary">{error || "The selected scheme could not be found."}</p>
                     <button
                         onClick={() => navigate("/schemes")}
                         className="mt-6 rounded-xl bg-brand-orange px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-blue"
@@ -107,9 +208,16 @@ export default function SchemeDetailsPage() {
                                 Check My Eligibility
                             </button>
                             <div className="flex gap-3">
-                                <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
-                                    <LuBookmark className="h-4 w-4" />
-                                    Save
+                                <button
+                                    onClick={handleToggleBookmark}
+                                    className={`flex-1 transition-colors border rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium ${
+                                        isBookmarked
+                                            ? "bg-orange-50 border-brand-orange text-brand-orange hover:bg-orange-100"
+                                            : "bg-white border-border-light text-slate-heading hover:bg-gray-50"
+                                    }`}
+                                >
+                                    <LuBookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
+                                    {isBookmarked ? "Saved" : "Save"}
                                 </button>
                                 <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
                                     <LuShare2 className="h-4 w-4" />
@@ -168,12 +276,12 @@ export default function SchemeDetailsPage() {
             <main className="bg-cream mx-auto max-w-[1440px] px-5 lg:px-20 py-10">
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="flex-1">
-                        {activeTab === "Overview" && <OverviewSection />}
-                        {activeTab === "Eligibility" && <EligibilitySection />}
-                        {activeTab === "Benefits" && <BenefitsSection />}
-                        {activeTab === "Documents" && <DocumentsSection />}
-                        {activeTab === "Apply" && <ApplySection />}
-                        {activeTab === "Faqs" && <FaqsSection />}
+                        {activeTab === "Overview" && <OverviewSection scheme={scheme} />}
+                        {activeTab === "Eligibility" && <EligibilitySection scheme={scheme} />}
+                        {activeTab === "Benefits" && <BenefitsSection scheme={scheme} />}
+                        {activeTab === "Documents" && <DocumentsSection scheme={scheme} />}
+                        {activeTab === "Apply" && <ApplySection scheme={scheme} />}
+                        {activeTab === "Faqs" && <FaqsSection scheme={scheme} />}
                     </div>
 
                     <aside className="w-full lg:w-[340px] flex flex-col gap-6">

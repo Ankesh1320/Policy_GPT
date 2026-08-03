@@ -183,22 +183,28 @@ export const evaluateSchemeEligibility = (scheme, profile) => {
   }
 
   // 13. Required Documents Rule
-  const userDocs = profile.documents || [];
+  const userDocs = profile.documents;
   const requiredDocs = rules.requiredDocuments || [];
   const missing = [];
   
-  for (const doc of requiredDocs) {
-    if (!userDocs.includes(doc)) {
-      missing.push(doc);
-    }
-  }
-
-  if (missing.length > 0) {
-    missingRequirements.push(...missing);
-    failedRules.push("Required Documents");
-  } else {
+  if (userDocs === undefined || userDocs === null) {
+    // If user's documents are not supplied (e.g. checker questionnaire), skip this check
     score += 1;
     matchedRules.push("Required Documents");
+  } else {
+    for (const doc of requiredDocs) {
+      if (!userDocs.includes(doc)) {
+        missing.push(doc);
+      }
+    }
+
+    if (missing.length > 0) {
+      missingRequirements.push(...missing);
+      failedRules.push("Required Documents");
+    } else {
+      score += 1;
+      matchedRules.push("Required Documents");
+    }
   }
 
   const matchScore = Math.round((score / totalRules) * 100);
