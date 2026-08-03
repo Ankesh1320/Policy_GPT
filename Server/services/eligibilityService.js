@@ -250,6 +250,19 @@ export const sampleSchemes = [
   }
 ];
 
+function mapFrontendCategoryToDb(cat) {
+  if (!cat) return "";
+  const c = cat.toLowerCase();
+  if (c.includes("agriculture") || c.includes("farming")) return "agriculture";
+  if (c.includes("healthcare") || c.includes("medical") || c.includes("health")) return "healthcare";
+  if (c.includes("housing") || c.includes("shelter")) return "housing";
+  if (c.includes("education") || c.includes("schloarship") || c.includes("scholarship")) return "education";
+  if (c.includes("women") || c.includes("child")) return "women welfare";
+  if (c.includes("employment") || c.includes("skill")) return "employment";
+  if (c.includes("financial") || c.includes("loan")) return "financial aid";
+  return c;
+}
+
 export const processEligibilityCheck = async (userAnswers) => {
   let dbSchemes = [];
   try {
@@ -264,9 +277,11 @@ export const processEligibilityCheck = async (userAnswers) => {
   const { category } = userAnswers;
   let targetSchemes = allSchemes;
   if (category && category !== "All") {
-    targetSchemes = allSchemes.filter(
-      (scheme) => scheme.category.toLowerCase().trim() === category.toLowerCase().trim()
-    );
+    const mappedQueryCat = mapFrontendCategoryToDb(category);
+    targetSchemes = allSchemes.filter((scheme) => {
+      const dbCat = mapFrontendCategoryToDb(scheme.category);
+      return dbCat === mappedQueryCat;
+    });
   }
 
   // Evaluate matching schemes using the robust eligibility engine

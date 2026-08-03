@@ -50,6 +50,10 @@ const schemeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    objective: {
+      type: String,
+      trim: true,
+    },
     annualBenefit: {
       type: String,
       trim: true,
@@ -126,6 +130,10 @@ const schemeSchema = new mongoose.Schema(
     applicationUrl: {
       type: String,
       default: "#",
+    },
+    helpline: {
+      type: String,
+      trim: true,
     },
     tags: {
       type: [String],

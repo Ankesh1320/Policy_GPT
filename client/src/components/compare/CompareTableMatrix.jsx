@@ -156,7 +156,7 @@ export default function CompareTableMatrix({ selectedSchemes }) {
           {/* Scheme 1 View Details Button */}
           <div>
             <Link
-              to={scheme1._id || scheme1.id ? `/policies/${scheme1._id || scheme1.id}` : "/policies"}
+              to={scheme1._id || scheme1.id ? `/schemes/${scheme1._id || scheme1.id}` : "/schemes"}
               className="w-full bg-[#ECFDF5] text-[#16A34A] font-semibold text-sm py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#D1FAE5] transition-colors cursor-pointer shadow-xs"
             >
               <span>View Details</span>
@@ -167,7 +167,7 @@ export default function CompareTableMatrix({ selectedSchemes }) {
           {/* Scheme 2 View Details Button */}
           <div>
             <Link
-              to={scheme2._id || scheme2.id ? `/policies/${scheme2._id || scheme2.id}` : "/policies"}
+              to={scheme2._id || scheme2.id ? `/schemes/${scheme2._id || scheme2.id}` : "/schemes"}
               className="w-full bg-[#EEF2FF] text-[#1E40AF] font-semibold text-sm py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 hover:bg-[#E0E7FF] transition-colors cursor-pointer shadow-xs"
             >
               <span>View Details</span>

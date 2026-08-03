@@ -1,18 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import greenTick from '../../assets/icons/green-tick.svg';
+import { schemeService } from "../../services/schemeService";
 
-function BookmarkIcon() {
+function BookmarkIcon({ filled }) {
   return (
     <svg
       width="20"
       height="20"
       viewBox="0 0 24 24"
-      fill="none"
+      fill={filled ? "currentColor" : "none"}
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-text-secondary"
+      className={filled ? "text-brand-orange" : "text-text-secondary"}
       aria-hidden="true"
     >
       <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
@@ -39,13 +41,16 @@ function SchemeBadge({ label, type }) {
   );
 }
 
-function StatPill({ label, value }) {
+function StatPill({ label, value, fullValue }) {
   return (
-    <div className="flex w-full min-h-[60px] flex-col items-center justify-center rounded-[16px] bg-cream px-2 py-2 text-center sm:min-h-[72px] sm:rounded-[24px] sm:px-4 sm:py-3">
-      <span className="font-body text-[9px] uppercase tracking-[0.08em] text-text-secondary sm:text-[11px]">
+    <div 
+      title={fullValue || value}
+      className="flex w-full min-h-[68px] flex-col items-center justify-center rounded-[16px] bg-cream px-2 py-2 text-center sm:min-h-[76px] sm:rounded-[24px] sm:px-3 sm:py-3 cursor-help hover:bg-orange-50 transition-colors"
+    >
+      <span className="font-body text-[9px] uppercase tracking-[0.08em] text-[#64748B] sm:text-[10px]">
         {label}
       </span>
-      <span className="mt-0.5 font-body text-xs font-semibold text-text-primary leading-tight sm:mt-1 sm:text-sm">
+      <span className="mt-0.5 font-body text-xs font-semibold text-text-primary leading-tight sm:mt-1 sm:text-[13px] line-clamp-2">
         {value}
       </span>
     </div>
@@ -54,7 +59,46 @@ function StatPill({ label, value }) {
 
 export default function SchemeCard({ scheme }) {
   const navigate = useNavigate();
-  const { ministry, title, description, badges, benefit, applicants, deadline } = scheme;
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { ministry, title, description, badges, benefit, applicants, deadline, id } = scheme;
+
+  useEffect(() => {
+    const checkSaved = async () => {
+      if (id && id.toString().length === 24) {
+        try {
+          const saved = await schemeService.isSaved(id);
+          setIsBookmarked(saved);
+        } catch (err) {
+          console.warn("Failed to check saved status:", err.message);
+        }
+      }
+    };
+    checkSaved();
+  }, [id]);
+
+  const handleToggleBookmark = async (e) => {
+    e.stopPropagation();
+    const nextState = !isBookmarked;
+    setIsBookmarked(nextState);
+
+    if (id && id.toString().length === 24) {
+      try {
+        if (nextState) {
+          await schemeService.save(id);
+        } else {
+          await schemeService.unsave(id);
+        }
+      } catch (err) {
+        console.error("Failed to toggle bookmark:", err.message);
+        setIsBookmarked(!nextState); // Revert state
+      }
+    }
+  };
+
+  const truncateValue = (val, max = 22) => {
+    if (!val) return "N/A";
+    return val.length > max ? val.substring(0, max - 3) + "..." : val;
+  };
 
   return (
     <article className="group flex flex-col rounded-[16px] border border-border-warm bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-soft sm:rounded-[20px] sm:p-5">
@@ -66,31 +110,32 @@ export default function SchemeCard({ scheme }) {
         </div>
         <button
           type="button"
+          onClick={handleToggleBookmark}
           className="shrink-0 rounded p-1 transition-colors hover:bg-gray-100"
           aria-label={`Bookmark ${title}`}
         >
-          <BookmarkIcon />
+          <BookmarkIcon filled={isBookmarked} />
         </button>
       </div>
 
-      <p className="mb-1 font-body text-sm font-medium text-text-secondary line-clamp-2">
+      <p className="mb-1 font-body text-sm font-medium text-text-secondary line-clamp-1">
         {ministry}
       </p>
-      <h3 className="mb-3 font-heading text-lg font-bold text-text-primary sm:text-xl">{title}</h3>
-      <p className="mb-4 font-body text-sm leading-snug text-text-secondary line-clamp-2 sm:text-base">
+      <h3 className="mb-2 font-heading text-base font-bold text-text-primary line-clamp-2 sm:text-lg min-h-[44px]">{title}</h3>
+      <p className="mb-4 font-body text-xs leading-relaxed text-text-secondary line-clamp-2 sm:text-sm">
         {description}
       </p>
 
-      <div className="mb-4 grid grid-cols-3 gap-2 line ">
-        <StatPill label="Benefit" value={benefit} />
-        <StatPill label="Applicants" value={applicants} />
-        <StatPill label="Deadline" value={deadline} />
+      <div className="mb-4 grid grid-cols-3 gap-1.5">
+        <StatPill label="Benefit" value={truncateValue(benefit)} fullValue={benefit} />
+        <StatPill label="Applicants" value={truncateValue(applicants)} fullValue={applicants} />
+        <StatPill label="Deadline" value={truncateValue(deadline)} fullValue={deadline} />
       </div>
 
       <button
         type="button"
         onClick={() => navigate(`/schemes/${scheme.id}`)}
-        className="mt-auto inline-flex w-full items-center justify-center rounded-[30px] bg-card-orange py-2.5 text-center font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white sm:text-base"
+        className="mt-auto inline-flex w-full items-center justify-center rounded-[30px] bg-card-orange py-2 text-center font-body text-sm font-medium text-brand-orange transition-colors hover:bg-brand-orange hover:text-white sm:text-base"
       >
         View Details &gt;
       </button>

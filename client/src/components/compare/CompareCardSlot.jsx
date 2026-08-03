@@ -62,7 +62,7 @@ export default function CompareCardSlot({
           ✓ Verified Active
         </span>
         <Link
-          to={`/policies/${scheme.id}`}
+          to={`/schemes/${scheme.id}`}
           className="font-heading text-xs font-semibold text-brand-orange hover:underline"
         >
           Details →

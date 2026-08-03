@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/layouts/Navbar";
 import Footer from "../components/layouts/Footer";
@@ -11,69 +11,199 @@ import schemesData, {
   sortOptions,
   stateOptions,
 } from "../data/schemesData";
+import { schemeService } from "../services/schemeService";
 import breadcrumbChevron from "../assets/icons/policies/breadcrumb-chevron.svg";
 import sortDropdownArrow from "../assets/icons/policies/sort-dropdown-arrow.svg";
 import AuthBlocker from "../components/auth/AuthBlocker";
 
-function Pagination() {
-  const pages = [
-    { label: "1", active: true },
-    { label: "2", active: false },
-    { label: "...", active: false, disabled: true },
-    { label: "3", active: false },
-    { label: "24", active: false },
-  ];
+const ITEMS_PER_PAGE = 6;
+
+function Pagination({ currentPage, totalPages, onPageChange }) {
+  if (totalPages <= 1) return null;
+
+  const pages = [];
+  const maxVisiblePages = 5;
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage - startPage < maxVisiblePages - 1) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
 
   return (
-    <nav className="mt-10 flex items-center justify-center gap-3" aria-label="Pagination">
-      {pages.map((page) => {
-        if (page.label === "...") {
-          return (
-            <span key="ellipsis" className="font-body text-xl font-bold leading-7 text-text-body">
-              ...
-            </span>
-          );
-        }
+    <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Pagination">
+      <button
+        type="button"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="flex h-9 px-3 items-center justify-center rounded-xl border border-[#CBD5E1] bg-white text-xs font-semibold text-text-body hover:border-brand-orange hover:text-brand-orange disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-[#CBD5E1] disabled:hover:text-text-body transition-colors"
+      >
+        Prev
+      </button>
 
-        return (
+      {startPage > 1 && (
+        <>
           <button
-            key={page.label}
             type="button"
-            disabled={page.disabled}
-            className={`flex h-9 w-9 items-center justify-center rounded-full font-body text-sm font-semibold transition-colors ${
-              page.active
+            onClick={() => onPageChange(1)}
+            className={`flex h-9 w-9 items-center justify-center rounded-xl font-body text-xs font-semibold transition-colors ${
+              currentPage === 1
                 ? "bg-brand-orange text-white"
                 : "border border-[#CBD5E1] bg-white text-text-body hover:border-brand-orange hover:text-brand-orange"
             }`}
-            aria-current={page.active ? "page" : undefined}
           >
-            {page.label}
+            1
           </button>
-        );
-      })}
+          {startPage > 2 && <span className="text-text-secondary text-xs px-1">...</span>}
+        </>
+      )}
+
+      {pages.map((page) => (
+        <button
+          key={page}
+          type="button"
+          onClick={() => onPageChange(page)}
+          className={`flex h-9 w-9 items-center justify-center rounded-xl font-body text-xs font-semibold transition-colors ${
+            currentPage === page
+              ? "bg-brand-orange text-white"
+              : "border border-[#CBD5E1] bg-white text-text-body hover:border-brand-orange hover:text-brand-orange"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      {endPage < totalPages && (
+        <>
+          {endPage < totalPages - 1 && <span className="text-text-secondary text-xs px-1">...</span>}
+          <button
+            type="button"
+            onClick={() => onPageChange(totalPages)}
+            className={`flex h-9 w-9 items-center justify-center rounded-xl font-body text-xs font-semibold transition-colors ${
+              currentPage === totalPages
+                ? "bg-brand-orange text-white"
+                : "border border-[#CBD5E1] bg-white text-text-body hover:border-brand-orange hover:text-brand-orange"
+            }`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
+
+      <button
+        type="button"
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="flex h-9 px-3 items-center justify-center rounded-xl border border-[#CBD5E1] bg-white text-xs font-semibold text-text-body hover:border-brand-orange hover:text-brand-orange disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-[#CBD5E1] disabled:hover:text-text-body transition-colors"
+      >
+        Next
+      </button>
     </nav>
   );
 }
 
 export default function SchemesPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("search") || "";
+  });
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedEligibility, setSelectedEligibility] = useState(["Open for All"]);
+  const [selectedEligibility, setSelectedEligibility] = useState([]); // Unchecked by default
   const [selectedState, setSelectedState] = useState("All India (Central)");
   const [sortBy, setSortBy] = useState("Popular");
+  const [dbSchemes, setDbSchemes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const token = localStorage.getItem("token");
 
+  useEffect(() => {
+    if (!token) return;
+    const fetchSchemes = async () => {
+      try {
+        const response = await fetch("/api/schemes", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const res = await response.json();
+        if (res.success) {
+          const mapped = res.data.map((s) => {
+            // Build real eligibility tags dynamically from database properties
+            const eligTags = ["Open for All"];
+            if (s.eligibility) {
+              const el = s.eligibility;
+              if (el.womenOnly || (el.genders && el.genders.includes("Female") && !el.genders.includes("Male"))) {
+                eligTags.push("Women Only");
+              }
+              if (el.socialCategories && el.socialCategories.some(c => ["SC", "ST", "OBC"].includes(c))) {
+                eligTags.push("SC/ST/OBC");
+              }
+              const desc = (s.description || "").toLowerCase();
+              if (el.annualIncomeMax > 0 || desc.includes("bpl") || desc.includes("poverty") || desc.includes("vulnerable") || desc.includes("deprived")) {
+                eligTags.push("Below Poverty Line");
+              }
+              if (el.minAge >= 60) {
+                eligTags.push("Senior Citizens");
+              }
+            }
+
+            return {
+              id: s._id || s.id,
+              category: s.category || "General",
+              ministry: s.department || s.ministry || "Unknown",
+              title: s.title || s.name,
+              description: s.description || "",
+              badges: s.badgeTag ? [{ label: s.badgeTag, type: "popular" }] : [{ label: s.category || "General", type: "new" }],
+              benefit: s.annualBenefit || s.benefit || "Ongoing",
+              applicants: s.beneficiaries || "N/A",
+              deadline: s.deadline || "Ongoing",
+              eligibility: eligTags,
+              popularity: s.popularity || 10,
+            };
+          });
+          setDbSchemes(mapped);
+        }
+      } catch (err) {
+        console.error("Error fetching schemes:", err);
+      }
+    };
+    fetchSchemes();
+  }, [token]);
+
+  // Reset page when search or sorting triggers
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedEligibility, sortBy]);
+
+  // Debounced search history tracking
+  useEffect(() => {
+    if (!searchQuery || searchQuery.trim().length < 3) return;
+
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        await schemeService.addSearchHistory(searchQuery);
+      } catch (err) {
+        console.warn("Failed to save search history:", err.message);
+      }
+    }, 1200);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
   const filteredSchemes = useMemo(() => {
-    let results = [...schemesData];
+    let results = dbSchemes.length > 0 ? dbSchemes : [...schemesData];
     const query = searchQuery.trim().toLowerCase();
 
     if (query) {
       results = results.filter(
         (scheme) =>
-          scheme.title.toLowerCase().includes(query) ||
-          scheme.ministry.toLowerCase().includes(query) ||
-          scheme.description.toLowerCase().includes(query) ||
-          scheme.category.toLowerCase().includes(query),
+          (scheme.title || "").toLowerCase().includes(query) ||
+          (scheme.ministry || "").toLowerCase().includes(query) ||
+          (scheme.description || "").toLowerCase().includes(query) ||
+          (scheme.category || "").toLowerCase().includes(query),
       );
     }
 
@@ -98,12 +228,18 @@ export default function SchemesPage() {
     }
 
     return results;
-  }, [searchQuery, selectedCategory, selectedEligibility, sortBy]);
+  }, [dbSchemes, searchQuery, selectedCategory, selectedEligibility, sortBy]);
+
+  const totalPages = Math.ceil(filteredSchemes.length / ITEMS_PER_PAGE);
+  const paginatedSchemes = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredSchemes.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredSchemes, currentPage]);
 
   const handleReset = () => {
     setSearchQuery("");
     setSelectedCategory("All");
-    setSelectedEligibility(["Open for All"]);
+    setSelectedEligibility([]);
     setSelectedState("All India (Central)");
     setSortBy("Popular");
   };
@@ -191,9 +327,9 @@ export default function SchemesPage() {
                       </div>
                     </div>
 
-                    {filteredSchemes.length > 0 ? (
+                    {paginatedSchemes.length > 0 ? (
                       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                        {filteredSchemes.map((scheme) => (
+                        {paginatedSchemes.map((scheme) => (
                           <SchemeCard key={scheme.id} scheme={scheme} />
                         ))}
                       </div>
@@ -206,7 +342,13 @@ export default function SchemesPage() {
                       </div>
                     )}
 
-                    {filteredSchemes.length > 0 && <Pagination />}
+                    {filteredSchemes.length > 0 && (
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
