@@ -49,17 +49,6 @@ export const useLogin = (defaultRole = "citizen") => {
     setIsLoading(true);
 
     try {
-      // Fake Admin Login Bypass
-      if (identifier.trim().toLowerCase() === 'admin@admin.com' && password === 'password123') {
-        const fakeData = {
-          token: "fake-jwt-token-123",
-          user: { id: "admin_123", email: "admin@admin.com", role: "admin", fullName: "System Admin" }
-        };
-        localStorage.setItem("token", fakeData.token);
-        localStorage.setItem("user", JSON.stringify(fakeData.user));
-        return fakeData;
-      }
-
       const data = await loginUser({ identifier: identifier.trim(), password, role });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
