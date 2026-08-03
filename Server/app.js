@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import eligibilityRoutes from "./routes/eligibilityRoutes.js";
 import compareRoutes from "./routes/compareRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/eligibility", eligibilityRoutes);
 app.use("/api/compare", compareRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

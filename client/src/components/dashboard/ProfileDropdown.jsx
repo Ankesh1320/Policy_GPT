@@ -35,7 +35,7 @@ const ProfileDropdown = ({ onClose }) => {
   };
 
   return (
-    <div className="absolute right-0 top-full mt-3 w-56 bg-white rounded-xl border border-gray-100 shadow-lg py-2 z-50">
+    <div className="absolute right-0 top-full mt-3 w-56 bg-white rounded-xl border border-gray-100 shadow-lg z-50">
       {profileMenuItems.map((item) => {
         const Icon = ICONS[item.icon];
         return (
