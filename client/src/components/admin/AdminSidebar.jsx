@@ -1,13 +1,14 @@
 import React from 'react';
-import {
-  LayoutDashboard,
-  Layers,
-  FileText,
-  Users,
-  Settings,
-  BarChart2,
+import { 
+  Shield, 
+  LayoutDashboard, 
+  Layers, 
+  FileText, 
+  Users, 
+  Settings, 
+  BarChart2, 
   FileBox,
-  Bell,
+  MessageSquare,
   HelpCircle,
   Image as ImageIcon,
   ArrowLeft,
@@ -18,20 +19,10 @@ import { Link, useLocation } from 'react-router-dom';
 
 export default function AdminSidebar({ isOpen, onClose }) {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const activeTab = searchParams.get("tab");
 
-  const isDashboardActive = location.pathname === '/admin/dashboard' && !activeTab;
+  const isDashboardActive = location.pathname === '/admin/dashboard';
   const isSchemeActive = location.pathname === '/admin/scheme-management';
   const isPolicyActive = location.pathname === '/admin/policy-management';
-  const isNotificationsActive = location.pathname === '/admin/dashboard' && activeTab === 'notifications';
-
-  const navLinkClass = (isActive) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
-      isActive
-        ? 'bg-[#FFF7ED] text-[#EA580C] font-semibold'
-        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-    }`;
 
   return (
     <>
@@ -51,7 +42,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
         }`}
       >
         <nav className="flex flex-col gap-6 overflow-y-auto scrollbar-hide">
-          {/* Logo */}
+          {/* Logo container */}
           <div className="flex items-center justify-between px-3 mb-2 shrink-0">
             <div className="flex items-center gap-2.5">
               <img src="/logo-icon.svg" alt="PolicyGPT logo" className="w-9 h-9 shrink-0" />
@@ -72,24 +63,50 @@ export default function AdminSidebar({ isOpen, onClose }) {
             )}
           </div>
 
-          {/* General */}
           <div className="flex flex-col gap-1 px-1">
-            <Link to="/admin/dashboard" className={navLinkClass(isDashboardActive)}>
-              <LayoutDashboard className={`w-[18px] h-[18px] ${isDashboardActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
+            <Link
+              to="/admin/dashboard"
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
+                isDashboardActive
+                  ? "bg-[#FFF7ED] text-[#EA580C] font-semibold"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <LayoutDashboard className={`w-[18px] h-[18px] ${isDashboardActive ? "text-[#EA580C]" : "text-gray-600"}`} strokeWidth={2} />
               <span className="whitespace-nowrap">Dashboard</span>
             </Link>
           </div>
 
           {/* Management Group */}
           <div className="flex flex-col gap-1 px-1">
-            <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">Management</p>
-            <Link to="/admin/scheme-management" className={navLinkClass(isSchemeActive)}>
-              <Layers className={`w-[18px] h-[18px] ${isSchemeActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
-              <span className="whitespace-nowrap">Scheme Management</span>
+            <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">
+              Management
+            </p>
+            <Link
+              to="/admin/scheme-management"
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                isSchemeActive
+                  ? 'bg-[#FFF7ED] text-[#EA580C] font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <Layers className={`w-[18px] h-[18px] ${isSchemeActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
+                <span className="whitespace-nowrap">Scheme Management</span>
+              </div>
             </Link>
-            <Link to="/admin/policy-management" className={navLinkClass(isPolicyActive)}>
-              <FileText className={`w-[18px] h-[18px] ${isPolicyActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
-              <span className="whitespace-nowrap">Policy Management</span>
+            <Link
+              to="/admin/policy-management"
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-medium transition-colors ${
+                isPolicyActive
+                  ? 'bg-[#FFF7ED] text-[#EA580C] font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <FileText className={`w-[18px] h-[18px] ${isPolicyActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
+                <span className="whitespace-nowrap">Policy Management</span>
+              </div>
             </Link>
             <SidebarItem icon={<FileBox className="w-[18px] h-[18px]" strokeWidth={2} />} text="Applications" />
             <SidebarItem icon={<Users className="w-[18px] h-[18px]" strokeWidth={2} />} text="Users" />
@@ -98,21 +115,19 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
           {/* Analytics Group */}
           <div className="flex flex-col gap-1 px-1">
-            <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">Analytics</p>
+            <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">
+              Analytics
+            </p>
             <SidebarItem icon={<BarChart2 className="w-[18px] h-[18px]" strokeWidth={2} />} text="Analytics" />
             <SidebarItem icon={<FileText className="w-[18px] h-[18px]" strokeWidth={2} />} text="Reports" />
           </div>
 
           {/* Content Group */}
           <div className="flex flex-col gap-1 px-1">
-            <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">Content</p>
-            <Link
-              to="/admin/dashboard?tab=notifications"
-              className={navLinkClass(isNotificationsActive)}
-            >
-              <Bell className={`w-[18px] h-[18px] ${isNotificationsActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
-              <span className="whitespace-nowrap">Notifications</span>
-            </Link>
+            <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">
+              Content
+            </p>
+            <SidebarItem icon={<MessageSquare className="w-[18px] h-[18px]" strokeWidth={2} />} text="Notifications" />
             <SidebarItem icon={<HelpCircle className="w-[18px] h-[18px]" strokeWidth={2} />} text="FAQs" />
             <SidebarItem icon={<ImageIcon className="w-[18px] h-[18px]" strokeWidth={2} />} text="Banners" />
           </div>

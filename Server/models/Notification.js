@@ -2,14 +2,9 @@ import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, required: true },
     isRead: { type: Boolean, default: false },
-    role: {
-      type: String,
-      enum: ["citizen", "admin"],
-      default: "citizen",
-    },
   },
   { timestamps: true }
 );
