@@ -16,6 +16,7 @@ import CitizenDashboard from "../pages/CitizenDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import SchemeManagement from "../pages/admin/SchemeManagement";
 import PolicyManagement from "../pages/admin/PolicyManagement";
+import Reports from "../pages/admin/Reports";
 import ContactUsPage from "../pages/ContactUsPage";
 import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
 import CompareSchemesPage from "../pages/CompareSchemesPage";
@@ -82,6 +83,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute redirectTo="/admin/login">
               <PolicyManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute redirectTo="/admin/login">
+              <Reports />
             </ProtectedRoute>
           }
         />

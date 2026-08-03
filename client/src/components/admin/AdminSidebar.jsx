@@ -25,6 +25,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
   const isSchemeActive = location.pathname === '/admin/scheme-management';
   const isPolicyActive = location.pathname === '/admin/policy-management';
   const isNotificationsActive = location.pathname === '/admin/dashboard' && activeTab === 'notifications';
+  const isReportsActive = location.pathname === '/admin/reports';
 
   const navLinkClass = (isActive) =>
     `flex items-center gap-3 px-3 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
@@ -100,7 +101,10 @@ export default function AdminSidebar({ isOpen, onClose }) {
           <div className="flex flex-col gap-1 px-1">
             <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">Analytics</p>
             <SidebarItem icon={<BarChart2 className="w-[18px] h-[18px]" strokeWidth={2} />} text="Analytics" />
-            <SidebarItem icon={<FileText className="w-[18px] h-[18px]" strokeWidth={2} />} text="Reports" />
+            <Link to="/admin/reports" className={navLinkClass(isReportsActive)}>
+              <FileText className={`w-[18px] h-[18px] ${isReportsActive ? 'text-[#EA580C]' : 'text-gray-600'}`} strokeWidth={2} />
+              <span className="whitespace-nowrap">Reports</span>
+            </Link>
           </div>
 
           {/* Content Group */}
