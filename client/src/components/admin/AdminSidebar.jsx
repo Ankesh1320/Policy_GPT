@@ -23,6 +23,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
   const isDashboardActive = location.pathname === '/admin/dashboard';
   const isSchemeActive = location.pathname === '/admin/scheme-management';
   const isPolicyActive = location.pathname === '/admin/policy-management';
+  const isAnalyticsActive = location.pathname === '/admin/analytics';
 
   return (
     <>
@@ -118,7 +119,17 @@ export default function AdminSidebar({ isOpen, onClose }) {
             <p className="px-3 mb-2 text-xs font-bold text-gray-400 tracking-wider uppercase">
               Analytics
             </p>
-            <SidebarItem icon={<BarChart2 className="w-[18px] h-[18px]" strokeWidth={2} />} text="Analytics" />
+            <Link
+              to="/admin/analytics"
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
+                isAnalyticsActive
+                  ? "bg-[#FFF7ED] text-[#EA580C] font-semibold"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <BarChart2 className={`w-[18px] h-[18px] ${isAnalyticsActive ? "text-[#EA580C]" : "text-gray-600"}`} strokeWidth={2} />
+              <span className="whitespace-nowrap">Analytics</span>
+            </Link>
             <SidebarItem icon={<FileText className="w-[18px] h-[18px]" strokeWidth={2} />} text="Reports" />
           </div>
 

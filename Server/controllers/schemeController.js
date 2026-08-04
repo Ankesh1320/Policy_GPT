@@ -2,6 +2,8 @@ import Scheme from "../models/Scheme.js";
 import { SavedScheme } from "../models/SavedScheme.js";
 import { SearchHistory } from "../models/SearchHistory.js";
 import { successResponse } from "../utils/apiResponse.js";
+import Policy from "../models/Policy.js";
+import { AiQueryLog } from "../models/AiQueryLog.js";
 
 // @desc    Get all schemes with optional filters
 // @route   GET /api/schemes
@@ -161,6 +163,19 @@ export const isSchemeSaved = async (req, res) => {
   return successResponse(res, { isSaved: !!saved });
 };
 
+// Helper to categorize natural language search terms
+const guessCategory = (text) => {
+  const t = text.toLowerCase();
+  if (t.includes("kisan") || t.includes("farm") || t.includes("crop") || t.includes("agri") || t.includes("soil")) return "Agriculture";
+  if (t.includes("health") || t.includes("hospital") || t.includes("medic") || t.includes("doctor") || t.includes("ayushman")) return "Healthcare";
+  if (t.includes("school") || t.includes("education") || t.includes("scholar") || t.includes("nep") || t.includes("student") || t.includes("college")) return "Education";
+  if (t.includes("job") || t.includes("work") || t.includes("employ") || t.includes("career") || t.includes("skill") || t.includes("mgnrega")) return "Employment";
+  if (t.includes("house") || t.includes("home") || t.includes("awas") || t.includes("flat") || t.includes("urban") || t.includes("rural")) return "Housing";
+  if (t.includes("women") || t.includes("girl") || t.includes("child") || t.includes("mother") || t.includes("sukanya")) return "Women & Child";
+  if (t.includes("loan") || t.includes("pension") || t.includes("saving") || t.includes("finance") || t.includes("money") || t.includes("mudra") || t.includes("bank")) return "Finance";
+  return "Education"; // Fallback default
+};
+
 // @desc    Add search term to history
 // @route   POST /api/schemes/search-history
 // @access  Protected
@@ -176,6 +191,56 @@ export const addSearchHistory = async (req, res) => {
   if (trimmedTerm.length < 3) {
     return res.status(200).json({ success: true, message: "Search term too short to persist" });
   }
+
+  // 1. Calculate query metrics & match against database
+  const startTime = Date.now();
+  let matchedPolicy = null;
+  let category = guessCategory(trimmedTerm);
+  let retrievalSuccess = false;
+
+  // Search Schemes in DB
+  const matchedSchemeObj = await Scheme.findOne({
+    $or: [
+      { name: { $regex: trimmedTerm, $options: "i" } },
+      { title: { $regex: trimmedTerm, $options: "i" } },
+      { description: { $regex: trimmedTerm, $options: "i" } }
+    ]
+  });
+
+  if (matchedSchemeObj) {
+    matchedPolicy = matchedSchemeObj.title || matchedSchemeObj.name;
+    if (matchedSchemeObj.category) {
+      category = guessCategory(matchedSchemeObj.category);
+    }
+    retrievalSuccess = true;
+  } else {
+    // Search Policies in DB
+    const matchedPolicyObj = await Policy.findOne({
+      $or: [
+        { name: { $regex: trimmedTerm, $options: "i" } },
+        { description: { $regex: trimmedTerm, $options: "i" } }
+      ]
+    });
+    if (matchedPolicyObj) {
+      matchedPolicy = matchedPolicyObj.name;
+      retrievalSuccess = true;
+    }
+  }
+
+  const responseTimeMs = Date.now() - startTime;
+
+  // 2. Create the real AI query log
+  await AiQueryLog.create({
+    queryText: trimmedTerm,
+    category,
+    responseTimeMs,
+    status: "success",
+    retrievalSuccess,
+    feedback: "none",
+    matchedPolicy,
+    user: req.user._id,
+    isDemo: false // REAL production query log
+  });
 
   const existing = await SearchHistory.findOne({ user: req.user._id, term: trimmedTerm });
   if (existing) {

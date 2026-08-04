@@ -5,6 +5,11 @@ export const fetchDashboard = async () => {
   return data.data;
 };
 
+export const fetchAnalytics = async (params) => {
+  const { data } = await apiClient.get("/analytics", { params });
+  return data.data;
+};
+
 export const fetchUser = async () => {
   const { data } = await apiClient.get("/user");
   return data.data;
