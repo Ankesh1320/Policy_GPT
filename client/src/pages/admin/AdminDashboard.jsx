@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 import AdminHeader from '../../components/admin/AdminHeader';
@@ -7,6 +8,7 @@ import ManagementSections from '../../components/admin/ManagementSections';
 import BottomGrid from '../../components/admin/BottomGrid';
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(
     typeof window !== "undefined" ? window.innerWidth >= 1024 : false
   );
@@ -34,7 +36,10 @@ export default function AdminDashboard() {
               </h1>
               <p className="mt-2 text-sm text-gray-500 font-normal">Here's what's happening with your platform today.</p>
             </div>
-            <button className="flex items-center gap-2 rounded-full bg-[#F2762E] hover:bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors cursor-pointer shrink-0">
+            <button
+              onClick={() => navigate('/admin/reports')}
+              className="flex items-center gap-2 rounded-full bg-[#F2762E] hover:bg-orange-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors cursor-pointer shrink-0"
+            >
               View Reports
               <ArrowRight size={16} />
             </button>
