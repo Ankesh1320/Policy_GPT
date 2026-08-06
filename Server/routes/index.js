@@ -5,6 +5,8 @@ import schemeRoutes from "./schemeRoutes.js";
 import policyRoutes from "./policyRoutes.js";
 import applicationRoutes from "./applicationRoutes.js";
 import notificationRoutes from "./notificationRoutes.js";
+import reportRoutes from "./reportRoutes.js";
+import analyticsRoutes from "./analyticsRoutes.js";
 
 const router = Router();
 
@@ -14,6 +16,7 @@ router.use("/schemes", schemeRoutes);
 router.use("/policies", policyRoutes);
 router.use("/applications", applicationRoutes);
 router.use("/notifications", notificationRoutes);
-
+router.use("/reports", reportRoutes);
+router.use("/analytics", analyticsRoutes);
 
 export default router;
