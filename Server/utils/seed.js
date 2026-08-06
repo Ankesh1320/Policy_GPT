@@ -10,6 +10,7 @@ import { Application } from "../models/Application.js";
 import { Notification } from "../models/Notification.js";
 import { SearchHistory } from "../models/SearchHistory.js";
 import mongoose from "mongoose";
+import { seedAnalyticsData } from "../scripts/seedAnalytics.js";
 
 const seed = async () => {
   await connectDB();
@@ -77,6 +78,9 @@ const seed = async () => {
       (term) => ({ user: user._id, term })
     )
   );
+
+  // Seed AI queries for dashboard analytics
+  await seedAnalyticsData([user, adminUser]);
 
   console.log("Database seeded successfully.");
   await mongoose.connection.close();
