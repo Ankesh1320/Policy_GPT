@@ -32,7 +32,7 @@ const maskEmail = (email) => {
 
 // Helper: Build Fuzzy Dept/Ministry Regex
 const buildFuzzyDeptRegex = (dept) => {
-  if (!dept || dept.startsWith("All ")) return null;
+  if (!dept || dept.startsWith("All ") || dept === "All") return null;
   // Replace & and and with flexible pattern
   const escaped = dept
     .replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&") // escape special regex characters
@@ -437,7 +437,7 @@ export const generateReport = async (req, res) => {
       if (deptRegex) {
         filter.department = { $regex: deptRegex };
       }
-      if (status && status !== "All Status") {
+      if (status && status !== "All Status" && status !== "All") {
         filter.status = status;
       }
 
@@ -473,16 +473,16 @@ export const generateReport = async (req, res) => {
       if (deptRegex) {
         filter.department = { $regex: deptRegex };
       }
-      if (status && status !== "All Status") {
+      if (status && status !== "All Status" && status !== "All") {
         filter.status = status;
       }
       // Fuzzy match category
-      if (category && category !== "All Categories") {
+      if (category && category !== "All Categories" && category !== "All") {
         const firstWord = category.split(" ")[0]; // matches e.g. "Agriculture" for "Agriculture & Farming"
         filter.category = { $regex: new RegExp(firstWord, "i") };
       }
       // State Filter (matches inside nested states array OR All India fallback)
-      if (state && state !== "All States") {
+      if (state && state !== "All States" && state !== "All") {
         filter.$or = [
           { "eligibility.states": { $regex: new RegExp(state, "i") } },
           { "eligibility.states": "All India" },
@@ -526,11 +526,13 @@ export const generateReport = async (req, res) => {
         schemeFilter.department = { $regex: deptRegex };
         policyFilter.department = { $regex: deptRegex };
       }
-      if (status && status !== "All Status") {
-        schemeFilter.status = status;
+      if (status && status !== "All Status" && status !== "All") {
         policyFilter.status = status;
       }
-      if (category && category !== "All Categories") {
+      if (status && status !== "All Status" && status !== "All") {
+        schemeFilter.status = status;
+      }
+      if (category && category !== "All Categories" && category !== "All") {
         const firstWord = category.split(" ")[0];
         schemeFilter.category = { $regex: new RegExp(firstWord, "i") };
       }
