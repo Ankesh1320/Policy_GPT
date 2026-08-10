@@ -8,9 +8,36 @@ import {
   LuMapPin,
   LuBuilding,
   LuLandmark,
+  LuCircleCheck,
 } from "react-icons/lu";
 
-export default function WhoIsAffectedSection() {
+export default function WhoIsAffectedSection({ policy }) {
+  if (policy && policy.eligibility) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="bg-white rounded-2xl border border-border-light p-6 md:p-8">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-2.5 h-2.5 rounded-full bg-brand-orange"></div>
+            <h2 className="font-heading font-bold text-xl text-slate-heading">Target Eligibility & Stakeholders</h2>
+          </div>
+          <div className="flex flex-col gap-3">
+            {policy.eligibility.map((item, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-3 p-4 bg-[#fffaf5] border border-[#ffeedd] rounded-xl hover:border-brand-orange/30 transition-colors"
+              >
+                <LuCircleCheck className="text-brand-orange h-5 w-5 shrink-0 mt-0.5" />
+                <span className="font-semibold text-sm text-slate-heading leading-relaxed">
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       

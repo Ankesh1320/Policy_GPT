@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/layouts/Navbar";
 import Footer from "../components/layouts/Footer";
 import PolicyCard from "../components/policies/PolicyCard";
 import PolicyFilter from "../components/policies/PolicyFilter";
 import policiesData, { sortOptions } from "../data/policiesData";
+import { policyService } from "../services/policyService";
 import breadcrumbChevron from "../assets/icons/policies/breadcrumb-chevron.svg";
 import sortDropdownArrow from "../assets/icons/policies/sort-dropdown-arrow.svg";
 import AuthBlocker from "../components/auth/AuthBlocker";
@@ -19,42 +20,52 @@ const categoryMap = {
   Agriculture: "Agriculture",
 };
 
-function Pagination() {
-  const pages = [
-    { label: "1", active: true },
-    { label: "2", active: false },
-    { label: "...", active: false, disabled: true },
-    { label: "3", active: false },
-    { label: "24", active: false },
-  ];
+function Pagination({ totalPages, currentPage, onPageChange }) {
+  if (totalPages <= 1) return null;
+
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
 
   return (
     <nav className="mt-10 flex items-center justify-center gap-3" aria-label="Pagination">
-      {pages.map((page) => {
-        if (page.label === "...") {
-          return (
-            <span key="ellipsis" className="font-body text-xl font-bold leading-7 text-text-body">
-              ...
-            </span>
-          );
-        }
+      {/* Prev Button */}
+      <button
+        type="button"
+        disabled={currentPage === 1}
+        onClick={() => onPageChange(currentPage - 1)}
+        className="px-3 h-9 flex items-center justify-center rounded-full border border-[#CBD5E1] bg-white font-body text-sm font-semibold text-text-body transition-colors hover:border-[#EA580C] hover:text-[#EA580C] disabled:opacity-40 disabled:pointer-events-none"
+      >
+        Prev
+      </button>
 
-        return (
-          <button
-            key={page.label}
-            type="button"
-            disabled={page.disabled}
-            className={`flex h-9 w-9 items-center justify-center rounded-full font-body text-sm font-semibold transition-colors ${
-              page.active
-                ? "bg-brand-orange text-white"
-                : "border border-[#CBD5E1] bg-white text-text-body hover:border-brand-orange hover:text-brand-orange"
-            }`}
-            aria-current={page.active ? "page" : undefined}
-          >
-            {page.label}
-          </button>
-        );
-      })}
+      {/* Page Numbers */}
+      {pages.map((page) => (
+        <button
+          key={page}
+          type="button"
+          onClick={() => onPageChange(page)}
+          className={`flex h-9 w-9 items-center justify-center rounded-full font-body text-sm font-semibold transition-colors ${
+            currentPage === page
+              ? "bg-[#EA580C] text-white"
+              : "border border-[#CBD5E1] bg-white text-text-body hover:border-[#EA580C] hover:text-[#EA580C]"
+          }`}
+          aria-current={currentPage === page ? "page" : undefined}
+        >
+          {page}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      <button
+        type="button"
+        disabled={currentPage === totalPages}
+        onClick={() => onPageChange(currentPage + 1)}
+        className="px-3 h-9 flex items-center justify-center rounded-full border border-[#CBD5E1] bg-white font-body text-sm font-semibold text-text-body transition-colors hover:border-[#EA580C] hover:text-[#EA580C] disabled:opacity-40 disabled:pointer-events-none"
+      >
+        Next
+      </button>
     </nav>
   );
 }
@@ -64,10 +75,61 @@ export default function PoliciesPage() {
   const [selectedEligibility, setSelectedEligibility] = useState(["Open for All"]);
   const [selectedState, setSelectedState] = useState("All India (Central)");
   const [sortBy, setSortBy] = useState("Popular");
+  const [policies, setPolicies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   const token = localStorage.getItem("token");
 
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, selectedEligibility, selectedState, sortBy]);
+
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      try {
+        const data = await policyService.getAll();
+        setPolicies(data);
+      } catch (err) {
+        console.error("Failed to load policies from API:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPolicies();
+  }, []);
+
+  const mappedPolicies = useMemo(() => {
+    const mapDbCategoryToFilter = (cat) => {
+      if (!cat) return "Financial Aid";
+      const c = cat.toLowerCase();
+      if (c.includes("education")) return "Education";
+      if (c.includes("health")) return "Healthcare";
+      if (c.includes("housing")) return "Housing";
+      if (c.includes("women")) return "Women Welfare";
+      if (c.includes("employment") || c.includes("skill") || c.includes("industry") || c.includes("tourism") || c.includes("technology") || c.includes("transport")) return "Employment";
+      if (c.includes("agriculture")) return "Agriculture";
+      if (c.includes("water") || c.includes("environment")) return "Agriculture";
+      return "Financial Aid";
+    };
+
+    return policies.map((p) => {
+      const filterCategory = mapDbCategoryToFilter(p.category);
+      return {
+        ...p,
+        id: p._id || p.id,
+        title: p.title || p.name,
+        published: p.published || p.effectiveDate || p.date || "2024",
+        category: filterCategory,
+        categoryVariant: p.categoryVariant || (filterCategory === "Healthcare" ? "green" : filterCategory === "Employment" ? "greenEmployment" : "orange"),
+        eligibility: p.eligibility && p.eligibility.length > 0 ? p.eligibility : ["Open for All"],
+      };
+    });
+  }, [policies]);
+
   const filteredPolicies = useMemo(() => {
-    let results = [...policiesData];
+    let results = [...mappedPolicies];
 
     if (selectedCategory !== "All") {
       const mappedCategory = categoryMap[selectedCategory] || selectedCategory;
@@ -75,9 +137,42 @@ export default function PoliciesPage() {
     }
 
     if (selectedEligibility.length > 0) {
-      results = results.filter((policy) =>
-        policy.eligibility.some((item) => selectedEligibility.includes(item)),
-      );
+      const isOnlyOpenForAll = selectedEligibility.length === 1 && selectedEligibility[0] === "Open for All";
+      
+      if (!isOnlyOpenForAll) {
+        results = results.filter((policy) => {
+          return policy.eligibility.some((item) => {
+            const lowerItem = item.toLowerCase();
+            
+            if (selectedEligibility.includes("Women Only") && lowerItem.includes("women")) {
+              return true;
+            }
+            if (selectedEligibility.includes("Senior Citizens") && (lowerItem.includes("older") || lowerItem.includes("senior") || lowerItem.includes("age"))) {
+              return true;
+            }
+            if (selectedEligibility.includes("SC/ST/OBC") && (lowerItem.includes("disadvantaged") || lowerItem.includes("vulnerable") || lowerItem.includes("minor") || lowerItem.includes("sc") || lowerItem.includes("st") || lowerItem.includes("obc"))) {
+              return true;
+            }
+            if (selectedEligibility.includes("Below Poverty Line") && (lowerItem.includes("bpl") || lowerItem.includes("poverty") || lowerItem.includes("economically"))) {
+              return true;
+            }
+            if (selectedEligibility.includes("Open for All") && (lowerItem.includes("citizen") || lowerItem.includes("all") || lowerItem.includes("household") || lowerItem.includes("people"))) {
+              return true;
+            }
+
+            return false;
+          });
+        });
+      }
+    }
+
+    if (selectedState && selectedState !== "All India (Central)") {
+      results = results.filter((policy) => {
+        if (!policy.state || policy.state === "All India" || policy.state === "Central" || policy.state === "All India (Central)") {
+          return true;
+        }
+        return policy.state.toLowerCase() === selectedState.toLowerCase();
+      });
     }
 
     if (sortBy === "A-Z") {
@@ -89,7 +184,33 @@ export default function PoliciesPage() {
     }
 
     return results;
-  }, [selectedCategory, selectedEligibility, sortBy]);
+  }, [mappedPolicies, selectedCategory, selectedEligibility, selectedState, sortBy]);
+
+  const paginatedPolicies = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredPolicies.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredPolicies, currentPage]);
+
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredPolicies.length / itemsPerPage);
+  }, [filteredPolicies]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-page-warm flex flex-col justify-between">
+        <div>
+          <Navbar activeLabel="Policies" />
+          <div className="flex-1 flex items-center justify-center py-32">
+            <div className="flex flex-col items-center gap-4">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#EA580C]"></div>
+              <p className="text-sm font-semibold text-gray-500">Loading policies from database...</p>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const handleReset = () => {
     setSelectedCategory("All");
@@ -174,7 +295,7 @@ export default function PoliciesPage() {
 
                     {filteredPolicies.length > 0 ? (
                       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                        {filteredPolicies.map((policy) => (
+                        {paginatedPolicies.map((policy) => (
                           <PolicyCard key={policy.id} policy={policy} />
                         ))}
                       </div>
@@ -187,7 +308,13 @@ export default function PoliciesPage() {
                       </div>
                     )}
 
-                    {filteredPolicies.length > 0 && <Pagination />}
+                    {filteredPolicies.length > 0 && (
+                      <Pagination
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        onPageChange={setCurrentPage}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

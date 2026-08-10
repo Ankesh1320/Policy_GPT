@@ -1,4 +1,19 @@
-export default function OverviewSection() {
+export default function OverviewSection({ policy }) {
+  if (policy) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="bg-white rounded-2xl border border-border-light p-6 md:p-8">
+          <h2 className="font-heading font-bold text-2xl text-slate-heading mb-4">
+            Policy Overview
+          </h2>
+          <p className="text-text-body mb-4 leading-relaxed whitespace-pre-wrap">
+            {policy.description}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       {/* Policy Overview Card */}
