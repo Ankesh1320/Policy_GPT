@@ -65,6 +65,50 @@ const policySchema = new mongoose.Schema(
       type: String,
       default: "#a855f7",
     },
+    vision: {
+      type: String,
+      trim: true,
+    },
+    objectives: {
+      type: [String],
+      default: [],
+    },
+    keyBenefits: [
+      {
+        icon: String,
+        title: String,
+        desc: String,
+        color: String,
+        bg: String,
+      }
+    ],
+    whoIsAffected: [
+      {
+        title: String,
+        desc: String,
+        isPrimary: Boolean,
+        icon: String,
+      }
+    ],
+    importantChanges: [
+      {
+        title: String,
+        desc: String,
+      }
+    ],
+    timeline: [
+      {
+        year: String,
+        title: String,
+        desc: String,
+      }
+    ],
+    faqs: [
+      {
+        q: String,
+        a: String,
+      }
+    ],
   },
   { timestamps: true }
 );

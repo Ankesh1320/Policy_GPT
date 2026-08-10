@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { LuChevronDown } from "react-icons/lu";
 
-export default function FaqsSection() {
+export default function FaqsSection({ policy }) {
   const [openIndex, setOpenIndex] = useState(null);
 
-  const faqs = [
+  const fallbackFaqs = [
     { q: "What is NEP 2020?", a: "The National Education Policy 2020 is a comprehensive framework designed to modernise the education system in India, aiming to transform learning from pre-primary through higher education." },
     { q: "Who does this policy apply to?", a: "It applies to all educational institutions, including schools, colleges, and universities across India, affecting students, teachers, and administrators." },
     { q: "Is this mandatory for all schools?", a: "While it provides a national framework, education is a concurrent subject in India. State boards and educational bodies are progressively adopting and adapting these guidelines." },
@@ -13,9 +13,11 @@ export default function FaqsSection() {
     { q: "How does NEP 2020 affect higher education?", a: "It introduces a multidisciplinary approach, flexible 4-year undergraduate programs with multiple entry/exit options, and establishes the Academic Bank of Credits." }
   ];
 
+  const list = policy?.faqs && policy.faqs.length > 0 ? policy.faqs : fallbackFaqs;
+
   return (
     <div className="flex flex-col gap-4">
-      {faqs.map((faq, idx) => {
+      {list.map((faq, idx) => {
         const isOpen = openIndex === idx;
         
         return (

@@ -34,24 +34,13 @@ async function run() {
   const rawData = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
   console.log(`Loaded ${rawData.length} policy records from JSON.`);
 
+  console.log("Clearing existing policies from database...");
+  await Policy.deleteMany({});
+  console.log("Existing policies cleared.");
+
   let inserted = 0;
-  let skipped = 0;
 
   for (const item of rawData) {
-    const normJsonName = normalizeName(item.name || item.title);
-
-    // Fetch existing database policies to compare normalized names
-    const allPolicies = await Policy.find({}).lean();
-    const exists = allPolicies.some(
-      (p) => normalizeName(p.name) === normJsonName || normalizeName(p.title) === normJsonName
-    );
-
-    if (exists) {
-      console.log(`Skipped policy (already exists): "${item.name}"`);
-      skipped++;
-      continue;
-    }
-
     // Map JSON fields to Policy Model
     const policyRecord = {
       name: item.name,
@@ -67,7 +56,14 @@ async function run() {
       pdf: item.pdf || "#",
       icon: item.icon || "FileText",
       iconBg: "#faf5ff",
-      iconColor: "#a855f7"
+      iconColor: "#a855f7",
+      vision: item.vision,
+      objectives: item.objectives || [],
+      keyBenefits: item.keyBenefits || [],
+      whoIsAffected: item.whoIsAffected || [],
+      importantChanges: item.importantChanges || [],
+      timeline: item.timeline || [],
+      faqs: item.faqs || []
     };
 
     await Policy.create(policyRecord);
@@ -78,7 +74,6 @@ async function run() {
   console.log("\n--- POLICIES IMPORT SUMMARY ---");
   console.log(`Total JSON records: ${rawData.length}`);
   console.log(`Successfully inserted: ${inserted}`);
-  console.log(`Skipped (duplicates): ${skipped}`);
   console.log("-------------------------------\n");
 
   await mongoose.connection.close();

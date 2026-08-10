@@ -82,22 +82,15 @@ export default function PolicyDetailsPage() {
     );
   }
 
-  const isNEP = policy.name?.toLowerCase().includes("national education policy");
-
-  const tabs = isNEP
-    ? [
-        "Overview",
-        "Objectives",
-        "Key Benefits",
-        "Who Is Affected",
-        "Important Changes",
-        "Timeline",
-        "Faqs",
-      ]
-    : [
-        "Overview",
-        "Eligibility",
-      ];
+  const tabs = [
+    "Overview",
+    "Objectives",
+    "Key Benefits",
+    "Who Is Affected",
+    "Important Changes",
+    "Timeline",
+    "Faqs",
+  ];
 
   return (
     <div className="min-h-screen bg-cream font-body flex flex-col justify-between">
@@ -213,14 +206,13 @@ export default function PolicyDetailsPage() {
               <div className="flex flex-col lg:flex-row gap-8">
                 {/* Left Content Column */}
                 <div className="flex-1">
-                  {activeTab === "Faqs" && <FaqsSection />}
-                  {activeTab === "Timeline" && <TimelineSection />}
-                  {activeTab === "Important Changes" && <ImportantChangesSection />}
-                  {activeTab === "Who Is Affected" && <WhoIsAffectedSection />}
-                  {activeTab === "Eligibility" && <WhoIsAffectedSection policy={policy} />}
-                  {activeTab === "Key Benefits" && <KeyBenefitsSection />}
+                  {activeTab === "Faqs" && <FaqsSection policy={policy} />}
+                  {activeTab === "Timeline" && <TimelineSection policy={policy} />}
+                  {activeTab === "Important Changes" && <ImportantChangesSection policy={policy} />}
+                  {activeTab === "Who Is Affected" && <WhoIsAffectedSection policy={policy} />}
+                  {activeTab === "Key Benefits" && <KeyBenefitsSection policy={policy} />}
                   {activeTab === "Overview" && <OverviewSection policy={policy} />}
-                  {activeTab === "Objectives" && <ObjectivesSection />}
+                  {activeTab === "Objectives" && <ObjectivesSection policy={policy} />}
                 </div>
 
                 {/* Right Sidebar */}
