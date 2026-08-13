@@ -22,6 +22,14 @@ function FooterLinkColumn({ title, links }) {
               >
                 {link}
               </Link>
+) : link === 'Feedback' ? (
+              <Link
+                to="/citizen/dashboard?tab=feedback"
+                onClick={() => window.scrollTo(0, 0)}
+                className="font-body text-sm font-semibold text-text-slate transition-colors hover:text-white"
+              >
+                {link}
+              </Link>
             ) : (
               <a
                 href="#"
