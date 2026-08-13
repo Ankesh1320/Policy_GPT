@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import { Application } from "../models/Application.js";
 import { SearchHistory } from "../models/SearchHistory.js";
 import Feedback from "../models/Feedback.js";
+import ReportHistory from "../models/ReportHistory.js";
 
 import { PassThrough } from "stream";
 import { createRequire } from "module";
@@ -667,15 +668,53 @@ export const generateReport = async (req, res) => {
     const baseName = reportType.toLowerCase().replace(/[^a-z0-9]+/g, "_");
     const today = new Date().toISOString().slice(0, 10);
 
+    // Save to ReportHistory
+    let mappedType = "Policy";
+    if (typeLower.includes("scheme")) mappedType = "Scheme";
+    else if (typeLower.includes("department")) mappedType = "Department";
+    else if (typeLower.includes("user_activity") || typeLower.includes("user activity")) mappedType = "User Activity";
+    else if (typeLower.includes("analytics")) mappedType = "Analytics";
+    else if (typeLower.includes("policy")) mappedType = "Policy";
+
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+    const reportName = `${mappedType} Report (${formattedStartDate} to ${formattedEndDate})`;
+    const fileExtension = exportFormat === "excel" ? "xlsx" : exportFormat === "both" ? "zip" : "pdf";
+    const fileName = `${baseName}_report_${today}.${fileExtension}`;
+
+    try {
+      await ReportHistory.create({
+        reportName,
+        reportType: mappedType,
+        status: "Ready",
+        generatedBy: req.user._id,
+        generatedByName: req.user.fullName || "Admin",
+        exportFormat,
+        fileName,
+        parameters: {
+          reportType,
+          department,
+          startDate,
+          endDate,
+          status,
+          state,
+          ministry,
+          category,
+        }
+      });
+    } catch (saveErr) {
+      console.error("[REPORT CONTROLLER SAVE HISTORY ERROR]", saveErr);
+    }
+
     if (exportFormat === "pdf") {
       const pdfBuffer = await generatePDFBuffer(reportTitle, headers, rows, stats, metadata, colWidths);
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", `attachment; filename="${baseName}_report_${today}.pdf"`);
+      res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
       return res.send(pdfBuffer);
     } else if (exportFormat === "excel") {
       const excelBuffer = await generateExcelBuffer(reportTitle, headers, rows, stats, metadata);
       res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-      res.setHeader("Content-Disposition", `attachment; filename="${baseName}_report_${today}.xlsx"`);
+      res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
       return res.send(excelBuffer);
     } else if (exportFormat === "both") {
       const pdfBuffer = await generatePDFBuffer(reportTitle, headers, rows, stats, metadata, colWidths);
@@ -683,7 +722,7 @@ export const generateReport = async (req, res) => {
       const zipBuffer = await generateZipBuffer(pdfBuffer, excelBuffer, reportType);
 
       res.setHeader("Content-Type", "application/zip");
-      res.setHeader("Content-Disposition", `attachment; filename="${baseName}_report_${today}.zip"`);
+      res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
       return res.send(zipBuffer);
     } else {
       return res.status(400).json({
@@ -697,6 +736,73 @@ export const generateReport = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error occurred while generating your report: " + err.message
+    });
+  }
+};
+
+// Get all generated report history
+export const getReportHistory = async (req, res) => {
+  try {
+    const history = await ReportHistory.find({})
+      .sort({ createdAt: -1 })
+      .lean();
+    
+    return res.status(200).json({
+      success: true,
+      data: history
+    });
+  } catch (err) {
+    console.error("[REPORT CONTROLLER GET HISTORY ERROR]", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching report history."
+    });
+  }
+};
+
+// Download a historical report by dynamic generation
+export const downloadReportById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const format = req.query.format || "pdf";
+    
+    const record = await ReportHistory.findById(id);
+    if (!record) {
+      return res.status(404).json({
+        success: false,
+        message: "Report history record not found."
+      });
+    }
+
+    const {
+      reportType,
+      department,
+      startDate,
+      endDate,
+      status,
+      state,
+      ministry,
+      category
+    } = record.parameters;
+
+    req.body = {
+      reportType,
+      department,
+      startDate,
+      endDate,
+      status,
+      state,
+      ministry,
+      category,
+      exportFormat: format
+    };
+
+    return await generateReport(req, res);
+  } catch (err) {
+    console.error("[REPORT CONTROLLER DOWNLOAD ERROR]", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while downloading historical report."
     });
   }
 };

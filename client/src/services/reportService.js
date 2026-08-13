@@ -6,5 +6,15 @@ export const reportService = {
       responseType: "blob"
     });
     return data;
+  },
+  getHistory: async () => {
+    const { data } = await apiClient.get("/reports");
+    return data.data;
+  },
+  download: async (id, format) => {
+    const { data } = await apiClient.get(`/reports/download/${id}?format=${format}`, {
+      responseType: "blob"
+    });
+    return data;
   }
 };
