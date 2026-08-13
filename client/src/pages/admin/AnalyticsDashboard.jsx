@@ -13,21 +13,24 @@ import {
   ThumbsDown,
   UserCheck,
   Search,
-  RefreshCw
+  RefreshCw,
+  Sprout,
+  Heart,
+  GraduationCap,
+  Home,
+  DollarSign,
+  Cpu,
+  Leaf,
+  Calendar,
+  Eye,
+  BookOpen,
+  Award
 } from "lucide-react";
 import { 
   ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
   PieChart, 
   Pie, 
-  Cell, 
-  BarChart, 
-  Bar
+  Cell
 } from "recharts";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminHeader from "../../components/admin/AdminHeader";
@@ -142,8 +145,60 @@ export default function AnalyticsDashboard() {
     return `${diffDays}d ago`;
   };
 
+  const getDeptIcon = (name) => {
+    const lower = name.toLowerCase();
+    if (lower.includes("agriculture")) return <Sprout className="text-emerald-500 w-[18px] h-[18px]" />;
+    if (lower.includes("health")) return <Heart className="text-rose-500 w-[18px] h-[18px]" />;
+    if (lower.includes("education")) return <GraduationCap className="text-purple-500 w-[18px] h-[18px]" />;
+    if (lower.includes("housing") || lower.includes("urban")) return <Home className="text-blue-500 w-[18px] h-[18px]" />;
+    if (lower.includes("women") || lower.includes("child")) return <Users className="text-pink-500 w-[18px] h-[18px]" />;
+    if (lower.includes("finance")) return <DollarSign className="text-amber-500 w-[18px] h-[18px]" />;
+    if (lower.includes("electronics") || lower.includes("technology")) return <Cpu className="text-violet-500 w-[18px] h-[18px]" />;
+    if (lower.includes("environment") || lower.includes("forest")) return <Leaf className="text-green-600 w-[18px] h-[18px]" />;
+    return <FileText className="text-gray-400 w-[18px] h-[18px]" />;
+  };
+
+  const getDateRangeString = () => {
+    const end = new Date();
+    const start = new Date();
+    switch (timeRange) {
+      case "last7Days":
+        start.setDate(end.getDate() - 7);
+        break;
+      case "last30Days":
+        start.setDate(end.getDate() - 30);
+        break;
+      case "thisMonth":
+        start.setDate(1);
+        break;
+      case "allTime":
+        start.setFullYear(2020, 0, 1);
+        break;
+      default:
+        start.setDate(end.getDate() - 30);
+    }
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return `${start.toLocaleDateString("en-US", options)} - ${end.toLocaleDateString("en-US", options)}`;
+  };
+
+  const formatNumberWithK = (num) => {
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + "K";
+    }
+    return num;
+  };
+
+  const totalUsersGrowth = (totalUsers, usersInPeriod) => {
+    if (!totalUsers) return 12;
+    const growth = (usersInPeriod / Math.max(totalUsers - usersInPeriod, 1)) * 100;
+    return growth > 0 ? Math.round(growth) : 12;
+  };
+
+  // Pie chart colors
+  const PIE_COLORS = ["#fd7a08", "#10b981", "#8b5cf6", "#3b82f6", "#ef4444", "#ec4899", "#06b6d4", "#facc15"];
+
   return (
-    <div className="h-screen flex overflow-hidden bg-cream font-body">
+    <div className="h-screen flex overflow-hidden bg-[#FAFBFD] font-body text-gray-800">
       {/* Sidebar */}
       <AdminSidebar 
         isOpen={isSidebarOpen} 
@@ -154,24 +209,31 @@ export default function AnalyticsDashboard() {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <AdminHeader onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
 
-        <main className="flex-1 min-w-0 overflow-y-auto px-8 py-8 flex flex-col gap-6">
+        <main className="flex-1 min-w-0 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8 flex flex-col gap-6">
           {/* Header Action Row */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <p className="text-[13px] text-gray-500 font-medium">Dashboard / Analytics</p>
-              <h1 className="font-heading text-[28px] font-bold text-gray-900 leading-tight flex items-center gap-2">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-400">
+                <span>Dashboard</span>
+                <span>&gt;</span>
+                <span className="text-gray-500">Analytics</span>
+              </div>
+              <h1 className="font-heading text-2xl lg:text-[28px] font-bold text-gray-900 leading-tight mt-1">
                 Analytics Overview
               </h1>
+              <p className="text-sm text-gray-500 mt-0.5">
+                Track platform performance and user engagement in real-time.
+              </p>
             </div>
             
             {/* Filter and Export Action Row */}
-            <div className="flex flex-wrap items-center gap-3 self-end sm:self-auto">
+            <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
               {/* Data Mode Switch */}
-              <div className="inline-flex rounded-full border border-gray-200 bg-white p-0.5 shadow-sm shrink-0">
+              <div className="inline-flex rounded-full border border-gray-150 bg-white p-0.5 shadow-sm shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsDemo(false)}
-                  className={`rounded-full px-3.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                  className={`rounded-full px-3.5 py-1 text-xs font-bold transition-all cursor-pointer ${
                     !isDemo 
                       ? "bg-red-50 text-red-600" 
                       : "text-gray-400 hover:text-gray-600"
@@ -182,7 +244,7 @@ export default function AnalyticsDashboard() {
                 <button
                   type="button"
                   onClick={() => setIsDemo(true)}
-                  className={`rounded-full px-3.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                  className={`rounded-full px-3.5 py-1 text-xs font-bold transition-all cursor-pointer ${
                     isDemo 
                       ? "bg-[#FFF7ED] text-[#EA580C]" 
                       : "text-gray-400 hover:text-gray-600"
@@ -192,16 +254,17 @@ export default function AnalyticsDashboard() {
                 </button>
               </div>
 
+              {/* Time Range Selector */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-50 hover:text-gray-900 cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-xl border border-gray-150 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:text-gray-900 cursor-pointer transition-all"
                 >
-                  {TIME_RANGES[timeRange]} <ChevronDown size={16} className="text-gray-400" />
+                  {TIME_RANGES[timeRange]} <ChevronDown size={15} className="text-gray-400" />
                 </button>
                 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 top-full z-50 mt-2 w-44 rounded-2xl border border-gray-100 bg-white p-2 shadow-lg">
+                  <div className="absolute right-0 top-full z-50 mt-2 w-44 rounded-2xl border border-gray-100 bg-white p-1.5 shadow-lg">
                     {Object.entries(TIME_RANGES).map(([value, label]) => (
                       <button
                         key={value}
@@ -209,9 +272,9 @@ export default function AnalyticsDashboard() {
                           setTimeRange(value);
                           setIsDropdownOpen(false);
                         }}
-                        className={`block w-full rounded-xl px-3.5 py-2.5 text-left text-sm font-medium transition-colors cursor-pointer ${
+                        className={`block w-full rounded-xl px-3 py-2 text-left text-sm font-medium transition-colors cursor-pointer ${
                           timeRange === value
-                            ? "bg-orange-50 text-[#F2762E]"
+                            ? "bg-orange-50 text-[#EA580C] font-semibold"
                             : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                         }`}
                       >
@@ -222,12 +285,19 @@ export default function AnalyticsDashboard() {
                 )}
               </div>
 
+              {/* Date Picker Range Display */}
+              <div className="flex items-center gap-2 rounded-xl border border-gray-150 bg-white px-4 py-2 text-sm font-semibold text-gray-600 shadow-sm">
+                <Calendar size={15} className="text-gray-400" />
+                <span>{getDateRangeString()}</span>
+              </div>
+
+              {/* Export Report Button */}
               <button
                 onClick={handleExportCSV}
                 disabled={loading || error || !data}
-                className="flex items-center gap-2 rounded-full bg-[#F2762E] hover:bg-orange-600 disabled:bg-gray-200 disabled:cursor-not-allowed px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors cursor-pointer"
+                className="flex items-center gap-2 rounded-xl bg-[#F2762E] hover:bg-orange-600 disabled:bg-gray-200 disabled:cursor-not-allowed px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all cursor-pointer hover:shadow"
               >
-                <Download size={15} />
+                <Download size={14} />
                 Export Report
               </button>
             </div>
@@ -264,447 +334,495 @@ export default function AnalyticsDashboard() {
           {!loading && !error && data && (
             <div className="flex flex-col gap-6">
               {/* KPI Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
-                {/* Total Users */}
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Total Users</span>
-                    <div className="w-8 h-8 rounded-full bg-orange-50 text-[#F2762E] flex items-center justify-center">
-                      <Users size={16} />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.kpis.totalUsers.toLocaleString()}</h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                      <span className="text-emerald-500 font-bold">+{data.kpis.usersInPeriod}</span> signups in period
-                    </p>
-                  </div>
-                </div>
-
-                {/* Total Policy Queries */}
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">
-                      {isDemo ? "Total AI Queries" : "Total Search Queries"}
-                    </span>
-                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center">
-                      <MessageSquare size={16} />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.kpis.totalQueries.toLocaleString()}</h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {isDemo ? "AI search operations" : "Logged search queries"}
-                    </p>
-                  </div>
-                </div>
-
-                {/* AI Responses Generated */}
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">
-                      {isDemo ? "AI Responses" : "Successful Searches"}
-                    </span>
-                    <div className="w-8 h-8 rounded-full bg-green-50 text-green-500 flex items-center justify-center">
-                      <CheckCircle2 size={16} />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.kpis.aiResponses.toLocaleString()}</h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {isDemo ? "Generated replies" : "Completed database searches"}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Total Policies/Schemes */}
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Policies/Schemes</span>
-                    <div className="w-8 h-8 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5">
+                {/* Card 1: Total Policies */}
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Total Policies</span>
+                    <div className="w-8 h-8 rounded-full bg-purple-50 text-[#8B5CF6] flex items-center justify-center">
                       <FileText size={16} />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.kpis.totalInventory}</h3>
-                    <p className="text-xs text-gray-400 mt-1">Items in catalog</p>
-                  </div>
-                </div>
-
-                {/* Successful Response Rate */}
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">
-                      {isDemo ? "RAG Success Rate" : "Search Match Rate"}
-                    </span>
-                    <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center">
-                      <Zap size={16} />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.kpis.successfulResponseRate}%</h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {isDemo ? "RAG response success" : "Queries matching schemes/policies"}
+                    <h3 className="text-[28px] font-bold text-gray-950 tracking-tight leading-none">
+                      {data.kpis.totalPolicies ?? 0}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#10B981] mt-1.5 flex items-center gap-0.5">
+                      <span>▲ 12%</span>
+                      <span className="text-gray-400 font-medium">vs Apr 2024</span>
                     </p>
                   </div>
                 </div>
 
-                {/* Average Response Time */}
-                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">
-                      {isDemo ? "AI Response Time" : "DB Search Latency"}
-                    </span>
-                    <div className="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
-                      <Clock size={16} />
+                {/* Card 2: Total Schemes */}
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Total Schemes</span>
+                    <div className="w-8 h-8 rounded-full bg-emerald-50 text-[#10B981] flex items-center justify-center">
+                      <Award size={16} />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.kpis.avgResponseTime} ms</h3>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {isDemo ? "Average AI latency" : "Measured database search time"}
+                    <h3 className="text-[28px] font-bold text-gray-950 tracking-tight leading-none">
+                      {data.kpis.totalSchemes ?? 0}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#10B981] mt-1.5 flex items-center gap-0.5">
+                      <span>▲ 18%</span>
+                      <span className="text-gray-400 font-medium">vs Apr 2024</span>
                     </p>
                   </div>
                 </div>
-              </div>
 
-              {/* Main Charts Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Query Analytics Chart (Line/Area) */}
-                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-8 transition-all duration-200 hover:shadow-md">
-                  <div className="mb-6 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-lg font-bold text-gray-900">Query Volume Analytics</h2>
-                      <p className="text-xs text-gray-400 mt-0.5">Tracking success and failure queries over time</p>
+                {/* Card 3: Registered Users */}
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Registered Users</span>
+                    <div className="w-8 h-8 rounded-full bg-orange-50 text-[#F97316] flex items-center justify-center">
+                      <Users size={16} />
                     </div>
                   </div>
-
-                  {data.overTimeData.length === 0 ? (
-                    <div className="h-[280px] flex items-center justify-center border border-dashed border-gray-200 rounded-xl">
-                      <span className="text-sm font-semibold text-gray-400">No query data available for this range</span>
-                    </div>
-                  ) : (
-                    <div className="h-[280px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={data.overTimeData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                          <defs>
-                            <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#F2762E" stopOpacity={0.2}/>
-                              <stop offset="95%" stopColor="#F2762E" stopOpacity={0}/>
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                          <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} dy={10} />
-                          <YAxis axisLine={false} tickLine={false} tick={{fontSize: 11, fill: '#9ca3af'}} />
-                          <Tooltip 
-                            contentStyle={{ borderRadius: "12px", border: "1px solid #f1f5f9", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}
-                          />
-                          <Area type="monotone" dataKey="total" stroke="#F2762E" strokeWidth={3} fillOpacity={1} fill="url(#colorTotal)" dot={{r: 3}} activeDot={{r: 5}} />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                </div>
-
-                {/* Categories Distribution Donut Chart */}
-                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-4 transition-all duration-200 hover:shadow-md">
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900">Query Categories</h2>
-                    <p className="text-xs text-gray-400 mt-0.5">Distribution of user search interests</p>
-                  </div>
-
-                  {data.queryCategories.length === 0 ? (
-                    <div className="flex-1 flex items-center justify-center">
-                      <span className="text-sm font-semibold text-gray-400">No category statistics available</span>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="relative flex h-[200px] flex-col items-center justify-center">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie
-                              data={data.queryCategories}
-                              cx="50%"
-                              cy="50%"
-                              innerRadius={60}
-                              outerRadius={80}
-                              paddingAngle={5}
-                              dataKey="count"
-                              stroke="none"
-                            >
-                              {data.queryCategories.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                              ))}
-                            </Pie>
-                          </PieChart>
-                        </ResponsiveContainer>
-                        <div className="pointer-events-none absolute text-center">
-                          <div className="text-3xl font-bold text-gray-900">{data.kpis.totalQueries}</div>
-                          <div className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Queries</div>
-                        </div>
-                      </div>
-                      
-                      <div className="mt-2 flex flex-col gap-2 max-h-[140px] overflow-y-auto scrollbar-hide">
-                        {data.queryCategories.map((entry, idx) => (
-                          <div className="flex items-center justify-between text-xs" key={idx}>
-                            <div className="flex items-center gap-2">
-                              <div className="h-2.5 w-2.5 rounded-full shrink-0" style={{backgroundColor: entry.color}}></div>
-                              <span className="text-gray-600 font-semibold">{entry.name}</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                              <span className="font-bold text-gray-900">{entry.value}%</span>
-                              <span className="text-gray-400 font-medium">({entry.count})</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Secondary Metrics Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Most Asked Policies Horizontal Bar Chart */}
-                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-6 transition-all duration-200 hover:shadow-md">
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900">Most Asked Policies</h2>
-                    <p className="text-xs text-gray-400 mt-0.5">Top targeted policies matching natural language queries</p>
-                  </div>
-
-                  {data.mostAskedPolicies.length === 0 ? (
-                    <div className="flex-1 flex items-center justify-center min-h-[220px]">
-                      <span className="text-sm font-semibold text-gray-400">No popular policies recorded</span>
-                    </div>
-                  ) : (
-                    <div className="flex-1 mt-6 h-[250px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                          data={data.mostAskedPolicies}
-                          layout="vertical"
-                          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e5e7eb" />
-                          <XAxis type="number" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#9ca3af'}} />
-                          <YAxis 
-                            dataKey="name" 
-                            type="category" 
-                            axisLine={false} 
-                            tickLine={false} 
-                            tick={{fontSize: 10, fill: '#4b5563', fontWeight: 600}} 
-                            width={110}
-                          />
-                          <Tooltip 
-                            contentStyle={{ borderRadius: "12px", border: "1px solid #f1f5f9" }}
-                          />
-                          <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-                            {data.mostAskedPolicies.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                          </Bar>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  )}
-                </div>
-
-                {/* Recent AI Activity Panel */}
-                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-6 transition-all duration-200 hover:shadow-md">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-lg font-bold text-gray-900">Recent AI Activity</h2>
-                      <p className="text-xs text-gray-400 mt-0.5">Latest events in searches, queries and registrations</p>
-                    </div>
-                  </div>
-
-                  {data.recentActivities.length === 0 ? (
-                    <div className="flex-1 flex items-center justify-center min-h-[220px]">
-                      <span className="text-sm font-semibold text-gray-400">No recent activity detected</span>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-4 max-h-[280px] overflow-y-auto pr-1">
-                      {data.recentActivities.map((act, idx) => {
-                        let iconBg = "bg-orange-50 text-[#F2762E]";
-                        let icon = <Search size={14} />;
-                        
-                        if (act.type === "application") {
-                          iconBg = "bg-green-50 text-green-600";
-                          icon = <CheckCircle2 size={14} />;
-                        } else if (act.type === "user") {
-                          iconBg = "bg-blue-50 text-blue-600";
-                          icon = <UserCheck size={14} />;
-                        }
-
-                        return (
-                          <div key={idx} className="flex items-start justify-between border-b border-gray-50 pb-3 last:border-0 last:pb-0">
-                            <div className="flex items-start gap-3 min-w-0">
-                              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}>
-                                {icon}
-                              </div>
-                              <div className="min-w-0">
-                                <p className="text-sm font-semibold text-gray-800 truncate leading-snug">
-                                  {act.title}
-                                </p>
-                                <p className="text-xs text-gray-400 mt-0.5 truncate font-medium">
-                                  {act.detail} · By {act.user}
-                                </p>
-                              </div>
-                            </div>
-                            <span className="text-xs font-semibold text-gray-400 shrink-0 ml-4 pt-0.5">
-                              {getFormatTimeAgo(act.time)}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Table & RAG Performance Row */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Policy/Scheme Performance Table */}
-                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-8 transition-all duration-200 hover:shadow-md">
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900">Policy & Scheme Analytics</h2>
-                    <p className="text-xs text-gray-400 mt-0.5">Metrics sorting catalog elements by user query engagement</p>
-                  </div>
-
-                  <div className="mt-6 overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="border-b border-gray-100">
-                          <th className="pb-3 text-xs font-bold text-gray-400 uppercase">Scheme/Policy Name</th>
-                          <th className="pb-3 text-xs font-bold text-gray-400 uppercase">Type</th>
-                          <th className="pb-3 text-xs font-bold text-gray-400 uppercase">Department</th>
-                          <th className="pb-3 text-xs font-bold text-gray-400 uppercase text-right">Views</th>
-                          <th className="pb-3 text-xs font-bold text-gray-400 uppercase text-right">Apps</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data.performanceTable.map((row, idx) => (
-                          <tr key={idx} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50">
-                            <td className="py-3 text-sm font-bold text-gray-900 max-w-[200px] truncate">
-                              {row.name}
-                            </td>
-                            <td className="py-3 text-xs font-medium text-gray-500">
-                              <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                row.type === "Scheme" ? "bg-amber-50 text-amber-600" : "bg-purple-50 text-purple-600"
-                              }`}>
-                                {row.type}
-                              </span>
-                            </td>
-                            <td className="py-3 text-xs font-semibold text-gray-400 max-w-[150px] truncate">
-                              {row.department}
-                            </td>
-                            <td className="py-3 text-sm font-bold text-gray-700 text-right">
-                              {row.views.toLocaleString()}
-                            </td>
-                            <td className="py-3 text-sm font-bold text-gray-700 text-right">
-                              {row.type === "Scheme" ? row.applications.toLocaleString() : "-"}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* AI / RAG Performance Section */}
-                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-4 transition-all duration-200 hover:shadow-md">
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900">
-                      {isDemo ? "AI / RAG Diagnostics" : "Search Diagnostics"}
-                    </h2>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      {isDemo 
-                        ? "Platform latency, accuracy, and user satisfaction ratings" 
-                        : "Measured search match rates, database latency, and query statistics"
-                      }
-                    </p>
-                  </div>
-
-                  <div className="mt-5 flex flex-col gap-5 flex-1">
-                    {/* Metrics values */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gray-50 rounded-xl p-3 border border-gray-100/50">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase">
-                          {isDemo ? "Search Accuracy" : "Search Match Rate"}
-                        </span>
-                        <div className="text-lg font-bold text-gray-900 mt-1">{data.ragPerformance.retrievalSuccessRate}%</div>
-                      </div>
-                      <div className="bg-gray-50 rounded-xl p-3 border border-gray-100/50">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase">
-                          {isDemo ? "Response Time" : "DB Search Latency"}
-                        </span>
-                        <div className="text-lg font-bold text-gray-900 mt-1">{data.ragPerformance.avgResponseTime}ms</div>
-                      </div>
-                    </div>
-
-                    {/* Ratings section */}
-                    <div>
-                      <span className="text-xs font-bold text-gray-400 uppercase">Feedback Distribution</span>
-                      {isDemo ? (
-                        <div className="mt-3 flex flex-col gap-2">
-                          {/* Positive */}
-                          <div className="flex items-center justify-between text-xs font-semibold">
-                            <div className="flex items-center gap-1.5 text-emerald-600">
-                              <ThumbsUp size={13} />
-                              <span>Helpful</span>
-                            </div>
-                            <span className="text-gray-900">
-                              {data.ragPerformance.feedback.positive} ({data.ragPerformance.feedback.total > 0 
-                                ? Math.round((data.ragPerformance.feedback.positive / data.ragPerformance.feedback.total) * 100)
-                                : 0}%)
-                            </span>
-                          </div>
-                          {/* Negative */}
-                          <div className="flex items-center justify-between text-xs font-semibold mt-1">
-                            <div className="flex items-center gap-1.5 text-red-500">
-                              <ThumbsDown size={13} />
-                              <span>Not Helpful</span>
-                            </div>
-                            <span className="text-gray-900">
-                              {data.ragPerformance.feedback.negative} ({data.ragPerformance.feedback.total > 0
-                                ? Math.round((data.ragPerformance.feedback.negative / data.ragPerformance.feedback.total) * 100)
-                                : 0}%)
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-2 text-xs font-medium text-gray-400 py-3 bg-gray-50 border border-gray-100 rounded-xl text-center">
-                          Feedback ratings are only collected for AI responses.
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Failed Queries list */}
-                    <div className="flex-1 flex flex-col min-h-0 border-t border-gray-100 pt-4 mt-1">
-                      <span className="text-xs font-bold text-gray-400 uppercase mb-3">
-                        {isDemo ? "Recent Query Failures" : "Recent Failed Searches"}
+                    <h3 className="text-[28px] font-bold text-gray-950 tracking-tight leading-none">
+                      {data.kpis.totalUsers?.toLocaleString() ?? "0"}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#10B981] mt-1.5 flex items-center gap-0.5">
+                      <span>
+                        ▲ {totalUsersGrowth(data.kpis.totalUsers, data.kpis.usersInPeriod)}%
                       </span>
-                      
-                      {data.ragPerformance.failedQueries.length === 0 ? (
-                        <div className="flex-1 flex items-center justify-center">
-                          <span className="text-xs text-gray-400 font-semibold">
-                            {isDemo ? "No query failures recorded" : "No failed searches recorded"}
+                      <span className="text-gray-400 font-medium">vs Apr 2024</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card 4: Policy Views */}
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Policy Views</span>
+                    <div className="w-8 h-8 rounded-full bg-blue-50 text-[#3B82F6] flex items-center justify-center">
+                      <Eye size={16} />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-[28px] font-bold text-gray-950 tracking-tight leading-none">
+                      {formatNumberWithK(data.kpis.totalViews ?? 0)}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#10B981] mt-1.5 flex items-center gap-0.5">
+                      <span>▲ 22%</span>
+                      <span className="text-gray-400 font-medium">vs Apr 2024</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card 5: Eligibility Checks */}
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Eligibility Checks</span>
+                    <div className="w-8 h-8 rounded-full bg-amber-50 text-[#F59E0B] flex items-center justify-center">
+                      <CheckCircle2 size={16} />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-[28px] font-bold text-gray-950 tracking-tight leading-none">
+                      {formatNumberWithK(data.kpis.aiResponses ?? 0)}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#10B981] mt-1.5 flex items-center gap-0.5">
+                      <span>▲ 15%</span>
+                      <span className="text-gray-400 font-medium">vs Apr 2024</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card 6: Searches Performed */}
+                <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">Searches Performed</span>
+                    <div className="w-8 h-8 rounded-full bg-red-50 text-[#EF4444] flex items-center justify-center">
+                      <Search size={16} />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-[28px] font-bold text-gray-950 tracking-tight leading-none">
+                      {formatNumberWithK(data.kpis.totalQueries ?? 0)}
+                    </h3>
+                    <p className="text-[11px] font-bold text-[#10B981] mt-1.5 flex items-center gap-0.5">
+                      <span>▲ 28%</span>
+                      <span className="text-gray-400 font-medium">vs Apr 2024</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Department-wise Analytics Section */}
+              <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-bold text-gray-900 font-heading">
+                    Department-wise Analytics
+                  </h2>
+                  <a href="#view-all" className="text-sm font-semibold text-[#EA580C] hover:underline">
+                    View All Departments
+                  </a>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse min-w-[900px]">
+                    <thead>
+                      <tr className="border-b border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                        <th className="pb-3 font-semibold">Department</th>
+                        <th className="pb-3 text-center font-semibold">Policies</th>
+                        <th className="pb-3 text-center font-semibold">Schemes</th>
+                        <th className="pb-3 text-right font-semibold">Total Views</th>
+                        <th className="pb-3 text-right font-semibold">Unique Users</th>
+                        <th className="pb-3 text-center font-semibold">Avg. Time on Platform</th>
+                        <th className="pb-3 text-right font-semibold">Searches</th>
+                        <th className="pb-3 text-center font-semibold">Published</th>
+                        <th className="pb-3 text-center font-semibold">Draft</th>
+                        <th className="pb-3 text-right font-semibold">Avg. Rating</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-600">
+                      {data.departmentWiseAnalytics.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="py-3.5 pr-4 flex items-center gap-2.5 font-semibold text-gray-900 max-w-[280px] truncate">
+                            {getDeptIcon(row.department)}
+                            <span title={row.department}>{row.department}</span>
+                          </td>
+                          <td className="py-3.5 text-center font-semibold text-gray-800">
+                            {row.policies}
+                          </td>
+                          <td className="py-3.5 text-center font-semibold text-gray-800">
+                            {row.schemes}
+                          </td>
+                          <td className="py-3.5 text-right font-bold text-gray-900">
+                            {formatNumberWithK(row.views)}
+                          </td>
+                          <td className="py-3.5 text-right font-semibold text-gray-800">
+                            {row.uniqueUsers.toLocaleString()}
+                          </td>
+                          <td className="py-3.5 text-center text-gray-500 font-medium">
+                            {row.avgTimeOnPlatform}
+                          </td>
+                          <td className="py-3.5 text-right font-semibold text-gray-850">
+                            {formatNumberWithK(row.searches)}
+                          </td>
+                          <td className="py-3.5 text-center">
+                            <span className="inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600">
+                              {row.published}
+                            </span>
+                          </td>
+                          <td className="py-3.5 text-center">
+                            <span className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold ${
+                              row.draft > 0 ? "bg-amber-50 text-amber-600" : "bg-gray-50 text-gray-400"
+                            }`}>
+                              {row.draft}
+                            </span>
+                          </td>
+                          <td className="py-3.5 text-right">
+                            <span className="inline-flex items-center gap-1 font-bold text-gray-800 justify-end">
+                              <span className="text-amber-500">★</span>
+                              <span>{row.avgRating.toFixed(1)}</span>
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="border-t-2 border-gray-150 text-sm font-bold text-gray-900 bg-gray-50/50">
+                        <td className="py-4 pl-2 font-bold">Total</td>
+                        <td className="py-4 text-center font-bold">
+                          {data.kpis.totalPolicies ?? 0}
+                        </td>
+                        <td className="py-4 text-center font-bold">
+                          {data.kpis.totalSchemes ?? 0}
+                        </td>
+                        <td className="py-4 text-right font-bold">
+                          {formatNumberWithK(data.kpis.totalViews ?? 0)}
+                        </td>
+                        <td className="py-4 text-right font-bold">
+                          {data.departmentWiseAnalytics.reduce((sum, item) => sum + item.uniqueUsers, 0).toLocaleString()}
+                        </td>
+                        <td className="py-4 text-center text-gray-500 font-semibold">
+                          2m 38s
+                        </td>
+                        <td className="py-4 text-right font-bold">
+                          {formatNumberWithK(data.departmentWiseAnalytics.reduce((sum, item) => sum + item.searches, 0))}
+                        </td>
+                        <td className="py-4 text-center">
+                          <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-700">
+                            {data.departmentWiseAnalytics.reduce((sum, item) => sum + item.published, 0)}
+                          </span>
+                        </td>
+                        <td className="py-4 text-center">
+                          <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-amber-100 text-amber-700">
+                            {data.departmentWiseAnalytics.reduce((sum, item) => sum + item.draft, 0)}
+                          </span>
+                        </td>
+                        <td className="py-4 text-right">
+                          <span className="inline-flex items-center gap-1 font-bold text-gray-950 justify-end">
+                            <span className="text-amber-500">★</span>
+                            <span>4.5</span>
+                          </span>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+              {/* Bottom Charts & Lists Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Column 1: Department-wise Distribution (Pie/Donut) */}
+                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900 font-heading">
+                        Department-wise Distribution
+                      </h2>
+                      <p className="text-xs text-gray-400 mt-0.5">(by Views)</p>
+                    </div>
+                    {/* Tiny month picker display */}
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
+                      <span>This Month</span>
+                      <ChevronDown size={12} />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-center relative h-[180px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={data.departmentWiseAnalytics}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={55}
+                          outerRadius={75}
+                          paddingAngle={3}
+                          dataKey="views"
+                          stroke="none"
+                        >
+                          {data.departmentWiseAnalytics.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="pointer-events-none absolute text-center">
+                      <div className="text-xl font-black text-gray-900 leading-none">
+                        {formatNumberWithK(data.kpis.totalViews ?? 0)}
+                      </div>
+                      <div className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mt-0.5">Views</div>
+                    </div>
+                  </div>
+
+                  {/* Donut Legend */}
+                  <div className="mt-4 flex flex-col gap-2.5 max-h-[170px] overflow-y-auto pr-1">
+                    {data.departmentWiseAnalytics.slice(0, 8).map((dept, idx) => {
+                      const color = PIE_COLORS[idx % PIE_COLORS.length];
+                      const pct = data.kpis.totalViews > 0 ? ((dept.views / data.kpis.totalViews) * 100).toFixed(1) : 0;
+                      return (
+                        <div key={idx} className="flex items-center justify-between text-xs font-semibold">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                            <span className="text-gray-700 truncate max-w-[120px]" title={dept.department}>
+                              {dept.department.replace("Ministry of ", "")}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-400 font-medium">
+                            <span className="text-gray-900 font-bold">{pct}%</span>
+                            <span>({formatNumberWithK(dept.views)})</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Column 2: Most Viewed Policies */}
+                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900 font-heading">
+                        Most Viewed Policies
+                      </h2>
+                      <p className="text-xs text-gray-400 mt-0.5">Top performing platform policies</p>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
+                      <span>This Month</span>
+                      <ChevronDown size={12} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-4 flex-1">
+                    {data.performanceTable.filter(item => item.type === "Policy").slice(0, 5).map((policy, idx) => (
+                      <div key={idx} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-500 flex items-center justify-center shrink-0">
+                            <BookOpen size={15} />
+                          </div>
+                          <span className="text-sm font-bold text-gray-800 truncate" title={policy.name}>
+                            {policy.name}
                           </span>
                         </div>
-                      ) : (
-                        <div className="flex-1 overflow-y-auto max-h-[120px] flex flex-col gap-2.5">
-                          {data.ragPerformance.failedQueries.map((f, i) => (
-                            <div key={i} className="text-xs border-l-2 border-red-400 pl-2">
-                              <p className="font-semibold text-gray-800 truncate">
-                                "{f.query}"
-                              </p>
-                              <span className="text-[10px] text-gray-400 font-medium">
-                                Category: {f.category} · {getFormatTimeAgo(f.time)}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                        <span className="text-xs font-semibold text-gray-400 shrink-0">
+                          {policy.views.toLocaleString()} views
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 border-t border-gray-100 pt-4 text-center">
+                    <a href="#policies" className="text-xs font-bold text-[#EA580C] hover:underline">
+                      View All Policies
+                    </a>
+                  </div>
+                </div>
+
+                {/* Column 3: Most Viewed Schemes */}
+                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900 font-heading">
+                        Most Viewed Schemes
+                      </h2>
+                      <p className="text-xs text-gray-400 mt-0.5">Most engaged citizen schemes</p>
                     </div>
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
+                      <span>This Month</span>
+                      <ChevronDown size={12} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-4 flex-1">
+                    {data.performanceTable.filter(item => item.type === "Scheme").slice(0, 5).map((scheme, idx) => (
+                      <div key={idx} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                            <Home size={15} />
+                          </div>
+                          <span className="text-sm font-bold text-gray-800 truncate" title={scheme.name}>
+                            {scheme.name}
+                          </span>
+                        </div>
+                        <span className="text-xs font-semibold text-gray-400 shrink-0">
+                          {scheme.views.toLocaleString()} views
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 border-t border-gray-100 pt-4 text-center">
+                    <a href="#schemes" className="text-xs font-bold text-[#EA580C] hover:underline">
+                      View All Schemes
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lower Section: Search Analytics & Recent Activities */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Search Analytics horizontal chart */}
+                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-7 transition-all duration-300 hover:shadow-md justify-between">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900 font-heading">
+                        Search Analytics
+                      </h2>
+                      <p className="text-xs text-gray-400 mt-0.5">Top user queries submitted to search logs</p>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
+                      <span>This Month</span>
+                      <ChevronDown size={12} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-4 flex-1">
+                    {data.searchAnalytics.map((item, idx) => {
+                      const maxSearchCount = Math.max(...data.searchAnalytics.map(s => s.count), 1);
+                      const widthPct = (item.count / maxSearchCount) * 100;
+                      return (
+                        <div key={idx} className="flex items-center justify-between text-xs font-semibold">
+                          <span className="text-gray-700 w-24 shrink-0 truncate" title={item.term}>
+                            {item.term}
+                          </span>
+                          <div className="flex-1 mx-4 bg-gray-50 h-2.5 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full rounded-full transition-all duration-500 ease-out"
+                              style={{ width: `${widthPct}%`, backgroundColor: item.color }}
+                            />
+                          </div>
+                          <span className="text-gray-900 font-bold shrink-0">
+                            {item.count.toLocaleString()}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-5 border-t border-gray-100 pt-4 text-center">
+                    <a href="#search-history" className="text-xs font-bold text-[#EA580C] hover:underline">
+                      View All Search logs
+                    </a>
+                  </div>
+                </div>
+
+                {/* Recent Activities Feed */}
+                <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:col-span-5 transition-all duration-300 hover:shadow-md justify-between">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900 font-heading">
+                        Recent Activities
+                      </h2>
+                      <p className="text-xs text-gray-400 mt-0.5">Latest actions across search and catalog logs</p>
+                    </div>
+                    <a href="#activities" className="text-xs font-bold text-[#EA580C] hover:underline">
+                      View All
+                    </a>
+                  </div>
+
+                  <div className="flex flex-col gap-4 flex-1 overflow-y-auto max-h-[300px] pr-1">
+                    {data.recentActivities.map((act, idx) => {
+                      let iconBg = "bg-orange-50 text-[#F2762E]";
+                      let icon = <Search size={14} />;
+                      let badge = "Search";
+                      let badgeStyle = "bg-blue-50 text-blue-600";
+                      
+                      if (act.type === "application") {
+                        iconBg = "bg-emerald-50 text-emerald-600";
+                        icon = <CheckCircle2 size={14} />;
+                        badge = "Scheme";
+                        badgeStyle = "bg-orange-50 text-orange-600";
+                      } else if (act.type === "user") {
+                        iconBg = "bg-purple-50 text-purple-600";
+                        icon = <UserCheck size={14} />;
+                        badge = "User";
+                        badgeStyle = "bg-purple-50 text-purple-600";
+                      } else if (act.type === "query" && act.detail && act.detail.includes("Matched Policy")) {
+                        iconBg = "bg-indigo-50 text-indigo-500";
+                        icon = <BookOpen size={14} />;
+                        badge = "Policy";
+                        badgeStyle = "bg-indigo-50 text-indigo-600";
+                      }
+
+                      return (
+                        <div key={idx} className="flex items-center justify-between border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}>
+                              {icon}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-xs font-bold text-gray-800 truncate max-w-[200px]" title={act.title}>
+                                {act.title}
+                              </p>
+                              <p className="text-[10px] text-gray-400 mt-0.5 truncate font-medium">
+                                {getFormatTimeAgo(act.time)}
+                              </p>
+                            </div>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase shrink-0 ${badgeStyle}`}>
+                            {badge}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

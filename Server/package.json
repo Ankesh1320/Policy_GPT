@@ -8,6 +8,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "seed": "node utils/seed.js",
+    "seed-corrected": "node scripts/replaceGovtSchemes.js",
+    "seed:policies": "node scripts/seedPolicies.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

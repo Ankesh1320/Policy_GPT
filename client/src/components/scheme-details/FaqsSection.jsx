@@ -49,8 +49,8 @@ export default function FaqsSection({ scheme }) {
         },
         {
           q: `What are the benefits of ${scheme.title}?`,
-          a: scheme.benefits 
-            ? `The benefits include: ${scheme.benefits.replace(/\r?\n/g, ' ')}` 
+          a: scheme.benefits && scheme.benefits.length > 0
+            ? `The benefits include: ${Array.isArray(scheme.benefits) ? scheme.benefits.join(" ").replace(/\r?\n/g, ' ') : scheme.benefits.replace(/\r?\n/g, ' ')}` 
             : `The scheme provides targeted social, financial, or developmental assistance. Please check the Benefits tab for detailed coverage.`
         },
         {
