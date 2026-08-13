@@ -244,13 +244,12 @@ export default function Reports() {
         {/* Header */}
         <AdminHeader onMenuClick={() => setIsSidebarOpen(p => !p)} />
 
-        <main className="flex-1 min-w-0 overflow-y-auto px-6 py-6">
+        <main className="flex-1 min-w-0 overflow-y-auto px-8 py-8">
           {view === 'dashboard' ? (
-            <div className="max-w-6xl mx-auto space-y-6">
+            <div className="max-w-8xl mx-auto space-y-6">
               {/* Header card */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-2xl bg-gradient-to-r from-[#F7D2A8] via-white to-[#D8F3E3] border border-[#E2E8F0] p-6 shadow-sm gap-4">
                 <div>
-                  <p className="mb-1 text-[13px] text-gray-500 font-medium">Reports</p>
                   <h1 className="text-2xl font-bold text-gray-900 leading-tight">
                     Generate Government Intelligence Reports
                   </h1>
