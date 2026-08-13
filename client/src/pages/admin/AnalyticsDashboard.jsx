@@ -198,7 +198,7 @@ export default function AnalyticsDashboard() {
   const PIE_COLORS = ["#fd7a08", "#10b981", "#8b5cf6", "#3b82f6", "#ef4444", "#ec4899", "#06b6d4", "#facc15"];
 
   return (
-    <div className="h-screen flex overflow-hidden bg-[#FAFBFD] font-body text-gray-800">
+    <div className="h-screen flex overflow-hidden bg-cream font-body text-gray-800">
       {/* Sidebar */}
       <AdminSidebar 
         isOpen={isSidebarOpen} 
@@ -213,21 +213,16 @@ export default function AnalyticsDashboard() {
           {/* Header Action Row */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-400">
-                <span>Dashboard</span>
-                <span>&gt;</span>
-                <span className="text-gray-500">Analytics</span>
-              </div>
               <h1 className="font-heading text-2xl lg:text-[28px] font-bold text-gray-900 leading-tight mt-1">
                 Analytics Overview
               </h1>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <p className="text-sm text-gray-500 mt-0.5 whitespace-nowrap">
                 Track platform performance and user engagement in real-time.
               </p>
             </div>
             
             {/* Filter and Export Action Row */}
-            <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+            <div className="flex flex-wrap items-center gap-3 self-start md:self-auto justify-end">
               {/* Data Mode Switch */}
               <div className="inline-flex rounded-full border border-gray-150 bg-white p-0.5 shadow-sm shrink-0">
                 <button
@@ -466,7 +461,7 @@ export default function AnalyticsDashboard() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse min-w-[900px]">
                     <thead>
-                      <tr className="border-b border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                      <tr className="bg-[#FAF3E8] border-b border-gray-100 text-left text-xs font-semibold text-gray-500 tracking-wide px-5 py-3">
                         <th className="pb-3 font-semibold">Department</th>
                         <th className="pb-3 text-center font-semibold">Policies</th>
                         <th className="pb-3 text-center font-semibold">Schemes</th>
@@ -476,7 +471,6 @@ export default function AnalyticsDashboard() {
                         <th className="pb-3 text-right font-semibold">Searches</th>
                         <th className="pb-3 text-center font-semibold">Published</th>
                         <th className="pb-3 text-center font-semibold">Draft</th>
-                        <th className="pb-3 text-right font-semibold">Avg. Rating</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 text-sm font-medium text-gray-600">
@@ -516,12 +510,7 @@ export default function AnalyticsDashboard() {
                               {row.draft}
                             </span>
                           </td>
-                          <td className="py-3.5 text-right">
-                            <span className="inline-flex items-center gap-1 font-bold text-gray-800 justify-end">
-                              <span className="text-amber-500">★</span>
-                              <span>{row.avgRating.toFixed(1)}</span>
-                            </span>
-                          </td>
+
                         </tr>
                       ))}
                     </tbody>
@@ -554,12 +543,6 @@ export default function AnalyticsDashboard() {
                         <td className="py-4 text-center">
                           <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-amber-100 text-amber-700">
                             {data.departmentWiseAnalytics.reduce((sum, item) => sum + item.draft, 0)}
-                          </span>
-                        </td>
-                        <td className="py-4 text-right">
-                          <span className="inline-flex items-center gap-1 font-bold text-gray-950 justify-end">
-                            <span className="text-amber-500">★</span>
-                            <span>4.5</span>
                           </span>
                         </td>
                       </tr>
