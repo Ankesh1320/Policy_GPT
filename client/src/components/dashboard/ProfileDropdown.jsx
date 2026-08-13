@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, User, Bookmark, Settings, LogOut } from "lucide-react";
+import { Home, User, Bookmark, Settings, LogOut, Bell, MessageSquare } from "lucide-react";
 import { profileMenuItems } from "../../utils/staticContent";
 
 const ICONS = {
@@ -9,6 +9,8 @@ const ICONS = {
   Bookmark,
   Settings,
   LogOut,
+  Bell,
+  MessageSquare,
 };
 
 const ProfileDropdown = ({ onClose }) => {
@@ -22,14 +24,19 @@ const ProfileDropdown = ({ onClose }) => {
       navigate("/");
     } else {
       onClose();
-      if (item.label.toLowerCase() === "dashboard") {
+      const label = item.label.toLowerCase();
+      if (label === "dashboard") {
         navigate("/citizen/dashboard");
-      } else if (item.label.toLowerCase() === "profile") {
-        navigate("/citizen/dashboard");
-      } else if (item.label.toLowerCase() === "saved schemes") {
-        navigate("/citizen/dashboard");
-      } else if (item.label.toLowerCase() === "settings") {
-        navigate("/citizen/dashboard");
+      } else if (label === "profile") {
+        navigate("/citizen/dashboard?tab=profile");
+      } else if (label === "saved schemes") {
+        navigate("/citizen/dashboard?tab=saved");
+      } else if (label === "notifications") {
+        navigate("/citizen/dashboard?tab=notifications");
+      } else if (label === "feedback") {
+        navigate("/citizen/dashboard?tab=feedback");
+      } else if (label === "settings") {
+        navigate("/citizen/dashboard?tab=settings");
       }
     }
   };
@@ -37,7 +44,7 @@ const ProfileDropdown = ({ onClose }) => {
   return (
     <div className="absolute right-0 top-full mt-3 w-56 bg-white rounded-xl border border-gray-100 shadow-lg py-2 z-50">
       {profileMenuItems.map((item) => {
-        const Icon = ICONS[item.icon];
+        const Icon = ICONS[item.icon] || User;
         return (
           <Fragment key={item.label}>
             {item.danger && <div className="my-1 border-t border-gray-100" />}

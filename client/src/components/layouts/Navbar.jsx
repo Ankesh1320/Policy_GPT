@@ -5,7 +5,7 @@ import { navLinks } from '../../data/landingData';
 import Button from '../ui/Button';
 import arrowIcon from '../../assets/icons/line-md_arrow-right.svg';
 import { Bell, ChevronDown } from "lucide-react";
-import ProfileDropdown from "../Dashboard/ProfileDropdown";
+import ProfileDropdown from "../dashboard/ProfileDropdown";
 
 function MenuIcon({ open }) {
   return (
@@ -148,14 +148,14 @@ export default function Navbar({ activeLabel }) {
 
         {token ? (
           <div className="hidden items-center gap-6 xl:flex">
-            <button
-              type="button"
+            <Link
+              to="/citizen/dashboard?tab=notifications"
               aria-label="Notifications"
               className="relative text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
             >
               <Bell className="w-[22px] h-[22px]" strokeWidth={1.8} />
               <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white" />
-            </button>
+            </Link>
 
             <div className="relative" ref={profileRef}>
               <button

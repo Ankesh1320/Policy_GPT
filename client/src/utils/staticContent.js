@@ -36,7 +36,7 @@ export const sidebarSections = [
     items: [
       { label: "Help & FAQs", icon: "HelpCircle", to: "#" },
       { label: "Contact Support", icon: "Headphones", to: "/contact" },
-      { label: "Feedback", icon: "MessageSquare", to: "#" },
+      { label: "Feedback", icon: "MessageSquare", to: "/citizen/dashboard?tab=feedback" },
     ],
   },
 ];
