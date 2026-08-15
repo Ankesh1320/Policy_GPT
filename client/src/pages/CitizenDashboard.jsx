@@ -7,7 +7,6 @@ import StatCards from "../components/dashboard/StatCards";
 import SavedSchemes from "../components/dashboard/SavedSchemes";
 import ApplicationStatus from "../components/dashboard/ApplicationStatus";
 import RecentSearches from "../components/dashboard/RecentSearches";
-import NotificationsTab from "../components/dashboard/NotificationsTab";
 import FeedbackTab from "../components/dashboard/FeedbackTab";
 import DashboardSkeleton from "../components/dashboard/DashboardSkeleton";
 import DashboardError from "../components/dashboard/DashboardError";
@@ -66,7 +65,6 @@ const CitizenDashboard = () => {
                     <div className="flex flex-col gap-6">
                       <ApplicationStatus applications={data.applicationStatus} />
                       <RecentSearches searches={data.recentSearches} />
-                      <NotificationsTab />
                     </div>
                   </div>
                 </>
