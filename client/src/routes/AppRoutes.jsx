@@ -18,11 +18,13 @@ import SchemeManagement from "../pages/admin/SchemeManagement";
 import PolicyManagement from "../pages/admin/PolicyManagement";
 import Reports from "../pages/admin/Reports";
 import AnalyticsDashboard from "../pages/admin/AnalyticsDashboard";
+import VolunteerDashboard from "../pages/volunteer/VolunteerDashboard";
 import ContactUsPage from "../pages/ContactUsPage";
 import EligibilityCheckerPage from "../pages/EligibilityCheckerPage";
 import CompareSchemesPage from "../pages/CompareSchemesPage";
 import AboutUsPage from "../pages/AboutUsPage";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -100,6 +102,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute redirectTo="/admin/login">
               <AnalyticsDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/volunteer/dashboard"
+          element={
+            <ProtectedRoute redirectTo="/admin/login">
+              <VolunteerDashboard />
             </ProtectedRoute>
           }
         />

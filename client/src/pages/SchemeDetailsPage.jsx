@@ -33,6 +33,8 @@ export default function SchemeDetailsPage() {
     const [error, setError] = useState(null);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const token = localStorage.getItem("token");
+    const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+    const canUseCitizenFeatures = !currentUser || currentUser.role === "citizen";
 
     useEffect(() => {
         if (!id) return;
@@ -102,6 +104,7 @@ export default function SchemeDetailsPage() {
     }, [id, token]);
 
     const handleToggleBookmark = async () => {
+        if (!canUseCitizenFeatures) return;
         const nextState = !isBookmarked;
         setIsBookmarked(nextState);
 
@@ -203,27 +206,36 @@ export default function SchemeDetailsPage() {
                         </div>
 
                         <div className="flex flex-col gap-3 w-full sm:w-auto shrink-0">
-                            <button className="bg-btn-yellow hover:bg-brand-orange transition-colors text-slate-heading hover:text-white font-semibold rounded-xl px-6 py-3 flex items-center justify-center gap-2 shadow-btn">
-                                <LuExternalLink className="h-5 w-5" />
-                                Check My Eligibility
-                            </button>
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={handleToggleBookmark}
-                                    className={`flex-1 transition-colors border rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium ${
-                                        isBookmarked
-                                            ? "bg-orange-50 border-brand-orange text-brand-orange hover:bg-orange-100"
-                                            : "bg-white border-border-light text-slate-heading hover:bg-gray-50"
-                                    }`}
-                                >
-                                    <LuBookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
-                                    {isBookmarked ? "Saved" : "Save"}
+                            {canUseCitizenFeatures && (
+                                <button className="bg-btn-yellow hover:bg-brand-orange transition-colors text-slate-heading hover:text-white font-semibold rounded-xl px-6 py-3 flex items-center justify-center gap-2 shadow-btn">
+                                    <LuExternalLink className="h-5 w-5" />
+                                    Check My Eligibility
                                 </button>
-                                <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
-                                    <LuShare2 className="h-4 w-4" />
-                                    Share
-                                </button>
-                            </div>
+                            )}
+                            {canUseCitizenFeatures && (
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleToggleBookmark}
+                                        className={`flex-1 transition-colors border rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium ${
+                                            isBookmarked
+                                                ? "bg-orange-50 border-brand-orange text-brand-orange hover:bg-orange-100"
+                                                : "bg-white border-border-light text-slate-heading hover:bg-gray-50"
+                                        }`}
+                                    >
+                                        <LuBookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
+                                        {isBookmarked ? "Saved" : "Save"}
+                                    </button>
+                                    <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
+                                        <LuShare2 className="h-4 w-4" />
+                                        Share
+                                    </button>
+                                </div>
+                            )}
+                            {!canUseCitizenFeatures && (
+                                <div className="rounded-xl border border-dashed border-gray-200 bg-white/80 px-4 py-3 text-center text-sm font-medium text-gray-500">
+                                    Citizen access only
+                                </div>
+                            )}
                         </div>
                     </div>
 

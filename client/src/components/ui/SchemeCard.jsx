@@ -24,14 +24,14 @@ function BookmarkIcon({ filled }) {
 
 function SchemeBadge({ label, type }) {
   const styles = {
-    popular: 'bg-card-orange/35 text-brand-orange',
-    new: 'bg-[#E3F3FF] text-brand-blue-dark',
-    eligible: 'bg-card-green text-brand-green',
+    popular: 'bg-card-orange text-brand-orange',
+    new: 'bg-card-blue text-brand-blue',
+    eligible: 'bg-badge-green-bg text-badge-green-text',
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-[30px] px-3 py-1 font-body text-sm font-medium ${styles[type] || styles.popular}`}
+      className={`inline-flex h-[25px] w-fit items-center justify-center gap-1.5 rounded-[30px] px-3 font-body text-[13px] font-medium leading-none ${styles[type] || styles.popular}`}
     >
       {type === 'eligible' && (
         <img src={greenTick} alt="" className="h-2.5 w-2.5" aria-hidden="true" />
@@ -60,6 +60,8 @@ function StatPill({ label, value, fullValue }) {
 export default function SchemeCard({ scheme }) {
   const navigate = useNavigate();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const canSaveScheme = !currentUser || currentUser.role === "citizen";
   const { ministry, title, description, badges, benefit, applicants, deadline, id } = scheme;
 
   useEffect(() => {
@@ -77,6 +79,7 @@ export default function SchemeCard({ scheme }) {
   }, [id]);
 
   const handleToggleBookmark = async (e) => {
+    if (!canSaveScheme) return;
     e.stopPropagation();
     const nextState = !isBookmarked;
     setIsBookmarked(nextState);
@@ -108,14 +111,16 @@ export default function SchemeCard({ scheme }) {
             <SchemeBadge key={badge.label} label={badge.label} type={badge.type} />
           ))}
         </div>
-        <button
-          type="button"
-          onClick={handleToggleBookmark}
-          className="shrink-0 rounded p-1 transition-colors hover:bg-gray-100"
-          aria-label={`Bookmark ${title}`}
-        >
-          <BookmarkIcon filled={isBookmarked} />
-        </button>
+        {canSaveScheme && (
+          <button
+            type="button"
+            onClick={handleToggleBookmark}
+            className="shrink-0 rounded p-1 transition-colors hover:bg-gray-100"
+            aria-label={`Bookmark ${title}`}
+          >
+            <BookmarkIcon filled={isBookmarked} />
+          </button>
+        )}
       </div>
 
       <p className="mb-1 font-body text-sm font-medium text-text-secondary line-clamp-1">

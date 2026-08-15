@@ -60,8 +60,8 @@ export default function WhyPolicyGPT() {
       )
     },
     {
-      title: 'Multi-lingual',
-      description: 'Available in 12 Indian languages',
+      title: 'Clear Guidance',
+      description: 'Plain-English explanations for every step',
       iconBg: 'bg-[#EFF6FF]',
       iconColor: 'text-[#2563EB]',
       icon: (

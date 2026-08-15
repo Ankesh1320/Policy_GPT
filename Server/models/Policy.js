@@ -109,6 +109,16 @@ const policySchema = new mongoose.Schema(
         a: String,
       }
     ],
+    reviewStatus: {
+      type: String,
+      enum: ["pending", "approved", "changes_requested"],
+      default: "pending",
+    },
+    volunteerApproved: { type: Boolean, default: false },
+    changesRequested: { type: Boolean, default: false },
+    volunteerComment: { type: String, trim: true, default: "" },
+    reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    reviewedAt: { type: Date },
   },
   { timestamps: true }
 );

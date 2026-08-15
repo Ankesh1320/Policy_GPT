@@ -16,8 +16,12 @@ function AdminLoginPage() {
   const handleSubmit = async (event) => {
     const result = await loginState.handleSubmit(event);
     if (result) {
-      console.log("Admin login successful", result.user);
-      navigate("/admin/dashboard");
+      console.log("Admin/Volunteer login successful", result.user);
+      if (result.user?.role === "volunteer") {
+        navigate("/volunteer/dashboard");
+      } else {
+        navigate("/admin/dashboard");
+      }
     }
   };
 

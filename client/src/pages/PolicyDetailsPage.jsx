@@ -31,6 +31,8 @@ export default function PolicyDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Overview");
   const token = localStorage.getItem("token");
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const canUseCitizenFeatures = !currentUser || currentUser.role === "citizen";
 
   useEffect(() => {
     const fetchPolicyDetails = async () => {
@@ -140,16 +142,22 @@ export default function PolicyDetailsPage() {
                       <LuExternalLink className="h-5 w-5" />
                       View Government Source
                     </a>
-                    <div className="flex gap-3">
-                      <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
-                        <LuBookmark className="h-4 w-4" />
-                        Save
-                      </button>
-                      <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
-                        <LuShare2 className="h-4 w-4" />
-                        Share
-                      </button>
-                    </div>
+                    {canUseCitizenFeatures ? (
+                      <div className="flex gap-3">
+                        <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
+                          <LuBookmark className="h-4 w-4" />
+                          Save
+                        </button>
+                        <button className="flex-1 bg-white hover:bg-gray-50 transition-colors border border-border-light rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 font-medium text-slate-heading">
+                          <LuShare2 className="h-4 w-4" />
+                          Share
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="rounded-xl border border-dashed border-gray-200 bg-white/80 px-4 py-3 text-center text-sm font-medium text-gray-500">
+                        Citizen access only
+                      </div>
+                    )}
                   </div>
                 </div>
 

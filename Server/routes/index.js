@@ -8,6 +8,7 @@ import notificationRoutes from "./notificationRoutes.js";
 import feedbackRoutes from "./feedbackRoutes.js";
 import reportRoutes from "./reportRoutes.js";
 import analyticsRoutes from "./analyticsRoutes.js";
+import volunteerRoutes from "./volunteerRoutes.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/notifications", notificationRoutes);
 router.use("/feedback", feedbackRoutes);
 router.use("/reports", reportRoutes);
 router.use("/analytics", analyticsRoutes);
+router.use("/volunteer", volunteerRoutes);
 
-export default router;
+export default router;

@@ -12,7 +12,7 @@ const SchemeRow = ({ name, subtitle, icon, iconBg, status }) => {
   const Icon = ICONS[icon] || Briefcase;
 
   return (
-    <div className="flex items-center justify-between bg-[#F7F2E8] rounded-2xl px-5 py-4 transition-all hover:bg-[#F2EAD9]">
+    <div className="flex items-center justify-between bg-cream rounded-2xl px-5 py-4 transition-all hover:bg-[#F2EAD9]">
       <div className="flex items-center gap-4">
         <div
           className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${iconBg}`}
