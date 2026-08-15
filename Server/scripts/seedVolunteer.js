@@ -1,10 +1,6 @@
 /**
  * Seed script — creates the sample volunteer user
  * Run with: node server/scripts/seedVolunteer.js
- *
- * Credentials:
- *   Email:    volunteer@policygpt.in
- *   Password: Volunteer@123
  */
 
 import mongoose from "mongoose";
