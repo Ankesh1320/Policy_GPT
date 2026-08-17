@@ -23,6 +23,8 @@ export default function EligibilityCheckerPage() {
     resetFlow,
   } = useEligibilityFlow();
   const token = localStorage.getItem("token");
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const canAccessCitizenFeatures = !currentUser || currentUser.role === "citizen";
 
   const selectedAnswerForCurrentStep = currentQuestion
     ? answers[currentQuestion.field]
@@ -36,6 +38,16 @@ export default function EligibilityCheckerPage() {
         <Navbar activeLabel="Eligibility Checker" />
 
         <div className="relative">
+          {!canAccessCitizenFeatures ? (
+            <main className="bg-cream py-10 px-5 lg:px-20 min-h-[600px] flex items-center justify-center">
+              <div className="w-full max-w-[760px] mx-auto rounded-[28px] border border-border-warm bg-white p-10 text-center shadow-card">
+                <h2 className="font-heading text-2xl font-bold text-slate-heading">Eligibility Checker unavailable for your role</h2>
+                <p className="mt-3 text-base text-text-secondary">
+                  This feature is limited to citizen accounts. Please continue using your dashboard for admin or volunteer tasks.
+                </p>
+              </div>
+            </main>
+          ) : (
           <div className={!token ? "blur-[6px] pointer-events-none select-none" : ""}>
             {/* Header Section */}
             <EligibilityHeader />
@@ -93,8 +105,9 @@ export default function EligibilityCheckerPage() {
               </div>
             </main>
           </div>
+          )}
 
-          {!token && <AuthBlocker pageName="Eligibility Checker" />}
+          {!token && canAccessCitizenFeatures && <AuthBlocker pageName="Eligibility Checker" />}
         </div>
       </div>
 

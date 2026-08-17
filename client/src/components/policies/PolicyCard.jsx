@@ -32,16 +32,20 @@ function BookmarkIcon() {
 
 export default function PolicyCard({ policy }) {
   const badgeClass = categoryStyles[policy.categoryVariant] || categoryStyles.orange;
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const canSavePolicy = !currentUser || currentUser.role === "citizen";
 
   return (
     <article className="relative flex flex-col rounded-[20px] border border-border-warm bg-white p-[17px] pb-5">
-      <button
-        type="button"
-        className="absolute right-[17px] top-[33px] rounded p-0 transition-opacity hover:opacity-70"
-        aria-label={`Bookmark ${policy.title}`}
-      >
-        <BookmarkIcon />
-      </button>
+      {canSavePolicy && (
+        <button
+          type="button"
+          className="absolute right-[17px] top-[33px] rounded p-0 transition-opacity hover:opacity-70"
+          aria-label={`Bookmark ${policy.title}`}
+        >
+          <BookmarkIcon />
+        </button>
+      )}
 
       <span
         className={`inline-flex h-[25px] w-fit items-center justify-center rounded-[30px] px-3 font-body text-sm font-medium leading-none ${badgeClass}`}

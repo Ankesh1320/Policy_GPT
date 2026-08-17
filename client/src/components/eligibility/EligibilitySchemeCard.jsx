@@ -4,6 +4,8 @@ import { schemeService } from "../../services/schemeService";
 
 export default function EligibilitySchemeCard({ scheme: evalItem }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const canSaveScheme = !currentUser || currentUser.role === "citizen";
 
   // Normalize evaluated item vs raw scheme object
   const isEvaluated = evalItem && evalItem.scheme !== undefined;
@@ -28,6 +30,7 @@ export default function EligibilitySchemeCard({ scheme: evalItem }) {
   }, [id]);
 
   const handleToggleBookmark = async (e) => {
+    if (!canSaveScheme) return;
     e.preventDefault();
     e.stopPropagation();
     const nextState = !isBookmarked;
@@ -66,20 +69,22 @@ export default function EligibilitySchemeCard({ scheme: evalItem }) {
           </div>
 
           {/* Bookmark Button */}
-          <button
-            type="button"
-            onClick={handleToggleBookmark}
-            className="text-text-slate hover:text-brand-orange transition-colors p-1"
-            aria-label="Bookmark scheme"
-          >
-            <svg
-              className={`w-5 h-5 ${isBookmarked ? "fill-brand-orange text-brand-orange" : "fill-none stroke-current"}`}
-              viewBox="0 0 24 24"
-              strokeWidth="2"
+          {canSaveScheme && (
+            <button
+              type="button"
+              onClick={handleToggleBookmark}
+              className="text-text-slate hover:text-brand-orange transition-colors p-1"
+              aria-label="Bookmark scheme"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-            </svg>
-          </button>
+              <svg
+                className={`w-5 h-5 ${isBookmarked ? "fill-brand-orange text-brand-orange" : "fill-none stroke-current"}`}
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Scheme Title */}

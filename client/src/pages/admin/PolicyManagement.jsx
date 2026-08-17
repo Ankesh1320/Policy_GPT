@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -141,6 +141,7 @@ function Dropdown({ value, options, onChange, prefix }) {
 /* ─────────────── Main Page ─────────────── */
 export default function PolicyManagement() {
   const navigate = useNavigate();
+  const statusRef = useRef('Draft');
   const [isSidebarOpen, setIsSidebarOpen] = useState(
     typeof window !== 'undefined' ? window.innerWidth >= 1024 : false
   );
@@ -252,9 +253,16 @@ export default function PolicyManagement() {
         department: formData.department,
         category: formData.category,
         effectiveDate: formData.effectiveDate,
-        status: formData.status,
+        status: statusRef.current,
         description: formData.description
       };
+
+      if (statusRef.current === 'Under Review') {
+        payload.reviewStatus = 'pending';
+        payload.volunteerApproved = false;
+        payload.changesRequested = false;
+        payload.volunteerComment = '';
+      }
 
       if (formData.id) {
         await policyService.update(formData.id, payload);
@@ -658,31 +666,15 @@ export default function PolicyManagement() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Effective Date</label>
-                  <input
-                    type="text"
-                    value={formData.effectiveDate}
-                    onChange={e => setFormData({ ...formData, effectiveDate: e.target.value })}
-                    placeholder="e.g. 29 Jul 2020"
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={e => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
-                  >
-                    <option value="Draft">Draft</option>
-                    <option value="Under Review">Under Review</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Published">Published</option>
-                    <option value="Archived">Archived</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Effective Date</label>
+                <input
+                  type="text"
+                  value={formData.effectiveDate}
+                  onChange={e => setFormData({ ...formData, effectiveDate: e.target.value })}
+                  placeholder="e.g. 29 Jul 2020"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#F2762E]/30 focus:border-[#F2762E]"
+                />
               </div>
 
               <div>
@@ -700,16 +692,25 @@ export default function PolicyManagement() {
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 border rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50"
+                  className="px-4 py-2 border rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
+                  onClick={() => { statusRef.current = 'Draft'; }}
                   disabled={submitting}
-                  className="px-5 py-2 bg-[#F2762E] hover:bg-orange-600 text-white rounded-lg text-sm font-semibold flex items-center gap-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold transition cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  {submitting ? 'Saving...' : 'Save Policy'}
+                  {submitting ? 'Saving...' : 'Save as Draft'}
+                </button>
+                <button
+                  type="submit"
+                  onClick={() => { statusRef.current = 'Under Review'; }}
+                  disabled={submitting}
+                  className="px-5 py-2 bg-[#F2762E] hover:bg-orange-600 text-white rounded-lg text-sm font-semibold flex items-center gap-2 transition cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Sending...' : 'Send for Approval'}
                 </button>
               </div>
             </form>

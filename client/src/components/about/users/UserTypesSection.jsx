@@ -30,8 +30,8 @@ export default function UserTypesSection() {
           desc: 'Read policy documents simplified into clear, easy-to-understand summaries, free of complex jargon.'
         },
         {
-          title: 'Multi-lingual Guidance',
-          desc: 'Understand application requirements, deadlines, and benefits in your preferred regional language.'
+          title: 'Plain-English Guidance',
+          desc: 'Understand application requirements, deadlines, and benefits in clear, straightforward English.'
         }
       ],
       icon: (

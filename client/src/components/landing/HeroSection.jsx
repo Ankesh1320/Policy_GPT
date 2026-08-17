@@ -1,10 +1,38 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import heroImg from '../../assets/images/hero-img.png';
 import { heroStats, popularTags } from '../../data/landingData';
 import StatCard from '../ui/StatCard';
 import Button from '../ui/Button';
 import arrowIcon from '../../assets/icons/line-md_arrow-right.svg';
 
+const TAG_ROUTE_MAP = {
+  'PM Kisan': '/schemes/1',
+  'Ayushman Bharat': '/schemes/2',
+  'Scholarships': '/schemes/5',
+  'MUDRA Loan': '/schemes/6',
+  'PM Awas': '/schemes/3',
+};
+
 export default function HeroSection() {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    const trimmed = searchTerm.trim();
+    if (!trimmed) {
+      navigate('/schemes');
+      return;
+    }
+
+    navigate(`/schemes?search=${encodeURIComponent(trimmed)}`);
+  };
+
+  const handleTagClick = (tag) => {
+    const route = TAG_ROUTE_MAP[tag] || '/schemes';
+    navigate(route);
+  };
+
   return (
     <section className="relative flex flex-col overflow-hidden pb-8 lg:pb-10">
       <img
@@ -63,6 +91,13 @@ export default function HeroSection() {
                 </span>
                 <input
                   type="search"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleSearch();
+                    }
+                  }}
                   placeholder="Search schemes..."
                   className="w-full bg-transparent pl-11 pr-2 py-2.5 font-body text-sm text-text-placeholder outline-none placeholder:text-text-placeholder sm:placeholder:content-['Search_schemes,_policies,_departments...'] sm:text-base"
                 />
@@ -70,6 +105,7 @@ export default function HeroSection() {
               <Button
                 variant="search"
                 size="sm"
+                onClick={handleSearch}
                 icon={<img src={arrowIcon} alt="" className="h-4 w-4" aria-hidden="true" />}
                 className="shrink-0 !py-2.5 !px-3 sm:!px-6"
               >
@@ -82,12 +118,14 @@ export default function HeroSection() {
                 Popular:
               </span>
               {popularTags.map((tag) => (
-                <span
+                <button
                   key={tag}
+                  type="button"
+                  onClick={() => handleTagClick(tag)}
                   className="rounded-[30px] bg-white px-3 py-1 font-body text-sm font-medium text-text-secondary transition-colors hover:text-brand-orange sm:px-4 sm:py-1.5 sm:text-base"
                 >
                   {tag}
-                </span>
+                </button>
               ))}
             </div>
           </div>

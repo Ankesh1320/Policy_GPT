@@ -15,6 +15,8 @@ const ICONS = {
 
 const ProfileDropdown = ({ onClose }) => {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const role = user.role || "citizen";
 
   const handleItemClick = (item) => {
     if (item.danger || item.label.toLowerCase() === "logout") {
@@ -25,25 +27,43 @@ const ProfileDropdown = ({ onClose }) => {
     } else {
       onClose();
       const label = item.label.toLowerCase();
-      if (label === "dashboard") {
-        navigate("/citizen/dashboard");
-      } else if (label === "profile") {
-        navigate("/citizen/dashboard?tab=profile");
-      } else if (label === "saved schemes") {
-        navigate("/citizen/dashboard?tab=saved");
-      } else if (label === "notifications") {
-        navigate("/citizen/dashboard?tab=notifications");
-      } else if (label === "feedback") {
-        navigate("/citizen/dashboard?tab=feedback");
-      } else if (label === "settings") {
-        navigate("/citizen/dashboard?tab=settings");
+      if (role === "admin" || role === "volunteer") {
+        const dashboardPath = role === "admin" ? "/admin/dashboard" : "/volunteer/dashboard";
+        if (label === "dashboard") {
+          navigate(dashboardPath);
+        } else if (label === "settings") {
+          navigate(`${dashboardPath}?tab=settings`);
+        } else {
+          navigate(dashboardPath);
+        }
+      } else {
+        if (label === "dashboard") {
+          navigate("/citizen/dashboard");
+        } else if (label === "profile") {
+          navigate("/citizen/dashboard?tab=profile");
+        } else if (label === "saved schemes") {
+          navigate("/citizen/dashboard?tab=saved");
+        } else if (label === "notifications") {
+          navigate("/citizen/dashboard?tab=notifications");
+        } else if (label === "feedback") {
+          navigate("/citizen/dashboard?tab=feedback");
+        } else if (label === "settings") {
+          navigate("/citizen/dashboard?tab=settings");
+        }
       }
     }
   };
 
+  const filteredMenuItems = profileMenuItems.filter(item => {
+    if (role === "admin" || role === "volunteer") {
+      return ["dashboard", "settings", "logout"].includes(item.label.toLowerCase());
+    }
+    return true;
+  });
+
   return (
     <div className="absolute right-0 top-full mt-3 w-56 bg-white rounded-xl border border-gray-100 shadow-lg py-2 z-50">
-      {profileMenuItems.map((item) => {
+      {filteredMenuItems.map((item) => {
         const Icon = ICONS[item.icon] || User;
         return (
           <Fragment key={item.label}>
@@ -51,7 +71,7 @@ const ProfileDropdown = ({ onClose }) => {
             <button
               type="button"
               onClick={() => handleItemClick(item)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-left transition-colors ${
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-[15px] text-left transition-colors cursor-pointer ${
                 item.danger
                   ? "text-red-500 hover:bg-red-50"
                   : "text-gray-700 hover:bg-gray-50"

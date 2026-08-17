@@ -55,6 +55,7 @@ export default function Navbar({ activeLabel }) {
 
   const token = localStorage.getItem("token");
   const localUser = JSON.parse(localStorage.getItem("user") || "null");
+  const canAccessCitizenFeatures = !localUser || localUser.role === 'citizen';
   const displayName = localUser?.fullName || localUser?.name || "";
   const initial = displayName ? displayName.charAt(0).toUpperCase() : "?";
 
@@ -90,6 +91,7 @@ export default function Navbar({ activeLabel }) {
     }
 
     if (link.label === 'Eligibility Checker') {
+      if (!canAccessCitizenFeatures) return null;
       return (
         <Link to="/eligibility-checker" className={className} onClick={onNavigate}>
           {link.label}
@@ -149,7 +151,7 @@ export default function Navbar({ activeLabel }) {
         {token ? (
           <div className="hidden items-center gap-6 xl:flex">
             <Link
-              to="/citizen/dashboard?tab=notifications"
+              to={localUser?.role === 'admin' ? '/admin/dashboard?tab=notifications' : localUser?.role === 'volunteer' ? '/volunteer/dashboard?tab=notifications' : '/citizen/dashboard?tab=notifications'}
               aria-label="Notifications"
               className="relative text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
             >
@@ -218,7 +220,7 @@ export default function Navbar({ activeLabel }) {
             {token ? (
               <li className="flex flex-col gap-3 px-3 py-2">
                 <Link
-                  to="/citizen/dashboard"
+                  to={localUser?.role === 'admin' ? '/admin/dashboard' : localUser?.role === 'volunteer' ? '/volunteer/dashboard' : '/citizen/dashboard'}
                   onClick={() => setMobileOpen(false)}
                   className="font-heading text-base font-semibold text-text-primary hover:text-brand-orange transition-colors"
                 >
