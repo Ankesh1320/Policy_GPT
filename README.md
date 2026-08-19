@@ -411,6 +411,5 @@ This section lists all system flowcharts and architectural workflow diagrams for
     *Database entity relationships and schema definitions of primary collections inside MongoDB.*
 13. **Complete PolicyGPT End-to-End Flow**: ![Complete PolicyGPT End-to-End Flow](docs/flowcharts/end-to-end-flow.png)
     *Full workflow mapping the interactions between all portal roles (Citizens, Officers, Admins) and backend systems.*
-
-
-
+14. **Notification Flow**: ![Notification Flow](docs/flowcharts/notification-flow.png)
+   *Visualizes the email/OTP notification system (using SMTP and Nodemailer) alongside the in-app dashboard notification collections in MongoDB.*
