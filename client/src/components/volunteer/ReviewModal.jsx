@@ -29,7 +29,7 @@ export default function ReviewModal({ item, type, onClose, onSubmit }) {
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto bg-white rounded-2xl shadow-xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div>
@@ -45,7 +45,7 @@ export default function ReviewModal({ item, type, onClose, onSubmit }) {
         </div>
 
         {/* Item info */}
-        <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
+        <div className="px-6 py-4 bg-card-orange border-b border-orange-100">
           <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">{typeLabel}</p>
           <p className="font-semibold text-[15px] text-gray-800">{item?.name}</p>
           <div className="flex items-center gap-3 mt-1.5">
@@ -53,7 +53,43 @@ export default function ReviewModal({ item, type, onClose, onSubmit }) {
             <span className="w-1 h-1 rounded-full bg-gray-300" />
             <span className="text-[12px] text-gray-400">{item?.submittedAgo}</span>
           </div>
+          <p className="text-[12px] text-gray-500 mt-2">
+            {typeLabel === 'Scheme' ? 'Launch date' : 'Effective date'}:{' '}
+            <span className="font-semibold text-gray-700">{item?.date || 'N/A'}</span>
+          </p>
         </div>
+
+        {/* Item description */}
+        <div className="px-6 py-4 border-b border-gray-100">
+          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Description</p>
+          <p className="text-[13px] text-gray-600 leading-relaxed">
+            {item?.description || 'No description provided.'}
+          </p>
+        </div>
+
+        {item?.benefits?.length > 0 && (
+          <div className="px-6 py-4 border-b border-gray-100">
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Key Benefits</p>
+            <ul className="list-disc pl-5 space-y-1 text-[13px] text-gray-600">
+              {item.benefits.map((benefit, index) => (
+                <li key={index}>{benefit}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {item?.documentsRequired?.length > 0 && (
+          <div className="px-6 py-4 border-b border-gray-100">
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Required Documents</p>
+            <div className="flex flex-wrap gap-2">
+              {item.documentsRequired.map((document, index) => (
+                <span key={index} className="text-[12px] bg-orange-50 text-[#F2762E] font-semibold border border-orange-100 px-3 py-1 rounded-full">
+                  {document}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Body */}
         <div className="px-6 py-5 flex flex-col gap-4">

@@ -126,7 +126,7 @@ export const submitReview = async (req, res) => {
     if (action === "approve") {
       item.status = "Approved";
     } else {
-      item.status = "Under Review";
+      item.status = "Changes Requested";
     }
 
     await item.save();

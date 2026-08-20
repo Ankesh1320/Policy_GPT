@@ -32,7 +32,7 @@ const DEPARTMENTS = [
   'Ministry of Commerce & Industry',
 ];
 
-const STATUS_OPTIONS = ['All Status', 'Published', 'Under Review', 'Draft', 'Archived', 'Approved'];
+const STATUS_OPTIONS = ['All Status', 'Published', 'Under Review', 'Changes Requested', 'Draft', 'Archived', 'Approved'];
 const SORT_OPTIONS = ['Newest', 'Oldest', 'A–Z', 'Z–A'];
 
 const PAGE_SIZE = 7;
@@ -68,19 +68,21 @@ const getCategoryStyles = (category) => {
 };
 
 /* ─────────────── Status Badge ─────────────── */
-function StatusBadge({ status }) {
+function StatusBadge({ status, changesRequested }) {
+  const displayStatus = changesRequested ? 'Changes Requested' : status;
   const map = {
     Published:     { dotCls: 'bg-green-400',  cls: 'bg-green-50 text-green-700 border border-green-200/30' },
     'Under Review':{ dotCls: 'bg-amber-400',  cls: 'bg-amber-50 text-amber-700 border border-amber-200/30' },
+    'Changes Requested': { dotCls: 'bg-orange-400', cls: 'bg-orange-50 text-orange-700 border border-orange-200/30' },
     Draft:         { dotCls: 'bg-blue-400',   cls: 'bg-blue-50 text-blue-700 border border-blue-200/30' },
     Archived:      { dotCls: 'bg-gray-400',   cls: 'bg-gray-100 text-gray-600 border border-gray-200/30' },
     Approved:      { dotCls: 'bg-green-400',  cls: 'bg-green-50 text-green-700 border border-green-200/30' },
   };
-  const cfg = map[status] || map['Draft'];
+  const cfg = map[displayStatus] || map['Draft'];
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap ${cfg.cls}`}>
       <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.dotCls}`} />
-      {status}
+      {displayStatus}
     </span>
   );
 }
@@ -474,7 +476,7 @@ export default function PolicyManagement() {
 
                             {/* Status */}
                             <td className="px-4 py-4">
-                              <StatusBadge status={policy.status} />
+                              <StatusBadge status={policy.status} changesRequested={policy.changesRequested} />
                             </td>
 
                             {/* Actions */}
@@ -583,7 +585,7 @@ export default function PolicyManagement() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
                 <span className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide">Status</span>
-                <StatusBadge status={selectedPolicy.status} />
+                <StatusBadge status={selectedPolicy.status} changesRequested={selectedPolicy.changesRequested} />
               </div>
               <div>
                 <span className="block text-[11px] font-bold text-gray-400 uppercase tracking-wide">Effective Date</span>
@@ -597,6 +599,15 @@ export default function PolicyManagement() {
                 {selectedPolicy.description || 'No description provided.'}
               </p>
             </div>
+
+            {selectedPolicy.changesRequested && selectedPolicy.volunteerComment && (
+              <div className="mb-6">
+                <span className="block text-[11px] font-bold text-orange-600 uppercase tracking-wide mb-1">Changes Requested by Volunteer</span>
+                <p className="text-sm text-orange-900 leading-relaxed bg-orange-50 p-4 rounded-xl border border-orange-100">
+                  {selectedPolicy.volunteerComment}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

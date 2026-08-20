@@ -97,6 +97,7 @@ function StatusBadge({ status }) {
   const map = {
     Published:      { dot: 'bg-green-400', cls: 'bg-green-50 text-green-700 border border-green-200/30' },
     'Under Review': { dot: 'bg-amber-400', cls: 'bg-amber-50 text-amber-700 border border-amber-200/30' },
+    'Changes Requested': { dot: 'bg-orange-400', cls: 'bg-orange-50 text-orange-700 border border-orange-200/30' },
     Draft:          { dot: 'bg-blue-400',  cls: 'bg-blue-50 text-blue-700 border border-blue-200/30' },
     Archived:       { dot: 'bg-gray-400',  cls: 'bg-gray-100 text-gray-600 border border-gray-200/30' },
     Approved:       { dot: 'bg-green-400', cls: 'bg-green-50 text-green-700 border border-green-200/30' },
@@ -307,6 +308,12 @@ export default function VolunteerDashboard() {
           pendingPolRes.data.map((p, i) => ({
             id: p._id,
             name: p.name || p.title,
+            description: p.description || '',
+            date: p.effectiveDate || p.date || p.published || '',
+            benefits: Array.isArray(p.keyBenefits)
+              ? p.keyBenefits.map((benefit) => benefit.title || benefit.desc).filter(Boolean)
+              : (p.benefits || []),
+            documentsRequired: p.documentsRequired || p.documents || [],
             category: p.category || '—',
             department: p.department,
             submittedAgo: timeSince(p.updatedAt),
@@ -322,6 +329,10 @@ export default function VolunteerDashboard() {
           pendingSchRes.data.map((s, i) => ({
             id: s._id,
             name: s.title || s.name,
+            description: s.description || '',
+            date: s.launchDate || s.publishedDate || '',
+            benefits: s.benefits || [],
+            documentsRequired: s.documentsRequired || [],
             category: s.category || '—',
             department: s.department,
             submittedAgo: timeSince(s.updatedAt),
