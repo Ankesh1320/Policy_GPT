@@ -1,415 +1,349 @@
+<div align="center">
+
 # PolicyGPT
 
-PolicyGPT is a secure, full-stack web application designed to empower citizens, government officials, and administrators to access, search, analyze, and manage government welfare policies, programs, circulars, and public schemes. It simplifies the discovery and comprehension of government information through AI-powered search, eligibility checking, and structured comparisons.
+### Government Policy & Public Scheme Intelligence Platform
+
+**Making government policies and public welfare schemes easier to discover, understand, and access.**
+
+<br/>
+
+<!-- PLACEHOLDER: Add the PolicyGPT logo here -->
+<!-- Suggested image: `client/public/logo.png` or the final project logo -->
+
+<p align="center">
+  <img src="https://img.shields.io/badge/MERN%20Stack-Full%20Stack-20232A?style=for-the-badge&logo=mongodb&logoColor=4DB33D" />
+  <img src="https://img.shields.io/badge/Infosys%20Springboard-Internship%207.0-0066CC?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-0F172A?style=flat-square&logo=tailwindcss&logoColor=38BDF8" />
+  <img src="https://img.shields.io/badge/Node.js-215732?style=flat-square&logo=node.js&logoColor=68A063" />
+  <img src="https://img.shields.io/badge/Express-111111?style=flat-square&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-013220?style=flat-square&logo=mongodb&logoColor=4DB33D" />
+  <img src="https://img.shields.io/badge/Nodemailer-EA4335?style=flat-square&logo=gmail&logoColor=white" />
+</p>
+
+</div>
 
 ---
 
-## 1. Project Overview & Objective
+## 📖 About
 
-Government policies, welfare schemes, notifications, and regulations are often spread across lengthy and complex documents, making it difficult for citizens and other stakeholders to find and understand relevant information. PolicyGPT addresses this problem by:
-- Providing a centralized, user-friendly platform to browse, search, and understand government policies and schemes.
-- Using AI-powered Retrieval-Augmented Generation (RAG) to answer user queries in natural language with relevant, citation-based information.
-- Helping citizens identify eligible and relevant government schemes based on their profile and requirements.
-- Providing semantic search and document retrieval across government policy documents, schemes, and circulars.
-- Offering dedicated dashboards for citizens, government officers, and administrators to monitor information, activities, and analytics.
-- Providing notifications and alerts for policy updates, scheme changes, circulars, and important announcements.
-- Enabling administrators to manage policies, schemes, documents, users, reports, and platform analytics.
+Government policies, welfare schemes, notifications, and public information are often scattered across lengthy documents and multiple sources, making them difficult to discover and understand.
 
-![Complete PolicyGPT End-to-End Flow](docs/flowcharts/end-to-end-flow.png)
-*Figure 1: Complete end-to-end user and system interactions.*
+**PolicyGPT** is a full-stack web platform designed to bring this information together in one place, with AI-assisted capabilities for making government information easier to discover and process. It helps citizens explore government schemes and policies, check eligibility, compare schemes, receive notifications, and access useful information through a simple and responsive interface.
+
+The platform also provides dedicated workspaces for administrators and government reviewers to manage content, review submissions, monitor analytics, and generate reports.
+
+> 🎯 **Built during Infosys Springboard Internship 7.0**
+>
+> PolicyGPT is a collaborative full-stack project developed as part of the internship, covering requirements, UI/UX design, frontend development, backend development, database integration, role-based workflows, testing, and deployment.
 
 ---
 
-## 2. Key Features
+## 🌟 Overview
 
-- **Landing Page & Navigation**: Contains featured schemes, categorizations (Education, Health, Agriculture, Housing, etc.), policy updates, FAQ guides, and direct navigation links.
-- **Citizen Dashboard**: Access to profile management, saved/bookmarked schemes, recent search history list, custom feedback submission, and inbox notifications.
-  
-  ![Citizen Journey](docs/flowcharts/citizen-journey.png)
-  *Figure 2: Outlines the citizen user journey from landing page browsing through search, comparison, and eligibility checking.*
+PolicyGPT connects citizens with government policies and public welfare schemes through a centralized digital platform.
 
-- **Eligibility Checker**: A questionnaire-driven checking module that compares profile characteristics against rules in real-time, outputting percentage matches and compliance lists.
-  
-  ![Eligibility Checker](docs/flowcharts/eligibility-checker.png)
-  *Figure 3: Visualizes the questionnaire-driven eligibility checking process.*
+### 👤 Citizen
 
-- **Scheme Comparison**: Allows side-by-side analysis of up to 3 schemes across fields such as target beneficiary, max benefit, transfer mode, and application fees.
-  
-  ![Scheme Comparison](docs/flowcharts/scheme-comparison.png)
-  *Figure 4: Shows the comparison flow mapping selected schemes into a side-by-side comparative table.*
+Explore schemes and policies → Search and filter information → Check eligibility → Compare schemes → Save relevant schemes → Receive notifications → Submit feedback.
 
-- **Admin Management Panel**: Direct CRUD interfaces for managing policies, schemes, documents, users, auditing feedback logs, downloading detailed Excel/PDF reports, and viewing system usage analytics.
-  
-  ![Admin Management](docs/flowcharts/admin-management.png)
-  *Figure 5: Summarizes the actions available on the administrator panel.*
+### 🛡️ Administrator
 
-- **Government Officer Dashboard**: Dedicated review interface for government officers to monitor scheme updates, review activities, check reports, and track policy/announcement alignments.
-  
-  ![Volunteer / Government Reviewer Workflow](docs/flowcharts/volunteer-reviewer.png)
-  *Figure 6: Illustrates the government reviewer's workflow for inspecting pending schemes and policies.*
+Manage users → Manage schemes and policies → Monitor platform activity → Review analytics → Generate reports → Manage notifications and feedback.
 
-- **Natural Language Search Logging**: Matches keywords against schemas via regex, tracking response time latencies, matches, and success rates.
+### 🏛️ Volunteer
+
+Review submitted schemes and policies → Approve or suggest changes → Send reviewed content back through the administrative workflow.
+
+<!-- PLACEHOLDER: Add a polished screenshot of the PolicyGPT landing page here -->
+<!-- Suggested image: `docs/screenshots/landing-page.png` -->
 
 ---
 
-## 3. Tech Stack
+## ✨ Key Features
+
+| Feature | Description |
+|---|---|
+| 🔐 **Authentication & RBAC** | Secure authentication with role-based access for citizens, administrators, and reviewers |
+| 🔎 **Policy & Scheme Search** | Search and filter government policies and schemes by relevant categories |
+| 📋 **Scheme Management** | View detailed scheme information including benefits, eligibility, departments, and application guidance |
+| 🧮 **Eligibility Checker** | Evaluate citizen information against scheme eligibility requirements |
+| ⚖️ **Scheme Comparison** | Compare multiple schemes side by side to understand their differences |
+| 🔔 **Notifications** | Keep users informed about relevant updates and platform activity |
+| 📊 **Analytics Dashboard** | Monitor platform usage and department-wise information through visual analytics |
+| 📄 **Reports** | Generate reports for administrative monitoring and analysis |
+| 💬 **Feedback & Support** | Allow citizens to submit feedback and report issues |
+| 👥 **Review Workflow** | Enable government reviewers/volunteers to review policies and schemes before publication |
+
+---
+
+## 🎭 Roles & Permissions
+
+```text
+┌────────────────────────────────────────────────────────────┐
+│                        ADMIN                               │
+│  User Management · Scheme Management · Policy Management   │
+│  Analytics · Reports · Notifications · Platform Control    │
+├────────────────────────────────────────────────────────────┤
+│                      VOLUNTEER
+│  Review Policies · Review Schemes · Approve / Suggest      │
+│  Changes · Content Verification Workflow                   │
+├────────────────────────────────────────────────────────────┤
+│                       CITIZEN                              │
+│  Explore · Search · Check Eligibility · Compare · Save     │
+│  Schemes · Feedback                                        │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛠 Tech Stack
 
 ### Frontend
-- **Framework**: React.js (Vite configuration)
-- **Styling**: Tailwind CSS
-- **Routing**: React Router Dom (v7)
-- **Icons**: Lucide React & React Icons
-- **Visualizations**: Recharts (for dashboard analytics graphs)
-- **HTTP Client**: Axios
+
+| Technology | Purpose |
+|---|---|
+| <img src="https://img.shields.io/badge/React.js-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" height="24" /> | Component-based frontend development |
+| <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" height="24" /> | Frontend build tool and development server |
+| <img src="https://img.shields.io/badge/Tailwind%20CSS-0F172A?style=for-the-badge&logo=tailwindcss&logoColor=38BDF8" height="24" /> | Responsive UI styling |
+| <img src="https://img.shields.io/badge/React%20Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white" height="24" /> | Client-side routing and protected routes |
+| <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" height="24" /> | API communication |
+| <img src="https://img.shields.io/badge/Recharts-22C55E?style=for-the-badge" height="24" /> | Dashboard analytics and visualizations |
 
 ### Backend
-- **Framework**: Node.js & Express.js
-- **Database**: MongoDB (Mongoose ORM)
-- **Logging**: Morgan
-- **Security**: Bcrypt.js & JsonWebToken (JWT)
-- **Utility Tools**: ExcelJS (Excel sheets generator), PDFKit (PDF reports builder), Nodemailer (notification handler)
+
+| Technology | Purpose |
+|---|---|
+| <img src="https://img.shields.io/badge/Node.js-215732?style=for-the-badge&logo=node.js&logoColor=68A063" height="24" /> | JavaScript runtime |
+| <img src="https://img.shields.io/badge/Express.js-111111?style=for-the-badge&logo=express&logoColor=white" height="24" /> | REST API and server framework |
+| <img src="https://img.shields.io/badge/MongoDB-013220?style=for-the-badge&logo=mongodb&logoColor=4DB33D" height="24" /> | Application database |
+| <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white" height="24" /> | Database modeling and interaction |
+| <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" height="24" /> | Authentication and authorization |
+| <img src="https://img.shields.io/badge/Bcrypt.js-3B82F6?style=for-the-badge" height="24" /> | Password hashing |
+| <img src="https://img.shields.io/badge/Nodemailer-EA4335?style=for-the-badge&logo=gmail&logoColor=white" height="24" /> | Email-based notifications |
 
 ### AI & Data Processing
-- **AI Integration**: `@google/genai` SDK (`gemini-2.0-flash`)
-- **LLM Grounding**: Google Search tool integration (for database enrichment)
+
+| Technology | Purpose |
+|---|---|
+| <img src="https://img.shields.io/badge/Google%20Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" height="24" /> | AI-powered scheme data enrichment and intelligent processing |
+| <img src="https://img.shields.io/badge/Google%20Search-4285F4?style=for-the-badge&logo=google&logoColor=white" height="24" /> | Search grounding used with Gemini for scheme data enrichment |
+
+### Development Tools
+
+| Technology | Purpose |
+|---|---|
+| <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" height="24" /> | Version control |
+| <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" height="24" /> | Repository and collaboration |
+| <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" height="24" /> | API testing |
+| <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" height="24" /> | UI/UX design |
+| <img src="https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" height="24" /> | Development environment |
 
 ---
 
-## 4. System Architecture
+## 📸 Application Preview
 
-PolicyGPT follows a classic client-server architecture communicating via REST APIs. Below is the interaction flowchart:
+<!-- PLACEHOLDER: Replace each placeholder below with an actual project screenshot. -->
 
-```mermaid
-graph TD
-    Client[React Client Frontend] <-->|JSON HTTPS / API| Backend[Express Backend Server]
-    Backend <-->|Mongoose Queries| MongoDB[(MongoDB Database)]
-    Backend -.->|External API / Search Grounding| Gemini[Gemini LLM SDK]
-    
-    subgraph Client App
-        AuthCheck[Route Guard / ProtectedRoute] --> Page[Citizen / Admin / Officer Dashboards]
-    end
-    
-    subgraph Backend Server
-        Router[Router API Router] --> Middle[Auth Middleware / Protect & Admin]
-        Middle --> Controllers[Controllers Logic]
-        Controllers --> Services[Services & Eligibility Engine]
-    end
-```
+### Landing Page
+<!-- Suggested image: `docs/screenshots/landing-page.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Landing page showing the PolicyGPT homepage and navigation**
 
-![Overall System Architecture](docs/flowcharts/overall-system.png)
-*Figure 7: System architecture and layout of client, backend, database, and LLM components.*
+### Citizen Dashboard
+<!-- Suggested image: `docs/screenshots/citizen-dashboard.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Citizen dashboard showing overview, saved schemes, notifications, and activity**
+
+### Scheme Details
+<!-- Suggested image: `docs/screenshots/scheme-details.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Scheme details page showing benefits, eligibility, department, and application information**
+
+### Eligibility Checker
+<!-- Suggested image: `docs/screenshots/eligibility-checker.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Eligibility checker form and results**
+
+### Scheme Comparison
+<!-- Suggested image: `docs/screenshots/scheme-comparison.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Side-by-side scheme comparison page**
+
+### Admin Dashboard
+<!-- Suggested image: `docs/screenshots/admin-dashboard.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Admin dashboard with statistics, management modules, and analytics**
+
+### Volunteer Dashboard
+<!-- Suggested image: `docs/screenshots/volunteer-dashboard.png` -->
+> 🖼️ **IMAGE PLACEHOLDER — Reviewer dashboard showing pending policy and scheme approvals**
 
 ---
 
-## 5. Project Folder Structure
+## 📂 Project Structure
 
-```
-GPPSIP_Team2/
-├── client/                      # Frontend Application
-│   ├── src/
-│   │   ├── assets/              # Static media assets and icons
-│   │   ├── components/          # Reusable UI components
-│   │   │   ├── admin/           # Admin dashboard tables & managers
-│   │   │   ├── auth/            # ProtectedRoute and authentication overlays
-│   │   │   ├── landing/         # Homepage sections
-│   │   │   ├── navbar/          # Sidebar & header navigation components
-│   │   │   └── ui/              # Base UI components (SchemeCard, StatCards)
-│   │   ├── context/             # React Context providers (AuthContext.jsx)
-│   │   ├── data/                # Static local data (landingData.js, schemesData.js)
-│   │   ├── hooks/               # Core custom hook declarations
-│   │   ├── pages/               # Top-level page views (Dashboard, Details, Checker)
-│   │   ├── routes/              # Client-side router configuration (AppRoutes.jsx)
-│   │   ├── services/            # API client service classes (apiClient.js, schemeService.js)
-│   │   └── utils/               # Constants and helper functions
-│   ├── package.json
-│   └── vite.config.js
+```text
+PolicyGPT/
+├── client/                     # React + Vite frontend
+│   ├── public/
+│   └── src/
+│       ├── assets/             # Images, icons and static assets
+│       ├── components/         # Reusable UI components
+│       ├── context/            # Global application state
+│       ├── hooks/              # Custom React hooks
+│       ├── layouts/            # Application layouts
+│       ├── pages/              # Route-level pages
+│       ├── routes/              # Routing configuration
+│       ├── services/            # API service layer
+│       ├── utils/               # Utility functions
+│       ├── App.jsx
+│       └── main.jsx
 │
-└── Server/                      # Backend REST API Application
-    ├── config/                  # DB and Environment definitions (db.js, env.js)
-    ├── controllers/             # Express API controllers handling endpoints
-    ├── data/                    # JSON datasets (schemes, policies)
-    ├── middleware/              # Auth checking & error handling middleware
-    ├── models/                  # Mongoose MongoDB schemas
-    ├── routes/                  # Express endpoint paths definitions
-    ├── scripts/                 # Admin, analytics, seed, & AI enrichment scripts
-    ├── services/                # Backend business logic & eligibility calculators
-    ├── utils/                   # Database seeding script & generic helpers
-    ├── .env                     # Configuration file (ignored in git)
-    └── package.json
+├── Server/                    # Node.js + Express backend
+│   ├── config/                 # Database and environment configuration
+│   ├── controllers/            # Request handling and business logic
+│   ├── middleware/             # Authentication and authorization
+│   ├── models/                 # MongoDB/Mongoose models
+│   ├── routes/                 # API route definitions
+│   ├── scripts/                # Seed and utility scripts
+│   ├── services/               # Application services
+│   ├── utils/                  # Helper utilities
+│   └── server.js
+│
+├── docs/                       # Detailed project documentation
+├── README.md
+└── package.json
+```
+
+> 📚 Detailed API specifications, database structure, architecture diagrams, workflows, and implementation notes are maintained separately in the project documentation.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+
+- **npm**
+- **MongoDB** (local instance or MongoDB Atlas)
+- **Git**
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd PolicyGPT
+```
+
+### 2. Start the backend
+
+```bash
+cd Server
+npm install
+npm run dev
+```
+
+### 3. Start the frontend
+
+Open a new terminal:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The application will be available at the local URL shown by Vite.
+
+> 🔐 Environment variables and detailed configuration instructions are available in the project documentation. Never commit `.env` files or credentials to the repository.
+
+---
+
+## 🔄 Development Workflow
+
+```text
+Feature / Bug
+     ↓
+Create Branch
+     ↓
+Develop & Test
+     ↓
+Commit Changes
+     ↓
+Push Branch
+     ↓
+Create Pull Request
+     ↓
+Code Review
+     ↓
+Merge
+```
+
+Use clear conventional commit messages such as:
+
+```text
+feat: add scheme comparison
+fix: resolve admin routing issue
+docs: update project documentation
+refactor: improve authentication flow
 ```
 
 ---
 
-## 6. Frontend & Backend Architecture
+## 📚 Documentation
 
-### Frontend Architecture
-- **State Management**: Uses React Context (`AuthContext.jsx`) for managing authentication states and profile tokens.
-- **Route Guarding**: [ProtectedRoute.jsx](file:///c:/Users/Sheetal/OneDrive/Desktop/info/GPPSIP_Team2/client/src/components/auth/ProtectedRoute.jsx) intercepts private navigation paths (`/citizen/dashboard`, `/admin/dashboard`, etc.) and redirects unauthorized sessions to the login portals.
-- **Service Layer**: Decoupled HTTP API requests inside the `client/src/services/` folder using Axios, creating client handlers like `schemeService`, `compareService`, and `authService`.
+The README provides a high-level introduction to PolicyGPT.
 
-### Backend Architecture
-- **Router Pattern**: Mounted under `/api/`, individual route managers handle different namespaces (`/api/auth`, `/api/schemes`, `/api/policies`, `/api/volunteer`, etc.) and pass control through middlewares to controllers.
-- **Middlewares**:
-  - `protect`: Validates the client's JWT token and sets `req.user` with user credentials.
-  - `admin`: Verifies that `req.user.role === 'admin'`.
-  - `asyncHandler`: Catches runtime server errors in async/await logic blocks and routes them to the central error-handling wrapper.
-- **Controllers**: Extends logic from routes to query the models, process requests, and send responses.
+For detailed technical information, refer to the project documentation, including:
 
-![Backend API Request Flow](docs/flowcharts/backend-api-flow.png)
-*Figure 8: Backend REST API request execution path showing router, auth validation, role guards, and services.*
+- System architecture
+- Database schema
+- API reference
+- Authentication and authorization
+- Feature workflows
+- Search and eligibility logic
+- Analytics and reporting
+- Deployment and configuration
+- Testing and troubleshooting
 
----
-
-## 7. Database Models
-
-- **User**: Manages user profiles (email, mobile, hashedPassword, fullName, state, occupation, incomeRange) and security roles (`citizen`, `admin`, `volunteer`).
-- **Scheme**: Stores government scheme objects. Includes parameters for department, category, objectives, annualBenefit, beneficiaries, deadline, eligibility criteria guidelines, and reviews audit logs.
-- **Policy**: Manages legislative policies, timelines, visions, objectives list, affected target groups, and FAQs.
-- **Application**: Tracks scheme applications submitted by citizens, linking users to schemes and tracking status (`Submitted`, `Under Review`, `Approved`, `Rejected`).
-- **AiQueryLog**: Saves natural language search entries for dashboard graph visualizations, documenting parameters like query strings, latency speed, category classifications, and matched items.
-- **SavedScheme**: Junction table tracking saved/starred schemes per citizen.
-- **Feedback**: Stores citizens' dashboard feedback logs.
-- **Otp**: Houses active temporary OTPs and expiration dates.
-- **ReportHistory**: Audits administrative data reports exported.
-
-![Database Relationship / ER Diagram](docs/flowcharts/database-er.png)
-*Figure 9: Mongoose schema collections layout and entity relationships in MongoDB.*
+<!-- PLACEHOLDER: Add documentation link once the final documentation file/path is decided. -->
+**📖 Detailed Documentation:** `docs/README.md` *(replace with the final documentation path)*
 
 ---
 
-## 8. PolicyGPT Search Retrieval Pipeline
+## 👥 Core Contributors
 
-The natural language search matches queries against MongoDB collections using exact keyword patterns:
+PolicyGPT was collaboratively designed and developed by a dedicated team, with contributors taking ownership of different parts of the platform.
 
-1. **User Query Input**: The citizen submits a natural language search query (e.g. "PM Kisan loan").
-2. **Text Retrieval Matching**: The backend performs queries against MongoDB using case-insensitive `$regex` matches on scheme titles, names, and description fields:
-   ```javascript
-   const matchedSchemeObj = await Scheme.findOne({
-     $or: [
-       { name: { $regex: queryText, $options: "i" } },
-       { title: { $regex: queryText, $options: "i" } },
-       { description: { $regex: queryText, $options: "i" } }
-     ]
-   });
-   ```
-3. **History Logging**: The query gets persisted inside the `AiQueryLog` collection to populate administration analytics counters.
-4. **Result Delivery**: Matching schemes are returned to the client and highlighted in the explorer UI.
+| Contributor      | Contribution                                                                                       | GitHub                                                 |
+| ---------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **Ishita Singh** | 🎨 UI/UX Design, Figma Wireframes, Frontend Development & Volunteer Dashboard (Frontend + Backend), Documentation | [GitHub](https://github.com/InsaneIshita)      |
+| **Souvik Chandra**       | 🎨 UI/UX Design & Design Support                                                                   | [GitHub](https://github.com/souvikchandra1007-it2026)    |
+| **Sheetal Gourh**      | ⚙️ Backend Development, API Integration & Database Management, Documentation                                      | [GitHub](https://github.com/sheetal783)   |
+| **Prachi Kumari**       | 👤 Citizen Dashboard Development                                                                   | [GitHub](https://github.com/prachikumari850)    |
+| **Ankesh Agarwal**       | 🛠️ Admin Dashboard Development                                                                    | [GitHub](https://github.com/Ankesh1320)    |
+| **Mythreyee S**    | 📋 Schemes Module Development                                                                     | [GitHub](https://github.com/Mythreyee20) |
+| **Sai Mounika Chunchu**      | 📜 Policies Module Development                                                                      | [GitHub](https://github.com/ChSaiMounika/ChSaiMounika)   |
 
-*Note: Vector databases, chunking text, and embedding vector matching pipelines are not active in this codebase release. All search matches are regex-driven database queries.*
-
-![Scheme Search / Retrieval](docs/flowcharts/scheme-search.png)
-*Figure 10: Natural language keyword matching and query analytics logging pipeline.*
+> Each contributor played an important role in designing, developing, integrating, and refining the PolicyGPT platform.
 
 ---
 
-## 9. Data & Gemini LLM Enrichment Pipeline
+## 📌 Project Status
 
-PolicyGPT utilizes a database enrichment module powered by the Gemini LLM with Google Search Grounding to audit and automatically enrich schemes with verified details:
+**Active Development**
 
-1. **Thin Field Identification**: The developer runs [enrichSchemesWithGemini.js](file:///c:/Users/Sheetal/OneDrive/Desktop/info/GPPSIP_Team2/Server/scripts/enrichSchemesWithGemini.js), which scans MongoDB for schemes with missing or short descriptions, eligibility criteria, benefits, helplines, or application steps.
-2. **LLM Query & Grounding**: For each missing field, the script constructs a search prompt and calls the `gemini-2.0-flash` model with Google Search grounding enabled:
-   ```javascript
-   const response = await ai.models.generateContent({
-     model: "gemini-2.0-flash",
-     contents: prompt,
-     config: { tools: [{ googleSearch: {} }] }
-   });
-   ```
-3. **Verification & Update**: The retrieved information is validated and saved back to the database, ensuring accurate and up-to-date scheme information for citizens.
-
-![Gemini Scheme Enrichment Pipeline](docs/flowcharts/gemini-enrichment.png)
-*Figure 11: Schema database enrichment workflow using Gemini 2.0 Flash and Google Search Grounding.*
+PolicyGPT is being developed iteratively as part of the Infosys Springboard Internship 7.0, with features being implemented, tested, and refined throughout the project lifecycle.
 
 ---
 
-## 10. API Route Reference
+<div align="center">
 
-### Authentication (`/api/auth`)
-- `POST /register` – Register a new account.
-- `POST /login` – Authenticate credentials and return JWT token.
-- `POST /send-otp` – Generate and send a one-time passcode.
-- `POST /verify-otp` – Validate OTP code.
-- `POST /reset-password` – Reset password using validated credentials.
-- `GET /me` – Retrieve profile credentials for the logged-in user.
+### PolicyGPT
 
-![Authentication Flow](docs/flowcharts/auth-flow.png)
-*Figure 12: Detailed authentication process including hashing, validation, JWT token creation, and OTP recovery.*
+*Simplifying access to government policies and public welfare schemes.*
 
-### Schemes (`/api/schemes`)
-- `GET /` – Fetch all schemes (optional query filters: `status`, `department`).
-- `GET /public/featured` – Retrieve the 6 featured homepage schemes.
-- `GET /:id` – Fetch single scheme details.
-- `POST /` – Create a new scheme (Admin only).
-- `PUT /:id` – Update scheme details (Admin only).
-- `DELETE /:id` – Delete a scheme (Admin only).
-- `POST /:id/save` – Bookmark/save a scheme.
-- `DELETE /:id/save` – Unsave/remove bookmark.
-- `GET /:id/is-saved` – Check if a scheme is saved.
-- `POST /search-history` – Add query to user search history.
+Built with ❤️ during **Infosys Springboard Internship 7.0**
 
-### Policies (`/api/policies`)
-- `GET /` – Fetch all legislative policies.
-- `GET /:id` – Fetch policy details.
-- `POST /` – Create a new policy (Admin only).
-- `PUT /:id` – Update a policy (Admin only).
-- `DELETE /:id` – Delete a policy (Admin only).
-
-### Eligibility Checker (`/api/eligibility`)
-- `POST /check` – Match citizen profile data against scheme rules.
-- `GET /schemes` – Fetch list of schemes for the checker.
-- `POST /seed` – Seed eligibility test schemes.
-
-### Scheme Comparison (`/api/compare`)
-- `GET /all` – Retrieve comparison datasets.
-- `POST /` – Request comparative calculations.
-
-### Government Officer / Reviewer Queue (`/api/volunteer`)
-- `GET /dashboard` – Fetch stats for the review workspace.
-- `GET /reviews/policies` – Fetch policies awaiting review.
-- `GET /reviews/schemes` – Fetch schemes awaiting review.
-- `POST /reviews/:type/:id` – Submit review approval/feedback.
-
-### Reporting & Analytics (`/api/reports` & `/api/analytics`)
-- `POST /reports/generate` – Export system report (PDF/Excel) (Admin only).
-- `GET /reports` – View history of generated reports (Admin only).
-- `GET /reports/download/:id` – Download generated report by ID (Admin only).
-- `GET /analytics` – Retrieve search analytics logs and metadata (Admin only).
-
-![Reports & Analytics](docs/flowcharts/reports-analytics.png)
-*Figure 13: Report generation pipeline using ExcelJS/PDFKit and tracking report logs.*
-
----
-
-## 11. Environment Variables & Setup
-
-### Environment Variables
-Create a `.env` file inside the `Server/` directory containing the following:
-
-```env
-MONGO_URI=mongodb://localhost:27017/gppsip
-PORT=5000
-JWT_SECRET=your_jwt_signing_secret_key
-JWT_EXPIRES_IN=7d
-
-# SMTP Configuration
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
-SMTP_FROM=your_email@gmail.com
-
-# Gemini LLM Integration
-GEMINI_API_KEY=your_google_gemini_api_key
-```
-
-### Installation & Run
-
-1. **Install Server Dependencies**:
-   ```bash
-   cd Server
-   npm install
-   ```
-
-2. **Seed MongoDB Database**:
-   Seeding consists of three specific commands to populate schemes, policies, and the volunteer reviewer account:
-   - **Seed Schemes & Dashboard Logs**: Seeds the base schemes dataset and initializes 180 mock analytics logs for the dashboard graph visualizations.
-     ```bash
-     npm run seed
-     ```
-   - **Seed Legislative Policies**: Seeds the legislative policies records.
-     ```bash
-     npm run seed:policies
-     ```
-   - **Seed Volunteer Account**: Seeds the sample volunteer reviewer profile (`volunteer@policygpt.in` with password `Volunteer@123`).
-     ```bash
-     node scripts/seedVolunteer.js
-     ```
-
-3. **Start Backend Server**:
-   ```bash
-   npm run dev
-   ```
-
-4. **Install Client Dependencies**:
-   ```bash
-   cd ../client
-   npm install
-   ```
-
-5. **Start Frontend Dev Server**:
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:5173/` in your browser.
-
----
-
-## 12. Testing & Verification
-
-Run these validation scripts from the `Server/` folder to check data integrity:
-
-- **Data Integrity Check**: Compares MongoDB database count and schema documents against the local `government_schemes (1).json` file:
-  ```bash
-  node scripts/verify_data.js
-  ```
-
----
-
-## 13. Security
-
-- **Password Hashing**: Citizen and administrator passwords are automatically hashed with a salt factor of 12 using `bcryptjs` before insertion into MongoDB.
-- **JWT Authorization**: Protects private APIs by validating the `Authorization` header bearer token.
-- **Role Guards**: Admin-specific endpoints are guarded on the backend by verifying role claims:
-  ```javascript
-  export const admin = (req, res, next) => {
-    if (req.user && req.user.role === "admin") {
-      next();
-    } else {
-      res.status(403).json({ success: false, message: "Not authorized as an admin" });
-    }
-  };
-  ```
-
----
-
-## 14. Limitations & Future Enhancements
-
-- **Dynamic Vector Search**: Implementing a true Vector DB (like Pinecone/Chroma) and embedding model (like text-embedding-004) to support semantic search.
-- **SMS OTP Gateway**: Integrating a real SMS gateway service (e.g. Twilio) instead of relying solely on simulated/email-based notifications.
-- **Direct Application Gateway**: Integrating with official government API gateways to allow citizens to apply for schemes directly through PolicyGPT.
-
----
-
-## 15. Flowcharts & System Workflows
-
-This section lists all system flowcharts and architectural workflow diagrams for quick reference:
-
-1. **Overall System Architecture**: ![Overall System Architecture](docs/flowcharts/overall-system.png)
-   *High-level system components showing React client, Express REST server, MongoDB database, and Gemini AI SDK.*
-2. **Authentication Flow**: ![Authentication Flow](docs/flowcharts/auth-flow.png)
-   *Secure user registration, Bcrypt password hashing, JWT token issue, and NodeMailer OTP recovery.*
-3. **Citizen Journey**: ![Citizen Journey](docs/flowcharts/citizen-journey.png)
-   *Steps for citizens exploring schemes, checking eligibility, comparing schemes, and writing dashboard feedback.*
-4. **Scheme Search / Retrieval**: ![Scheme Search / Retrieval](docs/flowcharts/scheme-search.png)
-   *Search pipeline executing exact MongoDB regex keyword matching and logging entries in analytics.*
-5. **Eligibility Checker**: ![Eligibility Checker](docs/flowcharts/eligibility-checker.png)
-   *Dynamic questionnaire checks mapping citizen attributes (income, occupation, state) to scheme rules.*
-6. **Scheme Comparison**: ![Scheme Comparison](docs/flowcharts/scheme-comparison.png)
-   *Matrix builder evaluating up to 3 schemes across departments, categories, benefits, and deadlines.*
-7. **Admin Management**: ![Admin Management](docs/flowcharts/admin-management.png)
-   *Administrative control panel managing schemes, policies, generating reports, and tracking analytics logs.*
-8. **Volunteer / Government Reviewer Workflow**: ![Volunteer / Government Reviewer Workflow](docs/flowcharts/volunteer-reviewer.png)
-   *Review queue workspace permitting government officers to review pending schemes and policies.*
-9. **Gemini Scheme Enrichment Pipeline**: ![Gemini Scheme Enrichment Pipeline](docs/flowcharts/gemini-enrichment.png)
-   *AI-driven database enrichment using Gemini 2.0 Flash and Google Search Grounding to audit schemes.*
-10. **Reports & Analytics**: ![Reports & Analytics](docs/flowcharts/reports-analytics.png)
-    *Export engine generating Excel/PDF files using ExcelJS/PDFKit and tracking logs in ReportHistory.*
-11. **Backend API Request Flow**: ![Backend API Request Flow](docs/flowcharts/backend-api-flow.png)
-    *Sequential execution sequence of Express routers, protection middlewares, controllers, and services.*
-12. **Database Relationship / ER Diagram**: ![Database Relationship / ER Diagram](docs/flowcharts/database-er.png)
-    *Database entity relationships and schema definitions of primary collections inside MongoDB.*
-13. **Complete PolicyGPT End-to-End Flow**: ![Complete PolicyGPT End-to-End Flow](docs/flowcharts/end-to-end-flow.png)
-    *Full workflow mapping the interactions between all portal roles (Citizens, Officers, Admins) and backend systems.*
-14. **Notification Flow**: ![Notification Flow](docs/flowcharts/notification-flow.png)
-   *Visualizes the email/OTP notification system (using SMTP and Nodemailer) alongside the in-app dashboard notification collections in MongoDB.*
+</div>
