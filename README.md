@@ -1,15 +1,12 @@
 <div align="center">
 
-# PolicyGPT
+# <img src="client/src/assets/logos/logo-full.svg" width="300" alt="PolicyGPT Landing Page">
 
 ### Government Policy & Public Scheme Intelligence Platform
 
 **Making government policies and public welfare schemes easier to discover, understand, and access.**
 
 <br/>
-
-<!-- PLACEHOLDER: Add the PolicyGPT logo here -->
-<!-- Suggested image: `client/public/logo.png` or the final project logo -->
 
 <p align="center">
   <img src="https://img.shields.io/badge/MERN%20Stack-Full%20Stack-20232A?style=for-the-badge&logo=mongodb&logoColor=4DB33D" />
@@ -60,9 +57,6 @@ Manage users → Manage schemes and policies → Monitor platform activity → R
 ### 🏛️ Volunteer
 
 Review submitted schemes and policies → Approve or suggest changes → Send reviewed content back through the administrative workflow.
-
-<!-- PLACEHOLDER: Add a polished screenshot of the PolicyGPT landing page here -->
-<!-- Suggested image: `docs/screenshots/landing-page.png` -->
 
 ---
 
@@ -153,31 +147,31 @@ Review submitted schemes and policies → Approve or suggest changes → Send re
 
 ### Landing Page
 <!-- Suggested image: `docs/screenshots/landing-page.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Landing page showing the PolicyGPT homepage and navigation**
+> <img src="./docs/screenshots/landing-page.png">
 
 ### Citizen Dashboard
 <!-- Suggested image: `docs/screenshots/citizen-dashboard.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Citizen dashboard showing overview, saved schemes, notifications, and activity**
+> <img src="./docs/screenshots/citizen-dashboard.png">
 
 ### Scheme Details
 <!-- Suggested image: `docs/screenshots/scheme-details.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Scheme details page showing benefits, eligibility, department, and application information**
+> <img src="./docs/screenshots/scheme-details.png">
 
 ### Eligibility Checker
 <!-- Suggested image: `docs/screenshots/eligibility-checker.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Eligibility checker form and results**
+> <img src="./docs/screenshots/eligibility-checker.png">
 
 ### Scheme Comparison
 <!-- Suggested image: `docs/screenshots/scheme-comparison.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Side-by-side scheme comparison page**
+> <img src="./docs/screenshots/scheme-comparision.png">
 
 ### Admin Dashboard
 <!-- Suggested image: `docs/screenshots/admin-dashboard.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Admin dashboard with statistics, management modules, and analytics**
+> <img src="./docs/screenshots/admin-dashboard.png">
 
 ### Volunteer Dashboard
 <!-- Suggested image: `docs/screenshots/volunteer-dashboard.png` -->
-> 🖼️ **IMAGE PLACEHOLDER — Reviewer dashboard showing pending policy and scheme approvals**
+> <img src="./docs/screenshots/volunteer-dashboard.png">
 
 ---
 
@@ -256,7 +250,7 @@ npm run dev
 
 The application will be available at the local URL shown by Vite.
 
-> 🔐 Environment variables and detailed configuration instructions are available in the project documentation. Never commit `.env` files or credentials to the repository.
+> 🔐 Environment variables and detailed configuration instructions are available in the project documentation.
 
 ---
 
