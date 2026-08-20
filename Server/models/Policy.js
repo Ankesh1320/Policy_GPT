@@ -42,7 +42,7 @@ const policySchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Published", "Under Review", "Draft", "Archived", "Approved"],
+      enum: ["Published", "Under Review", "Changes Requested", "Draft", "Archived", "Approved"],
       default: "Draft",
     },
     eligibility: {

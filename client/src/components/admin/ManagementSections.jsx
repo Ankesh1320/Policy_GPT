@@ -152,6 +152,7 @@ const getCategoryStyles = (category) => categoryStyles[category] || 'bg-gray-50 
 const statusStyles = {
   'Published': 'bg-green-50 text-green-700 border-green-200/30',
   'Under Review': 'bg-amber-50 text-amber-700 border-amber-200/30',
+  'Changes Requested': 'bg-orange-50 text-orange-700 border-orange-200/30',
   'Draft': 'bg-blue-50 text-blue-700 border-blue-200/30',
   'Archived': 'bg-gray-100 text-gray-700 border-gray-200/30',
   'Approved': 'bg-green-50 text-green-700 border-green-200/30',
@@ -191,7 +192,7 @@ export default function ManagementSections() {
             .map(s => ({
               title: s.name || s.title,
               category: s.category || 'Technology',
-              status: s.status || 'Draft',
+              status: s.changesRequested ? 'Changes Requested' : (s.status || 'Draft'),
               updated: timeSince(s.updatedAt),
               icon: getCategoryIcon(s.category),
               iconBg: getCategoryStyles(s.category),
@@ -211,7 +212,7 @@ export default function ManagementSections() {
             .map(p => ({
               title: p.name || p.title,
               category: p.category || 'Technology',
-              status: p.status || 'Draft',
+              status: p.changesRequested ? 'Changes Requested' : (p.status || 'Draft'),
               updated: timeSince(p.updatedAt),
               icon: getCategoryIcon(p.category),
               iconBg: getCategoryStyles(p.category),
