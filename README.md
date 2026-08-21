@@ -301,8 +301,7 @@ For detailed technical information, refer to the project documentation, includin
 - Deployment and configuration
 - Testing and troubleshooting
 
-<!-- PLACEHOLDER: Add documentation link once the final documentation file/path is decided. -->
-**📖 Detailed Documentation:** `docs/README.md` *(replace with the final documentation path)*
+**📖 Detailed Documentation:** Detailed design, workflows, and project documentation are located in the [docs/](docs/) directory (Local Path: `C:\Users\Sheetal\OneDrive\Desktop\info\GPPSIP_Team2\docs`).
 
 ---
 
