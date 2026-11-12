@@ -1,0 +1,178 @@
+[
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "excel",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid Excel spreadsheet (starts with PK zip header)"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "both",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid ZIP archive (starts with PK header)"
+  },
+  {
+    "reportType": "Scheme Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "Scheme Report",
+    "exportFormat": "excel",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid Excel spreadsheet (starts with PK zip header)"
+  },
+  {
+    "reportType": "Scheme Report",
+    "exportFormat": "both",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid ZIP archive (starts with PK header)"
+  },
+  {
+    "reportType": "Department Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "Department Report",
+    "exportFormat": "excel",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid Excel spreadsheet (starts with PK zip header)"
+  },
+  {
+    "reportType": "Department Report",
+    "exportFormat": "both",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid ZIP archive (starts with PK header)"
+  },
+  {
+    "reportType": "User Activity Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "User Activity Report",
+    "exportFormat": "excel",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid Excel spreadsheet (starts with PK zip header)"
+  },
+  {
+    "reportType": "User Activity Report",
+    "exportFormat": "both",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid ZIP archive (starts with PK header)"
+  },
+  {
+    "reportType": "Analytics Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "Analytics Report",
+    "exportFormat": "excel",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid Excel spreadsheet (starts with PK zip header)"
+  },
+  {
+    "reportType": "Analytics Report",
+    "exportFormat": "both",
+    "filters": "{\"department\":\"All Departments\",\"status\":\"All Status\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid ZIP archive (starts with PK header)"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"Ministry of Health & Family Welfare\",\"status\":\"Published\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "Scheme Report",
+    "exportFormat": "excel",
+    "filters": "{\"department\":\"Ministry of Finance\",\"category\":\"Agriculture\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid Excel spreadsheet (starts with PK zip header)"
+  },
+  {
+    "reportType": "User Activity Report",
+    "exportFormat": "pdf",
+    "filters": "{\"state\":\"Uttar Pradesh\"}",
+    "status": 200,
+    "result": "SUCCESS",
+    "details": "Pass: Valid PDF format (starts with %PDF)"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "pdf",
+    "filters": "Invalid date range",
+    "status": 400,
+    "result": "SUCCESS",
+    "details": "Pass: Correctly rejected with 400 and validation error message"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\"}",
+    "status": 403,
+    "result": "SUCCESS",
+    "details": "Expected error returned: 403 (Not authorized as an admin)"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "pdf",
+    "filters": "{\"department\":\"All Departments\"}",
+    "status": 401,
+    "result": "SUCCESS",
+    "details": "Expected error returned: 401 (Not authorized, no token)"
+  },
+  {
+    "reportType": "Policy Report",
+    "exportFormat": "None",
+    "filters": "Missing export format",
+    "status": 400,
+    "result": "SUCCESS",
+    "details": "Pass: Correctly rejected with 400"
+  }
+]
